@@ -4,6 +4,7 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import { Header } from "../Header";
 import { Context } from "../../context";
+import { Controls } from "../Controls";
 
 const theme = createMuiTheme({
   palette: {
@@ -22,6 +23,8 @@ export const App = () => {
       <Context.Provider value={step}>
         <div className={classes.root}>
           <Header />
+          <div className={classes.viewer}>{step}</div>
+          <Controls setStep={setStep} />
         </div>
       </Context.Provider>
     </ThemeProvider>

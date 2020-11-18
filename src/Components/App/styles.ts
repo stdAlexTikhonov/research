@@ -9,5 +9,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       justifyContent: "flex-start",
     },
+    viewer: {
+      width: 700,
+      flexGrow: 1,
+      border: "1px solid black",
+      margin: "auto",
+    },
   })
 );
