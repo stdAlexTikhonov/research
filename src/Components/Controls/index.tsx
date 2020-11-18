@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "@material-ui/core/Button";
 import { useStyles } from "./styles";
 import { BACK, NEXT } from "../../utils/constants";
+import { Context } from "../../context";
 
 export const Controls: React.FC<{ setStep: any; len: number }> = ({
   setStep,
   len,
 }) => {
   const classes = useStyles();
+  const step = useContext(Context);
 
   const handleBack = () => {
     setStep((prev: number) => (prev > 0 ? prev - 1 : 0));
@@ -20,11 +22,13 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   return (
     <div className={classes.root}>
       <div className={classes.constrols}>
-        <Button onClick={handleBack} size={"small"}>
+        <Button onClick={handleBack} size={"small"} disabled={step === 0}>
           {BACK}
         </Button>
 
-        <Button onClick={handleNext}>{NEXT}</Button>
+        <Button onClick={handleNext} disabled={step === len - 1}>
+          {NEXT}
+        </Button>
       </div>
     </div>
   );
