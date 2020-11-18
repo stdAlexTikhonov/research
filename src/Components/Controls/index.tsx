@@ -3,7 +3,10 @@ import Button from "@material-ui/core/Button";
 import { useStyles } from "./styles";
 import { BACK, NEXT } from "../../utils/constants";
 
-export const Controls: React.FC<{ setStep: any }> = ({ setStep }) => {
+export const Controls: React.FC<{ setStep: any; len: number }> = ({
+  setStep,
+  len,
+}) => {
   const classes = useStyles();
 
   const handleBack = () => {
@@ -11,7 +14,7 @@ export const Controls: React.FC<{ setStep: any }> = ({ setStep }) => {
   };
 
   const handleNext = () => {
-    setStep((prev: number) => prev + 1);
+    setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
   };
 
   return (
