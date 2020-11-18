@@ -7,6 +7,7 @@ import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { getData } from "../../utils/Data";
 import { Typography } from "@material-ui/core";
+import { Answer } from "../Answer";
 
 const theme = createMuiTheme({
   palette: {
@@ -36,9 +37,7 @@ export const App = () => {
               {data[step].question}
             </Typography>
             {data[step].answers.map((answer: string) => (
-              <Typography variant="body1" gutterBottom>
-                {answer}
-              </Typography>
+              <Answer title={answer} />
             ))}
           </div>
           <Controls setStep={setStep} len={data.length} />
