@@ -12,7 +12,7 @@ export const Header = () => {
 
   return (
     <>
-      <AppBar position="static" className={classes.root}>
+      <AppBar position="static" className={classes.root} color={"primary"}>
         <Toolbar>
           <Avatar variant="square" className={classes.square} src={image} />
           <Typography variant="h6" className={classes.title}>

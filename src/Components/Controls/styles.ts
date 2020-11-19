@@ -26,6 +26,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       justifyContent: "space-around",
       margin: "auto",
+      width: 300,
     },
   })
 );

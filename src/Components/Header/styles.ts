@@ -4,8 +4,7 @@ import { deepOrange } from "@material-ui/core/colors";
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      background: "white",
-      color: "#444",
+      // color: "#444",
     },
     menuButton: {
       marginRight: theme.spacing(2),

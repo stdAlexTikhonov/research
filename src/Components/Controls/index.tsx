@@ -22,11 +22,22 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   return (
     <div className={classes.root}>
       <div className={classes.constrols}>
-        <Button onClick={handleBack} size={"small"} disabled={step === 0}>
+        <Button
+          variant="contained"
+          color={"primary"}
+          onClick={handleBack}
+          size={"small"}
+          disabled={step === 0}
+        >
           {BACK}
         </Button>
 
-        <Button onClick={handleNext} disabled={step === len - 1}>
+        <Button
+          variant="contained"
+          color={"primary"}
+          onClick={handleNext}
+          disabled={step === len - 1}
+        >
           {NEXT}
         </Button>
       </div>
