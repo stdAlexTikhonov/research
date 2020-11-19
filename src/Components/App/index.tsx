@@ -5,6 +5,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
+import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
 import { Typography } from "@material-ui/core";
 import { Answer } from "../Answer";
@@ -31,6 +32,7 @@ export const App = () => {
       <Context.Provider value={step}>
         <div className={classes.root}>
           <Header />
+          <BreadCrumbs len={data.length} setStep={setStep} />
           <div className={classes.viewer}>
             <Typography variant="h5" gutterBottom>
               {data[step].question}
