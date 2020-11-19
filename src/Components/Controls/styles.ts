@@ -9,14 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
     },
     button: {
-      fontSize: 20,
-      maxWidth: 30,
-      maxHeight: 30,
-      minWidth: "unset",
-      "& > .MuiButton-label .MuiButton-startIcon.MuiButton-iconSizeMedium": {
-        marginLeft: 0,
-        marginRight: 0,
-      },
+      minWidth: 80,
       margin: 5,
     },
     custom: {

@@ -28,6 +28,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           onClick={handleBack}
           size={"small"}
           disabled={step === 0}
+          className={classes.button}
         >
           {BACK}
         </Button>
@@ -37,6 +38,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           color={"primary"}
           onClick={handleNext}
           disabled={step === len - 1}
+          className={classes.button}
         >
           {NEXT}
         </Button>
