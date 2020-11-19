@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useStyles } from "./styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
@@ -18,18 +18,13 @@ const theme = createMuiTheme({
   },
 });
 
-type Data = {
-  question: string;
-  answers: string[];
-};
-
 export const App = () => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
-  const [data, setData] = useState<Data[]>(() => getData());
-  const [value, setValue] = React.useState();
+  const data = useMemo(() => getData(), []);
+  const [value, setValue] = useState<string>();
 
-  const handleChange = () => alert("change");
+  const handleChange = (val: string) => setValue(val);
 
   return (
     <ThemeProvider theme={theme}>
@@ -44,10 +39,10 @@ export const App = () => {
               aria-label="gender"
               name="gender1"
               value={value}
-              onChange={handleChange}
+              onChange={() => handleChange}
             >
-              {data[step].answers.map((answer: string) => (
-                <Answer title={answer} />
+              {data[step].answers.map((answer: string, index: number) => (
+                <Answer title={answer} key={index} />
               ))}
             </RadioGroup>
           </div>
