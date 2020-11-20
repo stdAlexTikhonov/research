@@ -9,7 +9,8 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   len,
 }) => {
   const classes = useStyles();
-  const step = useContext(Context);
+  const context = useContext(Context);
+  const { step } = context ? context : { step: 0 };
 
   const handleBack = () => {
     setStep((prev: number) => (prev > 0 ? prev - 1 : 0));

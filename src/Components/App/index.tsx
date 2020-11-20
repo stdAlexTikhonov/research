@@ -22,6 +22,7 @@ const theme = createMuiTheme({
 export const App = () => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
+  const [itog, setItog] = useState({});
   const data = useMemo(() => getData(), []);
   const [value, setValue] = useState<string>();
 
@@ -29,7 +30,7 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Context.Provider value={step}>
+      <Context.Provider value={{ step, itog, setItog }}>
         <div className={classes.root}>
           <Header />
           <BreadCrumbs len={data.length} setStep={setStep} />

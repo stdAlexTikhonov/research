@@ -8,7 +8,8 @@ export const BreadCrumbs: React.FC<{ len: number; setStep: any }> = ({
   len,
   setStep,
 }) => {
-  const step = useContext(Context);
+  const context = useContext(Context);
+  const { step } = context ? context : { step: 0 };
   const breadcrumbs = useMemo(
     () =>
       Array(len)
