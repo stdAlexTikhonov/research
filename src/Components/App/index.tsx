@@ -4,11 +4,13 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import { Header } from "../Header";
 import { Context } from "../../context";
+import { QUESTION } from "../../utils/constants";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
 import { Typography } from "@material-ui/core";
 import { Answer } from "../Answer";
+import { Title } from "../Title";
 import RadioGroup from "@material-ui/core/RadioGroup";
 
 const theme = createMuiTheme({
@@ -32,24 +34,14 @@ export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Context.Provider
-        value={{ step, itog, setItog, showCrumbs, setShowCrumbs }}
+        value={{ step, itog, setItog, showCrumbs, setShowCrumbs, data }}
       >
         <div className={classes.root}>
           <Header />
           {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
           <div className={classes.viewer}>
             <div>
-              <Typography variant="overline" display="block" gutterBottom>
-                Вопрос № {step + 1}
-              </Typography>
-              <Typography variant="h6" gutterBottom>
-                {data[step].question}
-              </Typography>
-              {data[step].subtitle && (
-                <Typography variant="caption" display="block" gutterBottom>
-                  {data[step].subtitle}
-                </Typography>
-              )}
+              <Title />
               <RadioGroup
                 aria-label="gender"
                 name="gender1"
