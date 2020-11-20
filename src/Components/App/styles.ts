@@ -7,11 +7,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: "100%",
       flexDirection: "column",
       justifyContent: "flex-start",
+      height: window.innerHeight,
     },
     viewer: {
       padding: 20,
-      width: 700,
+      maxWidth: 900,
+      flexGrow: 1,
       margin: "auto",
+      overflow: "auto",
     },
   })
 );

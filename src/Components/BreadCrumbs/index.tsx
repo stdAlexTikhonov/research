@@ -1,10 +1,8 @@
 import React, { useContext, useMemo } from "react";
-import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Button from "@material-ui/core/Button";
 import { useStyles } from "./styles";
 import { Context } from "../../context";
-// import { Navigation } from "../Navigation";
 
 export const BreadCrumbs: React.FC<{ len: number; setStep: any }> = ({
   len,
