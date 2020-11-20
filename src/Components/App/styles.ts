@@ -12,6 +12,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     viewer: {
       padding: 20,
       maxWidth: 900,
+      minWidth: 900,
       flexGrow: 1,
       margin: "auto",
       overflow: "auto",
