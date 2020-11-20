@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { useStyles } from "./styles";
 import { BACK, NEXT } from "../../utils/constants";
@@ -12,17 +12,19 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   const classes = useStyles();
   const context = useContext(Context);
   const { step, itog } = context ? context : { step: 0, itog: null };
+  const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
     setStep((prev: number) => (prev > 0 ? prev - 1 : 0));
   };
 
   const handleNext = () => {
-    if (step === len - 2) sendToServer();
+    if (step === len - 2 && !passed) sendToServer();
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
   };
 
   const sendToServer = async () => {
+    setPassed(true);
     const res = await post("/", itog);
     console.log(res);
   };
