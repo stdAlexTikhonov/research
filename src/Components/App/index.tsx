@@ -43,7 +43,7 @@ export const App = () => {
             <Title />
 
             {data[step].variants ? (
-              <DenseTable />
+              <DenseTable answers={data[step].answers} />
             ) : (
               <div className={classes.answers}>
                 <RadioGroup
