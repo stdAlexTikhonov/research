@@ -11,6 +11,7 @@ import { Answer } from "../Answer";
 import { DenseTable } from "../Table";
 import { Title } from "../Title";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const theme = createMuiTheme({
   palette: {
