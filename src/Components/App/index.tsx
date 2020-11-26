@@ -10,7 +10,10 @@ import { getData } from "../../utils/Data";
 import { Answer } from "../Answer";
 import { DenseTable } from "../Table";
 import { Title } from "../Title";
+import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
 
 const theme = createMuiTheme({
   palette: {
@@ -25,10 +28,13 @@ export const App = () => {
   const [step, setStep] = useState<number>(0);
   const [itog, setItog] = useState({});
   const data = useMemo(() => getData(), []);
-  const [value, setValue] = useState<string>();
+  const [value, setValue] = useState<string>("1");
   const [showCrumbs, setShowCrumbs] = useState(false);
 
-  const handleChange = (val: string) => setValue(val);
+  const handleChange = (e: any) => {
+    setValue(e.target.value);
+    console.log(e.target.value);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -48,16 +54,17 @@ export const App = () => {
               />
             ) : (
               <div className={classes.answers}>
-                <RadioGroup
-                  aria-label="gender"
-                  name="gender1"
-                  value={value}
-                  onChange={() => handleChange}
-                >
-                  {data[step].answers.map((answer: string, index: number) => (
-                    <Answer title={answer} key={index} value={index} />
-                  ))}
-                </RadioGroup>
+                <FormControl component="fieldset">
+                  <RadioGroup
+                    name={data[step].id}
+                    value={value}
+                    onChange={handleChange}
+                  >
+                    {data[step].answers.map((answer: string, index: number) => (
+                      <Answer title={answer} key={index} value={index} />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
               </div>
             )}
           </div>

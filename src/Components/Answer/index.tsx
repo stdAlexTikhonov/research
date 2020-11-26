@@ -9,7 +9,7 @@ type AnswerType = {
 export const Answer: React.FC<AnswerType> = ({ title, value }) => {
   return (
     <FormControlLabel
-      value={value}
+      value={value.toString()}
       control={<Radio color="primary" size={"small"} />}
       label={title}
     />
