@@ -8,8 +8,8 @@ import { QUESTION } from "../../utils/constants";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
-import { Typography } from "@material-ui/core";
 import { Answer } from "../Answer";
+import { DenseTable } from "../Table";
 import { Title } from "../Title";
 import RadioGroup from "@material-ui/core/RadioGroup";
 
@@ -41,18 +41,23 @@ export const App = () => {
           {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
           <div className={classes.viewer}>
             <Title />
-            <div className={classes.answers}>
-              <RadioGroup
-                aria-label="gender"
-                name="gender1"
-                value={value}
-                onChange={() => handleChange}
-              >
-                {data[step].answers.map((answer: string, index: number) => (
-                  <Answer title={answer} key={index} />
-                ))}
-              </RadioGroup>
-            </div>
+
+            {data[step].variants ? (
+              <DenseTable />
+            ) : (
+              <div className={classes.answers}>
+                <RadioGroup
+                  aria-label="gender"
+                  name="gender1"
+                  value={value}
+                  onChange={() => handleChange}
+                >
+                  {data[step].answers.map((answer: string, index: number) => (
+                    <Answer title={answer} key={index} />
+                  ))}
+                </RadioGroup>
+              </div>
+            )}
           </div>
           <Controls setStep={setStep} len={data.length} />
         </div>
