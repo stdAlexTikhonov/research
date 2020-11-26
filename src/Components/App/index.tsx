@@ -4,7 +4,6 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import { Header } from "../Header";
 import { Context } from "../../context";
-import { QUESTION } from "../../utils/constants";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
@@ -43,7 +42,10 @@ export const App = () => {
             <Title />
 
             {data[step].variants ? (
-              <DenseTable answers={data[step].answers} />
+              <DenseTable
+                answers={data[step].answers}
+                variants={data[step].variants!}
+              />
             ) : (
               <div className={classes.answers}>
                 <RadioGroup
@@ -53,7 +55,7 @@ export const App = () => {
                   onChange={() => handleChange}
                 >
                   {data[step].answers.map((answer: string, index: number) => (
-                    <Answer title={answer} key={index} />
+                    <Answer title={answer} key={index} value={index} />
                   ))}
                 </RadioGroup>
               </div>

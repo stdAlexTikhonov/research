@@ -2,14 +2,15 @@ import React from "react";
 import { Radio, FormControlLabel } from "@material-ui/core";
 
 type AnswerType = {
-  title: string;
+  title?: string;
+  value: string | number;
 };
 
-export const Answer: React.FC<AnswerType> = ({ title }) => {
+export const Answer: React.FC<AnswerType> = ({ title, value }) => {
   return (
     <FormControlLabel
-      value={title}
-      control={<Radio color="primary" />}
+      value={value}
+      control={<Radio color="primary" size={"small"} />}
       label={title}
     />
   );

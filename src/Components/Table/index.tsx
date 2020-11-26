@@ -7,6 +7,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { TITLE } from "../../utils/constants";
+import { Answer } from "../Answer";
 
 const useStyles = makeStyles({
   table: {
@@ -26,9 +28,10 @@ function createData(
 
 type Props = {
   answers: string[];
+  variants: string[];
 };
 
-export const DenseTable: React.FC<Props> = ({ answers }) => {
+export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
   const classes = useStyles();
 
   const rows = useMemo(
@@ -42,11 +45,10 @@ export const DenseTable: React.FC<Props> = ({ answers }) => {
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>{TITLE}</TableCell>
+            {variants.map((variant: string | number) => (
+              <TableCell style={{ padding: 0, margin: 0 }}>{variant}</TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,10 +57,11 @@ export const DenseTable: React.FC<Props> = ({ answers }) => {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              {variants.map((variant: string | number) => (
+                <TableCell style={{ padding: 0, margin: 0 }}>
+                  <Answer value={variant} />
+                </TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>

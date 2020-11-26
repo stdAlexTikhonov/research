@@ -2,3 +2,4 @@ export const NAME = "Федеральная служба государстве�
 export const BACK = "Назад";
 export const NEXT = "Далее";
 export const QUESTION = "Вопрос № ";
+export const TITLE = "Наименование";
