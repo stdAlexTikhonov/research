@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: "100%",
       flexDirection: "column",
       justifyContent: "flex-start",
-      height: window.innerHeight,
+      height: "100vh",
     },
     viewer: {
       padding: 20,
@@ -16,6 +16,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       margin: "auto",
       overflow: "auto",
+      display: "flex",
+      flexDirection: "column",
+    },
+    answers: {
+      overflow: "auto",
+      flexGrow: 1,
+      paddingLeft: 20,
     },
   })
 );

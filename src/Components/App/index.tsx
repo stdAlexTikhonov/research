@@ -40,8 +40,8 @@ export const App = () => {
           <Header />
           {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
           <div className={classes.viewer}>
-            <div>
-              <Title />
+            <Title />
+            <div className={classes.answers}>
               <RadioGroup
                 aria-label="gender"
                 name="gender1"
