@@ -35,6 +35,7 @@ export const data = [
       `Другие (укажите, какие именно источники)`,
     ],
     id: "js2k2k4j2j8f84j288f3",
+    multiple: true,
   },
   {
     question:
@@ -51,6 +52,7 @@ export const data = [
       "Другое (уточните)___________________________________",
     ],
     id: "jsj34j9dfuje88f3",
+    multiple: true,
   },
   {
     question:
@@ -77,6 +79,7 @@ export const data = [
       "Другое (уточните)___________________________________",
     ],
     id: "jsj34j48238s8f84j288f3",
+    multiple: true,
   },
   {
     part:
@@ -211,6 +214,7 @@ export const data = [
       "Реализация проектов национального значения",
     ],
     id: "jsj34j2u342u3888f3",
+    multiple: true,
   },
   {
     part: "III.	Открытость Службы",
