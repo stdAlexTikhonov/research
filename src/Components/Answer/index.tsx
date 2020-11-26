@@ -22,6 +22,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({ title, value }) => {
     <FormControlLabel
       control={
         <Checkbox
+          color="primary"
           checked={checked}
           name={value.toString()}
           onChange={() => setChecked(!checked)}

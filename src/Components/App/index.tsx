@@ -7,11 +7,11 @@ import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
-import { Answer } from "../Answer";
+import { Answer, CheckboxAns } from "../Answer";
 import { DenseTable } from "../Table";
 import { Title } from "../Title";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import Checkbox from "@material-ui/core/Checkbox";
+import FormGroup from "@material-ui/core/FormGroup";
 
 const theme = createMuiTheme({
   palette: {
@@ -29,10 +29,7 @@ export const App = () => {
   const [value, setValue] = useState<string>("1");
   const [showCrumbs, setShowCrumbs] = useState(false);
 
-  const handleChange = (e: any) => {
-    setValue(e.target.value);
-    console.log(e.target.value);
-  };
+  const handleChange = (e: any) => setValue(e.target.value);
 
   return (
     <ThemeProvider theme={theme}>
@@ -52,15 +49,23 @@ export const App = () => {
               />
             ) : (
               <div className={classes.answers}>
-                <RadioGroup
-                  name={data[step].id}
-                  value={value}
-                  onChange={handleChange}
-                >
-                  {data[step].answers.map((answer: string, index: number) => (
-                    <Answer title={answer} key={index} value={index} />
-                  ))}
-                </RadioGroup>
+                {data[step].multiple ? (
+                  <FormGroup>
+                    {data[step].answers.map((answer: string, index: number) => (
+                      <CheckboxAns title={answer} key={index} value={index} />
+                    ))}
+                  </FormGroup>
+                ) : (
+                  <RadioGroup
+                    name={data[step].id}
+                    value={value}
+                    onChange={handleChange}
+                  >
+                    {data[step].answers.map((answer: string, index: number) => (
+                      <Answer title={answer} key={index} value={index} />
+                    ))}
+                  </RadioGroup>
+                )}
               </div>
             )}
           </div>
