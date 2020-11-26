@@ -47,7 +47,17 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
           <TableRow>
             <TableCell>{TITLE}</TableCell>
             {variants.map((variant: string | number) => (
-              <TableCell style={{ padding: 0, margin: 0 }}>{variant}</TableCell>
+              <TableCell
+                key={variant}
+                style={{
+                  padding: 0,
+                  margin: 0,
+                  maxWidth: 130,
+                  textAlign: variants.length < 10 ? "center" : "left",
+                }}
+              >
+                {variant}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -58,7 +68,14 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                 {row.name}
               </TableCell>
               {variants.map((variant: string | number) => (
-                <TableCell style={{ padding: 0, margin: 0 }}>
+                <TableCell
+                  key={variant}
+                  style={{
+                    padding: 0,
+                    margin: 0,
+                    textAlign: variants.length < 10 ? "center" : "left",
+                  }}
+                >
                   <Answer value={variant} />
                 </TableCell>
               ))}
