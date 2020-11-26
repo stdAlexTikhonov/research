@@ -9,3 +9,11 @@ export const post = async (url: string, data: any) => {
   });
   return response.json();
 };
+
+export const generateUID = () => {
+  return (
+    "_" +
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
+};
