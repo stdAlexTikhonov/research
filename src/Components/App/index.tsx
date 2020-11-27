@@ -7,11 +7,11 @@ import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
-import { Answer, CheckboxAns } from "../Answer";
+import { CheckboxAns } from "../Answer";
 import { DenseTable } from "../Table";
 import { Title } from "../Title";
-import RadioGroup from "@material-ui/core/RadioGroup";
 import FormGroup from "@material-ui/core/FormGroup";
+import { Answers } from "../Answers";
 
 const theme = createMuiTheme({
   palette: {
@@ -26,10 +26,7 @@ export const App = () => {
   const [step, setStep] = useState<number>(0);
   const [itog, setItog] = useState({});
   const data = useMemo(() => getData(), []);
-  const [value, setValue] = useState<string>("1");
   const [showCrumbs, setShowCrumbs] = useState(false);
-
-  const handleChange = (e: any) => setValue(e.target.value);
 
   return (
     <ThemeProvider theme={theme}>
@@ -55,15 +52,7 @@ export const App = () => {
                     ))}
                   </FormGroup>
                 ) : (
-                  <RadioGroup
-                    name={data[step].id}
-                    value={value}
-                    onChange={handleChange}
-                  >
-                    {data[step].answers.map((answer: string, index: number) => (
-                      <Answer title={answer} key={index} value={index} />
-                    ))}
-                  </RadioGroup>
+                  <Answers {...data[step]} />
                 )}
               </div>
             )}
