@@ -13,7 +13,7 @@ export const Answers: React.FC<Props> = ({ answers, id }) => {
   const [value, setValue] = useState(null);
 
   useEffect(() => {
-    itog[step] && setValue(itog[step]);
+    itog[step] ? setValue(itog[step]) : setValue(null);
   }, [step]);
 
   const handleChange = (e: any) => {
