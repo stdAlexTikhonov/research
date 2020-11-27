@@ -11,7 +11,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog } = context ? context : { step: 0, itog: null };
+  const { step, itog, setItog } = context!;
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
@@ -23,6 +23,14 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
       console.log(itog);
       // sendToServer();
     }
+
+    if (!itog[step]) {
+      setItog((prev: any) => ({
+        ...prev,
+        [`${step}`]: null,
+      }));
+    }
+
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
   };
 

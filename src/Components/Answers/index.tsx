@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
 import { Context } from "../../context";
@@ -9,17 +9,19 @@ type Props = {
 };
 
 export const Answers: React.FC<Props> = ({ answers, id }) => {
-  const [value, setValue] = useState("1");
-  const my_context = useContext(Context);
+  const { setItog, step, itog } = useContext(Context)!;
+  const [value, setValue] = useState(null);
+
+  useEffect(() => {
+    itog[step] && setValue(itog[step]);
+  }, [step]);
 
   const handleChange = (e: any) => {
-    if (my_context) {
-      const { setItog, step } = my_context;
-      setItog((prev: any) => ({
-        ...prev,
-        [`${step}`]: e.target.value,
-      }));
-    }
+    setItog((prev: any) => ({
+      ...prev,
+      [`${step}`]: e.target.value,
+    }));
+
     setValue(e.target.value);
   };
 

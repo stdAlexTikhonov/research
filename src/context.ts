@@ -2,7 +2,7 @@ import React from "react";
 
 export const Context = React.createContext<{
   step: number;
-  itog: Object;
+  itog: any;
   setItog: any;
   showCrumbs: boolean;
   setShowCrumbs: any;
