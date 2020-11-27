@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Radio, FormControlLabel, Checkbox } from "@material-ui/core";
+import { Context } from "../../context";
 
 type AnswerType = {
   title?: string;
@@ -18,6 +19,8 @@ export const Answer: React.FC<AnswerType> = ({ title, value }) => {
 };
 
 export const CheckboxAns: React.FC<AnswerType> = ({ title, value }) => {
+  const { setItog, step } = useContext(Context)!;
+  // const { setItog, step } = my_context!;
   const [checked, setChecked] = useState(false);
   return (
     <FormControlLabel
@@ -26,7 +29,22 @@ export const CheckboxAns: React.FC<AnswerType> = ({ title, value }) => {
           color="primary"
           checked={checked}
           name={value.toString()}
-          onChange={() => setChecked(!checked)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              setItog((prev: any) => ({
+                ...prev,
+                [`${step}`]: prev[step]
+                  ? prev[step] + e.target.name + ","
+                  : e.target.name + ",",
+              }));
+            } else {
+              setItog((prev: any) => ({
+                ...prev,
+                [`${step}`]: prev[step].split(e.target.name + ",").join(""),
+              }));
+            }
+            setChecked(!checked);
+          }}
         />
       }
       label={title}
