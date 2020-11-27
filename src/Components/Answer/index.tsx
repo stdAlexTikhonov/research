@@ -12,6 +12,7 @@ export const Answer: React.FC<AnswerType> = ({ title, value }) => {
       value={value.toString()}
       control={<Radio color="primary" size={"small"} />}
       label={title}
+      style={{ margin: 0 }}
     />
   );
 };

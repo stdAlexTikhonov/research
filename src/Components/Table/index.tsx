@@ -9,6 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { TITLE } from "../../utils/constants";
 import { Answer } from "../Answer";
+import { Row } from "../Row";
 
 const useStyles = makeStyles({
   table: {
@@ -46,19 +47,22 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
         <TableHead>
           <TableRow>
             <TableCell>{TITLE}</TableCell>
-            {variants.map((variant: string | number) => (
-              <TableCell
-                key={variant}
-                style={{
-                  padding: 0,
-                  margin: 0,
-                  maxWidth: 130,
-                  textAlign: variants.length < 10 ? "center" : "left",
-                }}
-              >
-                {variant}
-              </TableCell>
-            ))}
+            <TableCell
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              {variants.map((variant: string | number) => (
+                <div
+                  style={{ paddingLeft: 14, paddingRight: 14 }}
+                  key={variant}
+                >
+                  {variant}
+                </div>
+              ))}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -67,18 +71,9 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              {variants.map((variant: string | number) => (
-                <TableCell
-                  key={variant}
-                  style={{
-                    padding: 0,
-                    margin: 0,
-                    textAlign: variants.length < 10 ? "center" : "left",
-                  }}
-                >
-                  <Answer value={variant} />
-                </TableCell>
-              ))}
+              <TableCell>
+                <Row values={variants} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

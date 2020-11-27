@@ -41,7 +41,6 @@ export const App = () => {
           {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
           <div className={classes.viewer}>
             <Title />
-
             {data[step].variants ? (
               <DenseTable
                 answers={data[step].answers}
