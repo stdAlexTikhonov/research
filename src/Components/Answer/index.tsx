@@ -19,9 +19,11 @@ export const Answer: React.FC<AnswerType> = ({ title, value }) => {
 };
 
 export const CheckboxAns: React.FC<AnswerType> = ({ title, value }) => {
-  const { setItog, step } = useContext(Context)!;
-  // const { setItog, step } = my_context!;
-  const [checked, setChecked] = useState(false);
+  const { setItog, step, itog } = useContext(Context)!;
+
+  const [checked, setChecked] = useState(() =>
+    itog[step] ? itog[step][`${value}`] : false
+  );
   return (
     <FormControlLabel
       control={
@@ -33,14 +35,22 @@ export const CheckboxAns: React.FC<AnswerType> = ({ title, value }) => {
             if (e.target.checked) {
               setItog((prev: any) => ({
                 ...prev,
-                [`${step}`]: prev[step]
-                  ? prev[step] + e.target.name + ","
-                  : e.target.name + ",",
+                [`${step}`]: !!prev[step]
+                  ? {
+                      ...prev[step],
+                      [`${e.target.name}`]: true,
+                    }
+                  : {
+                      [`${e.target.name}`]: true,
+                    },
               }));
             } else {
               setItog((prev: any) => ({
                 ...prev,
-                [`${step}`]: prev[step].split(e.target.name + ",").join(""),
+                [`${step}`]: {
+                  ...prev[step],
+                  [`${e.target.name}`]: false,
+                },
               }));
             }
             setChecked(!checked);
