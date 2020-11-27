@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
+import { Context } from "../../context";
 
 type Props = {
   answers: string[];
@@ -9,7 +10,18 @@ type Props = {
 
 export const Answers: React.FC<Props> = ({ answers, id }) => {
   const [value, setValue] = useState("1");
-  const handleChange = (e: any) => setValue(e.target.value);
+  const my_context = useContext(Context);
+
+  const handleChange = (e: any) => {
+    if (my_context) {
+      const { setItog, step } = my_context;
+      setItog((prev: any) => ({
+        ...prev,
+        [`${step}`]: e.target.value,
+      }));
+    }
+    setValue(e.target.value);
+  };
 
   return (
     <RadioGroup name={id} value={value} onChange={handleChange}>

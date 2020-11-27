@@ -19,7 +19,10 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   };
 
   const handleNext = () => {
-    if (step === len - 2 && !passed) sendToServer();
+    if (step === len - 2 && !passed) {
+      console.log(itog);
+      // sendToServer();
+    }
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
   };
 
