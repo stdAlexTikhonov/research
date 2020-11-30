@@ -10,6 +10,7 @@ type AnswerType = {
 };
 
 export const Answer: React.FC<AnswerType> = ({ title, value, user_input }) => {
+  const [userInput, setUserInput] = useState("");
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
       <FormControlLabel
@@ -20,6 +21,8 @@ export const Answer: React.FC<AnswerType> = ({ title, value, user_input }) => {
       />
       <TextField
         id="standard-basic"
+        value={userInput}
+        onChange={(e) => setUserInput(e.target.value)}
         style={{ minWidth: 300, marginLeft: 20 }}
       />
     </div>
@@ -40,6 +43,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
 }) => {
   const { setItog, step, itog } = useContext(Context)!;
   const [checked_, setChecked] = useState(false);
+  const [userInput, setUserInput] = useState("");
 
   useEffect(() => {
     // setUserInput(itog[step].user_input);
@@ -81,6 +85,8 @@ export const CheckboxAns: React.FC<AnswerType> = ({
       />
       <TextField
         id="standard-basic"
+        value={userInput}
+        onChange={(e) => setUserInput(e.target.value)}
         style={{ minWidth: 300, marginLeft: 20 }}
       />
     </div>
