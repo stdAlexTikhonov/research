@@ -94,7 +94,16 @@ export const CheckboxAns: React.FC<AnswerType> = ({
         id="standard-basic"
         value={userInput}
         disabled={!checked_}
-        onChange={(e) => setUserInput(e.target.value)}
+        onChange={(e) => {
+          setUserInput(e.target.value);
+          setItog((prev: any) => ({
+            ...prev,
+            [`${step}`]: {
+              ...prev[step],
+              [`${value}`]: e.target.value,
+            },
+          }));
+        }}
         style={{ minWidth: 300, marginLeft: 20 }}
       />
     </div>
