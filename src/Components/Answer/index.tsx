@@ -7,9 +7,15 @@ type AnswerType = {
   title?: string;
   value: string | number;
   user_input: boolean;
+  selected?: boolean;
 };
 
-export const Answer: React.FC<AnswerType> = ({ title, value, user_input }) => {
+export const Answer: React.FC<AnswerType> = ({
+  title,
+  value,
+  user_input,
+  selected,
+}) => {
   const [userInput, setUserInput] = useState("");
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
@@ -22,6 +28,7 @@ export const Answer: React.FC<AnswerType> = ({ title, value, user_input }) => {
       <TextField
         id="standard-basic"
         value={userInput}
+        disabled={!selected}
         onChange={(e) => setUserInput(e.target.value)}
         style={{ minWidth: 300, marginLeft: 20 }}
       />
@@ -86,6 +93,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
       <TextField
         id="standard-basic"
         value={userInput}
+        disabled={!checked_}
         onChange={(e) => setUserInput(e.target.value)}
         style={{ minWidth: 300, marginLeft: 20 }}
       />

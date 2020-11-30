@@ -34,6 +34,7 @@ export const Answers: React.FC<Props> = ({ answers, id, user_input }) => {
           key={index}
           value={index}
           user_input={user_input && answers.length - 1 === index}
+          selected={index == value}
         />
       ))}
     </RadioGroup>
