@@ -9,10 +9,8 @@ type AnswerType = {
   user_input: boolean;
 };
 
-type CheckboxType = AnswerType & { checked: boolean };
-
 export const Answer: React.FC<AnswerType> = ({ title, value, user_input }) => {
-  return (
+  return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
       <FormControlLabel
         value={value.toString()}
@@ -20,10 +18,18 @@ export const Answer: React.FC<AnswerType> = ({ title, value, user_input }) => {
         label={title}
         style={{ margin: 0 }}
       />
-      {user_input && (
-        <TextField id="standard-basic" style={{ minWidth: 300 }} />
-      )}
+      <TextField
+        id="standard-basic"
+        style={{ minWidth: 300, marginLeft: 20 }}
+      />
     </div>
+  ) : (
+    <FormControlLabel
+      value={value.toString()}
+      control={<Radio color="primary" size={"small"} />}
+      label={title}
+      style={{ margin: 0 }}
+    />
   );
 };
 
@@ -40,40 +46,50 @@ export const CheckboxAns: React.FC<AnswerType> = ({
     setChecked(itog[step] ? itog[step][value] : false);
   }, [step]);
 
-  return (
+  const handleChange = (e: React.ChangeEvent<{}>) => {
+    if (!checked_) {
+      setItog((prev: any) => ({
+        ...prev,
+        [`${step}`]: !!prev[step]
+          ? {
+              ...prev[step],
+              [`${value}`]: true,
+            }
+          : {
+              [`${value}`]: true,
+            },
+      }));
+    } else {
+      setItog((prev: any) => ({
+        ...prev,
+        [`${step}`]: {
+          ...prev[step],
+          [`${value}`]: false,
+        },
+      }));
+    }
+    setChecked(!checked_);
+  };
+
+  return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
       <FormControlLabel
         checked={checked_}
-        onChange={(e) => {
-          if (!checked_) {
-            setItog((prev: any) => ({
-              ...prev,
-              [`${step}`]: !!prev[step]
-                ? {
-                    ...prev[step],
-                    [`${value}`]: true,
-                  }
-                : {
-                    [`${value}`]: true,
-                  },
-            }));
-          } else {
-            setItog((prev: any) => ({
-              ...prev,
-              [`${step}`]: {
-                ...prev[step],
-                [`${value}`]: false,
-              },
-            }));
-          }
-          setChecked(!checked_);
-        }}
+        onChange={handleChange}
         control={<Checkbox color="primary" />}
         label={title}
       />
-      {user_input && (
-        <TextField id="standard-basic" style={{ minWidth: 300 }} />
-      )}
+      <TextField
+        id="standard-basic"
+        style={{ minWidth: 300, marginLeft: 20 }}
+      />
     </div>
+  ) : (
+    <FormControlLabel
+      checked={checked_}
+      onChange={handleChange}
+      control={<Checkbox color="primary" />}
+      label={title}
+    />
   );
 };
