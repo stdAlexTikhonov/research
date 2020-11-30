@@ -16,6 +16,7 @@ export const Answer: React.FC<AnswerType> = ({
   user_input,
   selected,
 }) => {
+  const { setItog, step } = useContext(Context)!;
   const [userInput, setUserInput] = useState("");
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
@@ -29,7 +30,15 @@ export const Answer: React.FC<AnswerType> = ({
         id="standard-basic"
         value={userInput}
         disabled={!selected}
-        onChange={(e) => setUserInput(e.target.value)}
+        onChange={(e) => {
+          setUserInput(e.target.value);
+          setItog((prev: any) => ({
+            ...prev,
+            [`${step}`]: {
+              [`${value}`]: e.target.value,
+            },
+          }));
+        }}
         style={{ minWidth: 300, marginLeft: 20 }}
       />
     </div>
