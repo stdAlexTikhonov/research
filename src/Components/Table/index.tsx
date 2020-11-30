@@ -49,13 +49,13 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {answers.map((answer: string) => (
+          {answers.map((answer: string, index: number) => (
             <TableRow key={answer}>
               <TableCell component="th" scope="row">
                 {answer}
               </TableCell>
               <TableCell>
-                <Row values={variants} />
+                <Row values={variants} row_index={index} />
               </TableCell>
             </TableRow>
           ))}
