@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Radio, FormControlLabel, Checkbox } from "@material-ui/core";
 import { Context } from "../../context";
 
@@ -6,6 +6,8 @@ type AnswerType = {
   title?: string;
   value: string | number;
 };
+
+type CheckboxType = AnswerType & { checked: boolean };
 
 export const Answer: React.FC<AnswerType> = ({ title, value }) => {
   return (
@@ -20,43 +22,40 @@ export const Answer: React.FC<AnswerType> = ({ title, value }) => {
 
 export const CheckboxAns: React.FC<AnswerType> = ({ title, value }) => {
   const { setItog, step, itog } = useContext(Context)!;
+  const [checked_, setChecked] = useState(false);
 
-  const [checked, setChecked] = useState(() =>
-    itog[step] ? itog[step][`${value}`] : false
-  );
+  useEffect(() => {
+    setChecked(itog[step] ? itog[step][value] : false);
+  }, [step]);
+
   return (
     <FormControlLabel
-      control={
-        <Checkbox
-          color="primary"
-          checked={checked}
-          name={value.toString()}
-          onChange={(e) => {
-            if (e.target.checked) {
-              setItog((prev: any) => ({
-                ...prev,
-                [`${step}`]: !!prev[step]
-                  ? {
-                      ...prev[step],
-                      [`${e.target.name}`]: true,
-                    }
-                  : {
-                      [`${e.target.name}`]: true,
-                    },
-              }));
-            } else {
-              setItog((prev: any) => ({
-                ...prev,
-                [`${step}`]: {
+      checked={checked_}
+      onChange={(e) => {
+        if (!checked_) {
+          setItog((prev: any) => ({
+            ...prev,
+            [`${step}`]: !!prev[step]
+              ? {
                   ...prev[step],
-                  [`${e.target.name}`]: false,
+                  [`${value}`]: true,
+                }
+              : {
+                  [`${value}`]: true,
                 },
-              }));
-            }
-            setChecked(!checked);
-          }}
-        />
-      }
+          }));
+        } else {
+          setItog((prev: any) => ({
+            ...prev,
+            [`${step}`]: {
+              ...prev[step],
+              [`${value}`]: false,
+            },
+          }));
+        }
+        setChecked(!checked_);
+      }}
+      control={<Checkbox color="primary" />}
       label={title}
     />
   );
