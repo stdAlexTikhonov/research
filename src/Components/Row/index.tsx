@@ -32,7 +32,7 @@ export const Row: React.FC<Props> = ({ values, row_index }) => {
   return (
     <RadioGroup className={classes.root} value={value} onChange={handleChange}>
       {values.map((value_: string, index: number) => (
-        <Answer value={`${index}`} key={value_} />
+        <Answer value={`${index}`} key={value_} user_input={false} />
       ))}
     </RadioGroup>
   );
