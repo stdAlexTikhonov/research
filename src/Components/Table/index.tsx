@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,7 +8,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { TITLE } from "../../utils/constants";
-import { Answer } from "../Answer";
 import { Row } from "../Row";
 
 const useStyles = makeStyles({
@@ -17,16 +16,6 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
 type Props = {
   answers: string[];
   variants: string[];
@@ -34,12 +23,6 @@ type Props = {
 
 export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
   const classes = useStyles();
-
-  const rows = useMemo(
-    () =>
-      answers.map((answer: string) => createData(answer, 159, 6.0, 24, 4.0)),
-    [answers]
-  );
 
   return (
     <TableContainer component={Paper}>
@@ -66,10 +49,10 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
+          {answers.map((answer: string) => (
+            <TableRow key={answer}>
               <TableCell component="th" scope="row">
-                {row.name}
+                {answer}
               </TableCell>
               <TableCell>
                 <Row values={variants} />

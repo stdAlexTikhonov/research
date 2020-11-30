@@ -8,14 +8,14 @@ type Props = {
 };
 
 export const Row: React.FC<Props> = ({ values }) => {
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState(null);
   const handleChange = (e: any) => setValue(e.target.value);
   const classes = useStyles();
 
   return (
     <RadioGroup className={classes.root} value={value} onChange={handleChange}>
-      {values.map((value_: string) => (
-        <Answer value={value_} key={value_} />
+      {values.map((value_: string, index: number) => (
+        <Answer value={`${index}`} key={value_} />
       ))}
     </RadioGroup>
   );
