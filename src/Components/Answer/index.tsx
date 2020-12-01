@@ -18,8 +18,10 @@ export const Answer: React.FC<AnswerType> = ({
   selected,
   set_width,
 }) => {
-  const { setItog, step } = useContext(Context)!;
-  const [userInput, setUserInput] = useState("");
+  const { setItog, step, itog } = useContext(Context)!;
+  const [userInput, setUserInput] = useState(
+    () => itog[`user_input_${step}`] || ""
+  );
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
       <FormControlLabel
@@ -36,9 +38,7 @@ export const Answer: React.FC<AnswerType> = ({
           setUserInput(e.target.value);
           setItog((prev: any) => ({
             ...prev,
-            [`${step}`]: {
-              [`user_input`]: e.target.value,
-            },
+            [`user_input_${step}`]: e.target.value,
           }));
         }}
         style={{ minWidth: 300, marginLeft: 20 }}
