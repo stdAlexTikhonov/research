@@ -39,7 +39,12 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
             >
               {variants.map((variant: string | number) => (
                 <div
-                  style={{ paddingLeft: 14, paddingRight: 14 }}
+                  style={{
+                    width: variants.length < 10 ? 100 : "unset",
+                    textAlign: "center",
+                    paddingRight: variants.length > 5 ? 14 : "unset",
+                    paddingLeft: variants.length > 5 ? 14 : "unset",
+                  }}
                   key={variant}
                 >
                   {variant}

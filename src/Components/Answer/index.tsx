@@ -8,6 +8,7 @@ type AnswerType = {
   value: string | number;
   user_input: boolean;
   selected?: boolean;
+  set_width?: boolean;
 };
 
 export const Answer: React.FC<AnswerType> = ({
@@ -15,6 +16,7 @@ export const Answer: React.FC<AnswerType> = ({
   value,
   user_input,
   selected,
+  set_width,
 }) => {
   const { setItog, step } = useContext(Context)!;
   const [userInput, setUserInput] = useState("");
@@ -47,7 +49,12 @@ export const Answer: React.FC<AnswerType> = ({
       value={value.toString()}
       control={<Radio color="primary" size={"small"} />}
       label={title}
-      style={{ margin: 0 }}
+      style={{
+        margin: 0,
+        minWidth: set_width ? 100 : "unset",
+        display: set_width ? "flex" : "unset",
+        justifyContent: "center",
+      }}
     />
   );
 };
