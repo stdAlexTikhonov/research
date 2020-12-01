@@ -1,7 +1,14 @@
 {
-  "name": "test",
-  "version": "0.1.0",
+  "name": "surveys",
+  "version": "0.1.1",
   "private": true,
+  "description": "Обследования",
+  "author": "Contour Components",
+  "contributors": [
+    "Alexander Tikhonov <alexandert@contourcomponents.com>",
+    "Sergey Mikhaylov <sergeym@contourcomponents.com>"
+  ],
+  "license": "UNLICENSED",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -13,17 +20,31 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^1.0.6",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.0",
+    "soap": "^0.35.0",
     "typescript": "^4.0.3",
     "web-vitals": "^0.2.4"
   },
+  "devDependencies": {
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
+    "nodemon": "^2.0.6",
+    "npm-run-all": "^4.1.5"
+  },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "frontend": "cross-env NODE_ENV=development react-scripts start",
+    "start": "react-scripts start"
   },
   "eslintConfig": {
     "extends": [
@@ -42,10 +63,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.2"
   }
 }
