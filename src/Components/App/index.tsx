@@ -20,16 +20,20 @@ const theme = createMuiTheme({
   },
 });
 
+const setInitialData = (datum: any) => {
+  if (datum.multiple)
+    return Object.assign({}, Array(datum.answers.length).fill(false));
+  else if (datum.variants)
+    return Object.assign({}, Array(datum.answers.length).fill(""));
+  else return null;
+};
+
 export const App = () => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
   const data = useMemo(() => getData(), []);
   const [itog, setItog] = useState(() => {
-    const transformed = data.map((item) =>
-      item.multiple
-        ? Object.assign({}, Array(item.answers.length).fill(false))
-        : null
-    );
+    const transformed = data.map(setInitialData);
     const res = Object.assign({}, transformed);
     return res;
   });
