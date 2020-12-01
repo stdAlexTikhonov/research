@@ -37,7 +37,7 @@ export const Answer: React.FC<AnswerType> = ({
           setItog((prev: any) => ({
             ...prev,
             [`${step}`]: {
-              [`${value}`]: e.target.value,
+              [`user_input`]: e.target.value,
             },
           }));
         }}
@@ -116,7 +116,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
             ...prev,
             [`${step}`]: {
               ...prev[step],
-              [`${value}`]: e.target.value,
+              [`user_input`]: e.target.value,
             },
           }));
         }}

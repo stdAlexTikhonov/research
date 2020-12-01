@@ -23,8 +23,16 @@ const theme = createMuiTheme({
 export const App = () => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
-  const [itog, setItog] = useState({});
   const data = useMemo(() => getData(), []);
+  const [itog, setItog] = useState(() => {
+    const transformed = data.map((item) =>
+      item.multiple
+        ? Object.assign({}, Array(item.answers.length).fill(false))
+        : null
+    );
+    const res = Object.assign({}, transformed);
+    return res;
+  });
   const [showCrumbs, setShowCrumbs] = useState(false);
 
   return (
