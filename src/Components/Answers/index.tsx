@@ -6,9 +6,10 @@ import { Context } from "../../context";
 type Props = {
   answers: string[];
   id: string;
+  user_input: boolean;
 };
 
-export const Answers: React.FC<Props> = ({ answers, id }) => {
+export const Answers: React.FC<Props> = ({ answers, id, user_input }) => {
   const { setItog, step, itog } = useContext(Context)!;
   const [value, setValue] = useState(null);
 
@@ -28,7 +29,13 @@ export const Answers: React.FC<Props> = ({ answers, id }) => {
   return (
     <RadioGroup name={id} value={value} onChange={handleChange}>
       {answers.map((answer: string, index: number) => (
-        <Answer title={answer} key={index} value={index} />
+        <Answer
+          title={answer}
+          key={index}
+          value={index}
+          user_input={user_input && answers.length - 1 === index}
+          selected={index == value}
+        />
       ))}
     </RadioGroup>
   );

@@ -7,11 +7,10 @@ import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
-import { CheckboxAns } from "../Answer";
 import { DenseTable } from "../Table";
 import { Title } from "../Title";
-import FormGroup from "@material-ui/core/FormGroup";
 import { Answers } from "../Answers";
+import { MultipleAns } from "../MultipleAns";
 
 const theme = createMuiTheme({
   palette: {
@@ -46,13 +45,15 @@ export const App = () => {
             ) : (
               <div className={classes.answers}>
                 {data[step].multiple ? (
-                  <FormGroup>
-                    {data[step].answers.map((answer: string, index: number) => (
-                      <CheckboxAns title={answer} key={index} value={index} />
-                    ))}
-                  </FormGroup>
+                  <MultipleAns
+                    {...data[step]}
+                    user_input={!!data[step].user_answer}
+                  />
                 ) : (
-                  <Answers {...data[step]} />
+                  <Answers
+                    {...data[step]}
+                    user_input={!!data[step].user_answer}
+                  />
                 )}
               </div>
             )}

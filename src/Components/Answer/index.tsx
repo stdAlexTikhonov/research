@@ -1,62 +1,133 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Radio, FormControlLabel, Checkbox } from "@material-ui/core";
 import { Context } from "../../context";
+import TextField from "@material-ui/core/TextField";
 
 type AnswerType = {
   title?: string;
   value: string | number;
+  user_input: boolean;
+  selected?: boolean;
+  set_width?: boolean;
 };
 
-export const Answer: React.FC<AnswerType> = ({ title, value }) => {
-  return (
+export const Answer: React.FC<AnswerType> = ({
+  title,
+  value,
+  user_input,
+  selected,
+  set_width,
+}) => {
+  const { setItog, step } = useContext(Context)!;
+  const [userInput, setUserInput] = useState("");
+  return user_input ? (
+    <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
+      <FormControlLabel
+        value={value.toString()}
+        control={<Radio color="primary" size={"small"} />}
+        label={title}
+        style={{ margin: 0 }}
+      />
+      <TextField
+        id="standard-basic"
+        value={userInput}
+        disabled={!selected}
+        onChange={(e) => {
+          setUserInput(e.target.value);
+          setItog((prev: any) => ({
+            ...prev,
+            [`${step}`]: {
+              [`${value}`]: e.target.value,
+            },
+          }));
+        }}
+        style={{ minWidth: 300, marginLeft: 20 }}
+      />
+    </div>
+  ) : (
     <FormControlLabel
       value={value.toString()}
       control={<Radio color="primary" size={"small"} />}
       label={title}
-      style={{ margin: 0 }}
+      style={{
+        margin: 0,
+        minWidth: set_width ? 100 : "unset",
+        display: set_width ? "flex" : "unset",
+        justifyContent: "center",
+      }}
     />
   );
 };
 
-export const CheckboxAns: React.FC<AnswerType> = ({ title, value }) => {
+export const CheckboxAns: React.FC<AnswerType> = ({
+  title,
+  value,
+  user_input,
+}) => {
   const { setItog, step, itog } = useContext(Context)!;
+  const [checked_, setChecked] = useState(false);
+  const [userInput, setUserInput] = useState("");
 
-  const [checked, setChecked] = useState(() =>
-    itog[step] ? itog[step][`${value}`] : false
-  );
-  return (
-    <FormControlLabel
-      control={
-        <Checkbox
-          color="primary"
-          checked={checked}
-          name={value.toString()}
-          onChange={(e) => {
-            if (e.target.checked) {
-              setItog((prev: any) => ({
-                ...prev,
-                [`${step}`]: !!prev[step]
-                  ? {
-                      ...prev[step],
-                      [`${e.target.name}`]: true,
-                    }
-                  : {
-                      [`${e.target.name}`]: true,
-                    },
-              }));
-            } else {
-              setItog((prev: any) => ({
-                ...prev,
-                [`${step}`]: {
-                  ...prev[step],
-                  [`${e.target.name}`]: false,
-                },
-              }));
+  useEffect(() => {
+    // setUserInput(itog[step].user_input);
+    setChecked(itog[step] ? itog[step][value] : false);
+  }, [step]);
+
+  const handleChange = (e: React.ChangeEvent<{}>) => {
+    if (!checked_) {
+      setItog((prev: any) => ({
+        ...prev,
+        [`${step}`]: !!prev[step]
+          ? {
+              ...prev[step],
+              [`${value}`]: true,
             }
-            setChecked(!checked);
-          }}
-        />
-      }
+          : {
+              [`${value}`]: true,
+            },
+      }));
+    } else {
+      setItog((prev: any) => ({
+        ...prev,
+        [`${step}`]: {
+          ...prev[step],
+          [`${value}`]: false,
+        },
+      }));
+    }
+    setChecked(!checked_);
+  };
+
+  return user_input ? (
+    <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
+      <FormControlLabel
+        checked={checked_}
+        onChange={handleChange}
+        control={<Checkbox color="primary" />}
+        label={title}
+      />
+      <TextField
+        id="standard-basic"
+        value={userInput}
+        disabled={!checked_}
+        onChange={(e) => {
+          setUserInput(e.target.value);
+          setItog((prev: any) => ({
+            ...prev,
+            [`${step}`]: {
+              ...prev[step],
+              [`${value}`]: e.target.value,
+            },
+          }));
+        }}
+        style={{ minWidth: 300, marginLeft: 20 }}
+      />
+    </div>
+  ) : (
+    <FormControlLabel
+      checked={checked_}
+      onChange={handleChange}
+      control={<Checkbox color="primary" />}
       label={title}
     />
   );
