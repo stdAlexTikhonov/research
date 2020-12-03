@@ -16,6 +16,8 @@ assert.ok(EnvName, 'No NODE_ENV in env');
 
 const { now } = require('./lib');
 
+const { save, load } = require('./dwh');
+
 // Узнаем IP даже за прокси (https://stackoverflow.com/a/14631683).
 app.set('trust proxy', true);
 
@@ -34,16 +36,6 @@ const RootDir = path.join(__dirname, '../..');
 const BuildDir = path.join(RootDir, 'build');
 page.use(express.static(BuildDir));
 
-// React App.
-const IndexPath = path.join(BuildDir, 'index.html');
-const frontend = (req, res) => {
-    // console.debug(path.relative(RootDir, IndexPath), req.path);
-    assert.strictEqual(EnvName === 'production' || EnvName === 'windows', true, `${path.relative(RootDir, BuildDir)}/ is for production only`);
-    res.sendFile(IndexPath);
-};
-
-// For parsing application/json
-api.use(express.json());
 
 // Вызов несуществующего метода.
 const NotFoundStatus = 404;
@@ -61,11 +53,35 @@ function badRequest (req, res, fail) {
        });
 }
 
-// Методы API.
-api.post('/save', (req, res) => {
+// React App.
+const IndexPath = path.join(BuildDir, 'index.html');
+const frontend = (req, res) => {
     try {
-        console.debug('save', req.body);
-        res.json({ ok: true });
+        // console.debug(path.relative(RootDir, IndexPath), req.path);
+        assert.strictEqual(EnvName === 'production' || EnvName === 'windows', true, `${path.relative(RootDir, BuildDir)}/ is for production only`);
+        res.sendFile(IndexPath);
+    } catch (problem) {
+        badRequest(req, res, problem);
+    }
+};
+
+// For parsing application/json
+api.use(express.json());
+
+// Методы API.
+api.post('/save', async (req, res) => {
+    try {
+        const data = await save(req.body);
+        res.json(data);
+    } catch (fail) {
+        badRequest(req, res, fail);
+    }
+});
+
+api.get('/load', async (req, res) => {
+    try {
+        const data = await load();
+        res.json(data);
     } catch (fail) {
         badRequest(req, res, fail);
     }
