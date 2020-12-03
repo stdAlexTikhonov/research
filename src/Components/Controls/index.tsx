@@ -21,7 +21,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   const handleNext = () => {
     if (step === len - 2 && !passed) {
       console.log(itog);
-      // sendToServer();
+      sendToServer();
     }
 
     if (!itog[step]) {
@@ -36,7 +36,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 
   const sendToServer = async () => {
     setPassed(true);
-    const res = await post("/", itog);
+    const res = await post("/api/save", itog);
     console.log(res);
   };
 

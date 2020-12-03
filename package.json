@@ -1,6 +1,6 @@
 {
-  "name": "surveys",
-  "version": "0.1.1",
+  "name": "survey",
+  "version": "0.1.2",
   "private": true,
   "description": "Обследования",
   "author": "Contour Components",
@@ -43,8 +43,10 @@
   "scripts": {
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "server": "cross-env NODE_ENV=production node scripts/server.js",
+    "backend": "cross-env NODE_ENV=development nodemon --require dotenv/config --inspect src/server/main.js",
     "frontend": "cross-env NODE_ENV=development react-scripts start",
-    "start": "react-scripts start"
+    "start": "run-p frontend"
   },
   "eslintConfig": {
     "extends": [
