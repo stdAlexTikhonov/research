@@ -1,0 +1,138 @@
+*.bat text eol=crlf
+*.cs text eol=crlf diff=csharp
+*.vbs text eol=crlf
+*.vcf text eol=crlf
+
+*.asc text eol=lf
+*.awk text eol=lf
+*.bash text eol=lf
+*.c text eol=lf
+*.clj text eol=lf
+*.conf text eol=lf
+*.config text eol=lf
+*.cpp text eol=lf
+*.css text eol=lf
+*.csv text eol=lf
+*.dot text eol=lf
+*.editorconfig text eol=lf
+*.edn text eol=lf
+*.el text eol=lf
+*.emacs text eol=lf
+*.env text eol=lf
+*.eps text eol=lf
+*.fish text eol=lf
+*.gitattributes text eol=lf
+*.gitignore text eol=lf
+*.gitmodules text eol=lf
+*.go text eol=lf
+*.gv text eol=lf
+*.h text eol=lf
+*.hs text eol=lf
+*.htaccess text eol=lf
+*.htm text eol=lf
+*.html text eol=lf
+*.htpasswd text eol=lf
+*.ini text eol=lf
+*.java text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.less text eol=lf
+*.log text eol=lf
+*.lua text eol=lf
+*.m text eol=lf
+*.map text eol=lf
+*.md text eol=lf
+*.mk text eol=lf
+*.opml text eol=lf
+*.org text eol=lf
+*.php text eol=lf
+*.pl text eol=lf
+*.properties text eol=lf
+*.ps text eol=lf
+*.py text eol=lf
+*.rdf text eol=lf
+*.sass text eol=lf
+*.scm text eol=lf
+*.scss text eol=lf
+*.sed text eol=lf
+*.sh text eol=lf
+*.sql text eol=lf
+*.svg text eol=lf
+*.tcl text eol=lf
+*.tex text eol=lf
+*.trig text eol=lf
+*.ts text eol=lf
+*.tsv text eol=lf
+*.ttl text eol=lf
+*.txt text eol=lf
+*.vbs text eol=crlf
+*.vcf text eol=crlf
+*.vim text eol=lf
+*.wsdl text eol=lf
+*.xml text eol=lf
+*.xsd text eol=lf
+*.xslt text eol=lf
+*.yml text eol=lf
+Dockerfile text eol=lf
+Makefile text eol=lf
+hosts text eol=lf
+
+*.7z binary
+*.ai binary
+*.avi binary
+*.bmp binary
+*.class binary
+*.db binary
+*.deb binary
+*.dmg binary
+*.doc binary
+*.docx binary
+*.epub binary
+*.fb2 binary
+*.gif binary
+*.graffle binary
+*.gz binary
+*.gzip binary
+*.ico binary
+*.iso binary
+*.jar binary
+*.jpeg binary
+*.jpg binary
+*.kbdx binary
+*.mov binary
+*.mp3 binary
+*.mp4 binary
+*.numbers binary
+*.o binary
+*.odf binary
+*.odg binary
+*.ods binary
+*.odt binary
+*.ooutline binary
+*.pages binary
+*.pdf binary
+*.phar binary
+*.png binary
+*.ppt binary
+*.pptx binary
+*.psd binary
+*.rar binary
+*.rpm binary
+*.rtf binary
+*.rtfd binary
+*.sqlite3 binary
+*.tar binary
+*.tif binary
+*.tiff binary
+*.ttf binary
+*.vdx binary
+*.war binary
+*.wav binary
+*.wmv binary
+*.woff binary
+*.woff2 binary
+*.xls binary
+*.xlsx binary
+*.zip binary
+
+*.plist auto

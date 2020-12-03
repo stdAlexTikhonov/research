@@ -2,6 +2,15 @@
 'use strict';
 
 const assert = require('assert').strict;
+
+const fs = require('fs');
+
+const {
+    head,
+} = require('lodash');
+
+const { parseStringPromise } = require('xml2js');
+
 const { createClientAsync } = require('soap');
 
 const DwhWsdl = process.env.DWH_WSDL;
@@ -13,33 +22,42 @@ assert.ok(ModelCode, 'No MODEL_CODE in env');
 const SurveyCode = process.env.SURVEY_CODE;
 assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 
+// Соединение с DWH.
 function connect ()
 {
-    console.debug('dwh', 'connect');
+    console.debug('dwh', 'connect', DwhWsdl);
     try {
+        console.debug('dwh', 'connect', 'createClientAsync', '...');
         return createClientAsync(DwhWsdl);
-    } catch (problem) {
-        console.warn('createClientAsync', problem.message);
+    } catch (fail) {
+        console.warn('dwh', 'connect', 'createClientAsync', fail.message);
         throw problem;
     }
 }
 
+// Загружает Опросный лист из DWH.
 async function load ()
 {
-    console.debug('dwh', 'load');
-    const client = await connect();
     try {
-        const data = await client.getListAsync({
+        const client = await connect();
+        console.debug('dwh', 'load', 'getListAsync', '...');
+        const [ { listXml } ] = await client.getListAsync({
             modelCode: ModelCode,
             objectType: 'Reference',
         });
-        console.debug('listXml', data.listXml);
+        console.debug('dwh', 'load', 'parseStringPromise', '...');
+        const config = await parseStringPromise(listXml);
+        // console.debug('dwh', 'load', 'config', config);
+        return config;
     } catch (fail) {
-        console.warn('error', fail.message);
+        const { message } = fail;
+        console.warn('dwh', 'load', 'ERROR', message);
+        return { error: true,
+                 message };
     }
-    return [];
 }
 
+// Сохраняет Анкету в DWH.
 async function save ()
 {
     console.debug('dwh', 'save');
