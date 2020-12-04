@@ -11,6 +11,8 @@
 # production
 /build
 
+/data
+
 # misc
 .DS_Store
 .env.local
@@ -25,3 +27,10 @@ yarn-error.log*
 yarn.lock
 package-lock.json
 
+.DS_Store
+*.log
+*.pid
+*.tmp
+.#*
+.*.swp
+*.orig

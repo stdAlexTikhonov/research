@@ -68,7 +68,7 @@ const frontend = (req, res) => {
 // For parsing application/json
 api.use(express.json());
 
-// Методы API.
+// Сохраняет Анкету.
 api.post('/save', async (req, res) => {
     try {
         const data = await save(req.body);
@@ -78,6 +78,7 @@ api.post('/save', async (req, res) => {
     }
 });
 
+// Возвращает Опросный лист.
 api.get('/load', async (req, res) => {
     try {
         const data = await load();
@@ -87,7 +88,7 @@ api.get('/load', async (req, res) => {
     }
 });
 
-// JSON API.
+// Методы JSON API.
 app.use('/api', api);
 
 // Вызов несуществующего метода.
@@ -104,7 +105,6 @@ api.all('*', (req, res) => {
 const PageSlug = /^\/[a-z_-]*/;
 page.get(PageSlug, frontend);
 app.use(page);
-
 
 // Стартуем сервер
 const PortNum = +process.env.HTTP_PORT;
