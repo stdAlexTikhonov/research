@@ -3,10 +3,10 @@
 
 const assert = require('assert').strict;
 
-const fs = require('fs');
-
 const {
     head,
+    keys,
+    size,
 } = require('lodash');
 
 const { parseStringPromise } = require('xml2js');
@@ -25,9 +25,8 @@ assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 // Соединение с DWH.
 function connect ()
 {
-    console.debug('dwh', 'connect', DwhWsdl);
     try {
-        console.debug('dwh', 'connect', 'createClientAsync', '...');
+        console.debug('dwh', 'connect', 'createClientAsync', DwhWsdl);
         return createClientAsync(DwhWsdl);
     } catch (fail) {
         console.warn('dwh', 'connect', 'createClientAsync', fail.message);
@@ -40,18 +39,16 @@ async function load ()
 {
     try {
         const client = await connect();
-        console.debug('dwh', 'load', 'getListAsync', '...');
-        const [ { listXml } ] = await client.getListAsync({
-            modelCode: ModelCode,
-            objectType: 'Reference',
-        });
-        console.debug('dwh', 'load', 'parseStringPromise', '...');
-        const config = await parseStringPromise(listXml);
-        // console.debug('dwh', 'load', 'config', config);
-        return config;
+        console.debug('dwh', 'load', 'exportModelAsync', ModelCode);
+        const request = { modelCode: ModelCode };
+        const [ { modelXml } ] = await client.exportModelAsync(request);
+        console.debug('dwh', 'load', 'parseStringPromise', size(modelXml));
+        const { Model } = await parseStringPromise(modelXml);
+        console.debug('dwh', 'load', 'modelXml.Model', '(' + keys(Model).join(', ') + ')');
+        return Model;
     } catch (fail) {
         const { message } = fail;
-        console.warn('dwh', 'load', 'ERROR', message);
+        console.warn('dwh', 'load', 'error', message);
         return { error: true,
                  message };
     }
