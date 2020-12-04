@@ -73,6 +73,7 @@ api.post('/save', async (req, res) => {
     try {
         const data = await save(req.body);
         res.json(data);
+        console.debug('/save', 'done');
     } catch (fail) {
         badRequest(req, res, fail);
     }
@@ -83,6 +84,7 @@ api.get('/load', async (req, res) => {
     try {
         const data = await load();
         res.json(data);
+        console.debug('/load', 'done');
     } catch (fail) {
         badRequest(req, res, fail);
     }
