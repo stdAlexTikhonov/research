@@ -35,22 +35,30 @@ function connect ()
     return client;
 }
 
+// Получает описание модели.
+async function exportModel (modelCode)
+{
+    assert.ok(modelCode, 'No Model Code');
+    const client = await connect();
+    assert.ok(client, 'Failed connecting to DWH');
+    console.debug('dwh', 'exportModel', 'exportModelAsync', modelCode);
+    const request = { modelCode };
+    const [ { modelXml } ] = await client.exportModelAsync(request);
+    console.debug('dwh', 'exportModel', 'parseStringPromise', size(modelXml));
+    const { Model } = await parseStringPromise(modelXml);
+    console.debug('dwh', 'exportModel', 'modelXml.Model', '(' + keys(Model).join(', ') + ')');
+    return Model;
+}
+
 // Загружает Опросный лист из DWH.
 async function load ()
 {
     try {
-        const client = await connect();
-        assert.ok(client, 'Failed connecting to DWH');
-        console.debug('dwh', 'load', 'exportModelAsync', ModelCode);
-        const request = { modelCode: ModelCode };
-        const [ { modelXml } ] = await client.exportModelAsync(request);
-        console.debug('dwh', 'load', 'parseStringPromise', size(modelXml));
-        const { Model } = await parseStringPromise(modelXml);
-        console.debug('dwh', 'load', 'modelXml.Model', '(' + keys(Model).join(', ') + ')');
-        return Model;
+        console.warn('dwh', 'load', ModelCode);
+        return await exportModel(ModelCode);
     } catch (fail) {
         const { message } = fail;
-        console.warn('dwh', 'load', 'fail', message);
+        console.warn('dwh', 'load', 'error', message);
         return { error: true,
                  message };
     }
@@ -65,7 +73,7 @@ async function save (data)
         throw new Error('Not implemented');
     } catch (fail) {
         const { message } = fail;
-        console.warn('dwh', 'save', 'fail', message);
+        console.warn('dwh', 'save', 'error', message);
         return { error: true,
                  message };
     }
