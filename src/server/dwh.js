@@ -25,13 +25,14 @@ assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 // Соединение с DWH.
 function connect ()
 {
+    let client = null;
     try {
         console.debug('dwh', 'connect', 'createClientAsync', DwhWsdl);
-        return createClientAsync(DwhWsdl);
+        client = createClientAsync(DwhWsdl);
     } catch (fail) {
-        console.warn('dwh', 'connect', 'createClientAsync', fail.message);
-        throw problem;
+        console.warn('dwh', 'connect', 'createClientAsync', 'error', fail.message, DwhWsdl);
     }
+    return client;
 }
 
 // Загружает Опросный лист из DWH.
@@ -39,6 +40,7 @@ async function load ()
 {
     try {
         const client = await connect();
+        assert.ok(client, 'Failed connecting to DWH');
         console.debug('dwh', 'load', 'exportModelAsync', ModelCode);
         const request = { modelCode: ModelCode };
         const [ { modelXml } ] = await client.exportModelAsync(request);
@@ -48,18 +50,25 @@ async function load ()
         return Model;
     } catch (fail) {
         const { message } = fail;
-        console.warn('dwh', 'load', 'error', message);
+        console.warn('dwh', 'load', 'fail', message);
         return { error: true,
                  message };
     }
 }
 
 // Сохраняет Анкету в DWH.
-async function save ()
+async function save (data)
 {
-    console.debug('dwh', 'save');
-    // const client = await connect();
-    return { ok: true };
+    try {
+        console.debug('dwh', 'save', size(data));
+        const client = await connect();
+        throw new Error('Not implemented');
+    } catch (fail) {
+        const { message } = fail;
+        console.warn('dwh', 'save', 'fail', message);
+        return { error: true,
+                 message };
+    }
 }
 
 module.exports = { load, save };

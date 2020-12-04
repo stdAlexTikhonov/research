@@ -11,6 +11,7 @@ import { DenseTable } from "../Table";
 import { Title } from "../Title";
 import { Answers } from "../Answers";
 import { MultipleAns } from "../MultipleAns";
+import { Props } from "./type";
 
 const theme = createMuiTheme({
   palette: {
@@ -28,7 +29,7 @@ const setInitialData = (datum: any) => {
   else return null;
 };
 
-export const App = () => {
+export const App: React.FC<Props> = () => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
   const data = useMemo(() => getData(), []);

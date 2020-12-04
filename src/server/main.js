@@ -14,6 +14,8 @@ const api = express.Router();
 const EnvName = process.env.NODE_ENV;
 assert.ok(EnvName, 'No NODE_ENV in env');
 
+const { size } = require('lodash');
+
 const { now } = require('./lib');
 
 const { save, load } = require('./dwh');
@@ -36,7 +38,6 @@ const RootDir = path.join(__dirname, '../..');
 const BuildDir = path.join(RootDir, 'build');
 page.use(express.static(BuildDir));
 
-
 // Вызов несуществующего метода.
 const NotFoundStatus = 404;
 const NotFoundMessage = http.STATUS_CODES[NotFoundStatus];
@@ -56,11 +57,13 @@ function badRequest (req, res, fail) {
 // React App.
 const IndexPath = path.join(BuildDir, 'index.html');
 const frontend = (req, res) => {
+    const production = EnvName === 'production' || EnvName === 'windows';
     try {
-        // console.debug(path.relative(RootDir, IndexPath), req.path);
-        assert.strictEqual(EnvName === 'production' || EnvName === 'windows', true, `${path.relative(RootDir, BuildDir)}/ is for production only`);
+        assert.strictEqual(production, true, `${path.relative(RootDir, BuildDir)}/ is for production only`);
+        console.debug('frontend', path.relative(RootDir, IndexPath), req.path);
         res.sendFile(IndexPath);
     } catch (problem) {
+        console.warn('frontend', EnvName, req.path);
         badRequest(req, res, problem);
     }
 };
@@ -73,7 +76,7 @@ api.post('/save', async (req, res) => {
     try {
         const data = await save(req.body);
         res.json(data);
-        console.debug('/save', 'done');
+        console.debug('api', 'save', 'done', size(data));
     } catch (fail) {
         badRequest(req, res, fail);
     }
@@ -84,7 +87,7 @@ api.get('/load', async (req, res) => {
     try {
         const data = await load();
         res.json(data);
-        console.debug('/load', 'done');
+        console.debug('api', 'load', 'done', size(data));
     } catch (fail) {
         badRequest(req, res, fail);
     }
@@ -95,7 +98,7 @@ app.use('/api', api);
 
 // Вызов несуществующего метода.
 api.all('*', (req, res) => {
-    console.warn(NotFoundMessage, NotFoundStatus);
+    console.warn(NotFoundMessage, NotFoundStatus, req.method, req.path);
     res.status(NotFoundStatus)
        .json({
            error: true,
