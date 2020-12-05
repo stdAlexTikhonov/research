@@ -11,10 +11,10 @@ const app = express();
 const page = express.Router();
 const api = express.Router();
 
-const EnvName = process.env.NODE_ENV;
-assert.ok(EnvName, 'No NODE_ENV in env');
-
-const { size } = require('lodash');
+const {
+    size,
+    isString,
+} = require('lodash');
 
 const { now } = require('./lib');
 
@@ -22,6 +22,9 @@ const { save, load } = require('./dwh');
 
 // Узнаем IP даже за прокси (https://stackoverflow.com/a/14631683).
 app.set('trust proxy', true);
+
+const EnvName = process.env.NODE_ENV;
+assert.ok(EnvName, 'No NODE_ENV in env');
 
 const AppName = process.env.REACT_APP_NAME || 'survey';
 const AppVersion = process.env.REACT_APP_VERSION || 'unknown';
@@ -35,7 +38,8 @@ app.use(logger);
 
 // Статика.
 const RootDir = path.join(__dirname, '../..');
-const BuildDir = path.join(RootDir, 'build');
+const BuildDirName = 'build';
+const BuildDir = path.join(RootDir, BuildDirName);
 page.use(express.static(BuildDir));
 
 // Вызов несуществующего метода.
@@ -46,24 +50,25 @@ const NotFoundMessage = http.STATUS_CODES[NotFoundStatus];
 const BadRequestStatus = 400;
 const BadRequestMessage = http.STATUS_CODES[BadRequestStatus];
 function badRequest (req, res, fail) {
-    console.warn(req.url, BadRequestMessage, BadRequestStatus, fail.message);
+    const failMessage = isString(fail) ? fail : fail.message;
+    console.warn(req.url, BadRequestMessage, BadRequestStatus, failMessage);
     res.status(BadRequestStatus)
        .json({
            error: true,
-           message: fail.message || BadRequestMessage
+           message: failMessage || BadRequestMessage
        });
 }
 
-// React App.
-const IndexPath = path.join(BuildDir, 'index.html');
+// Главная страница приложения (Rect App).
+const IndexFileName = 'index.html';
+const IndexPath = path.join(BuildDir, IndexFileName);
+const IsProduction = EnvName === 'production' || EnvName === 'windows';
 const frontend = (req, res) => {
-    const production = EnvName === 'production' || EnvName === 'windows';
     try {
-        assert.strictEqual(production, true, `${path.relative(RootDir, BuildDir)}/ is for production only`);
-        console.debug('frontend', path.relative(RootDir, IndexPath), req.path);
+        assert.strictEqual(IsProduction, true, `${BuildDirName}/ is for production only`);
         res.sendFile(IndexPath);
     } catch (problem) {
-        console.warn('frontend', EnvName, req.path);
+        console.warn(IndexFileName, req.path, EnvName, IsProduction);
         badRequest(req, res, problem);
     }
 };
@@ -107,7 +112,7 @@ api.all('*', (req, res) => {
 });
 
 // Страницы сайта.
-const PageSlug = /^\/[a-z_-]*/;
+const PageSlug = /^\/?[a-z0-9_-]*\/?$/i;
 page.get(PageSlug, frontend);
 app.use(page);
 
