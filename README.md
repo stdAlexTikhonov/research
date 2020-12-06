@@ -1,42 +1,58 @@
-# Обследования
+# Обследования #
 
-Web-интерфейс для заполнения опросных листов.
+Web-интерфейс для заполнения *Анкет*.
 
 ## Настройки ##
 
 Все настройки определяются в файле [.env](./.env).
 
-## Зависимости
+Используемые библиотеки определены в файле [package.json](./package.json).
 
-В [Хранилище](https://www.contourcomponents.com/ru/dw) данных создаются опросные листы и сохраняются анкеты с ответами.
+## Зависимости ##
 
-Используемые библиотеки определены в [package.json](./package.json).
+В [Хранилище](https://www.contourcomponents.com/ru/dw) данных:
 
-Пакеты устанавливаются в каталог `node_modules/`.
+* создаются *Опросные листы* с вопросами, и
+* сохраняются заполненные *Анкеты* с ответами.
 
-## Установка
+Для управления пакетами и служебными скриптами используется [npm](https://docs.npmjs.com/packages-and-modules).
 
-    npm install
+Сторонние библиотеки [не хранятся](https://git-scm.com/docs/gitignore) в репозитории.
+
+Требуемые пакеты скачиваются в каталог `node_modules/` при установке приложения.
+
+## Установка ##
 
 Проект инициирован с помощью [Create React App](https://github.com/facebook/create-react-app).
 
-## Сборка
+    npm install
 
-Сборка файлов фронтенда в папке `build/` для использования в production:
+## Сборка ##
 
-    npm build
+Сборка файлов фронтенда в папке `build/` для использования в **production**:
+
+    npm run build
 
 It correctly bundles React in production mode and optimizes the build for the best performance.
 The build is minified and the filenames include the hashes.
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Запуск
+## Запуск ##
 
-In the project directory, you can run:
+Два основных режима запуска приложения: разработка и эксплуатация.
+Им соответствуют следующие значения переменной окружения `NODE_ENV`.
+
+### development ###
 
     npm start
 
-## Тесты
+Открывает браузер с фронтендом на порту [3000](http://localhost:3000).
+
+### production ###
+
+    npm run server
+
+## Тесты ##
 
 Launch the test runner in the interactive watch mode:
 
@@ -44,34 +60,34 @@ Launch the test runner in the interactive watch mode:
 
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## Термины
+## Термины ###
 
-### Обследование
+### Обследование (Survey) ###
 
-**Survey**. Вопросы и ответы.
+*Обследование* содержит набор вопросов и заполненные анкеты с ответами.
 
-### Опросный лист
+### Опросный лист (Questionary) ###
 
-Вопросы *Обследования*.
+*Опросный лист* определяет порядок вопросов и возможные варианты ответа на них.
 
-### Анкета
+### Анкета ###
 
-Ответы на вопросы *Обследования*.
+*Анкеты* хранят ответы респондентов в Хранилище.
 
-## API
+## API ##
 
-### GET /api/load
+### GET /api/load ###
 
 Получает *Опросный лист*:
 
     curl -kLs -H 'Content-Type: application/json' localhost:3000/api/load
 
-### POST /api/save
+### POST /api/save ###
 
 Сохраняет *Анекту*:
 
-    curl -X POST -kLs -H 'Content-Type: application/json' --data-binary '{}' localhost:8123/api/save
+    curl  -kLs  -H 'Content-Type: application/json' -X POST --data-binary '{}' localhost:8123/api/save
 
-## Ссылки
+## Ссылки ##
 
 To learn React, check out the [React documentation](https://reactjs.org/).

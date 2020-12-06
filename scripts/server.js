@@ -1,10 +1,14 @@
 /*global __dirname,require,process*/
 'use strict';
-
 const path = require('path');
-const RootDir = path.join(__dirname, '..');
-const ScriptPath = path.join(RootDir, 'src/server/main.js');
+const assert = require('assert').strict;
 
+const RootDir = path.join(__dirname, '..');
 process.chdir(RootDir);
+
 require('dotenv').config();
-require(ScriptPath);
+assert.ok(process.env.NODE_ENV, 'No NODE_ENV in env');
+
+const ScriptPath = 'src/server/main.js';
+const FullPath = path.join(RootDir, ScriptPath);
+require(FullPath);
