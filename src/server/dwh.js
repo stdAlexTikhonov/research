@@ -111,6 +111,10 @@ async function load ()
       const record = mapValues(row, head);
       for (let key of QIntKeys) if (key in record) record[key] = +record[key];
       for (let key of QBoolKeys) if (key in record) record[key] = !!+record[key];
+      if ('multiply_values' in record) {
+        record.multiple_values = record.multiply_values;
+        delete record.multiply_values;
+      }
       return record;
     });
     const refs = result(head(References), [ ReferenceType ], []);

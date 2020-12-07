@@ -101,7 +101,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "code": "v1",
             "value": "Пользуетесь ли Вы официальной статистической информацией, предоставляемой Службой?",
             "question": "v1",
-            "multiply_values": false,
+            "multiple_values": false,
             "other_allowed": false,
             "question_num": 1
         },
@@ -110,7 +110,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "value": "Как часто Вы пользуетесь официальной статистической информацией?..",
             "parent_code": "v1",
             "question": "v2",
-            "multiply_values": false,
+            "multiple_values": false,
             "other_allowed": false,
             "condition": 1,
             "question_num": 2
@@ -120,7 +120,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "value": "Какую официальную статистическую информацию Вы используете?",
             "parent_code": "v2",
             "question": "v5",
-            "multiply_values": true,
+            "multiple_values": true,
             "other_allowed": true,
             "question_tooltip": "Возможны несколько вариантов ответа",
             "question_num": 5
@@ -130,7 +130,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "value": "Уровень детализации информации",
             "parent_code": "v2",
             "question": "v6",
-            "multiply_values": false,
+            "multiple_values": false,
             "other_allowed": false,
             "question_group": 6,
             "question_num": 6,
@@ -140,7 +140,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "value": "Оперативность",
             "parent_code": "v2",
             "question": "v6",
-            "multiply_values": false,
+            "multiple_values": false,
             "other_allowed": false,
             "question_group": 6,
             "question_num": 6
