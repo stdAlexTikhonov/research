@@ -8,6 +8,7 @@ const {
   keys,
   map,
   mapValues,
+  omit,
   partial,
   result,
   size,
@@ -87,24 +88,34 @@ async function queryExtendedData (modelCode, objectType, objectCode)
 
 // Загружает Опросный лист из DWH.
 const QuestionaryType = 'Questionary';
+const QIntKeys = [ 'action_id', 'sort_order', 'condition', 'question_num', 'question_group' ];
+const QBoolKeys = [ 'multiply_values', 'other_allowed' ];
+const QSortKey = 'sort_order';
+const QOmitKeys = [ QSortKey ];
+const ReferenceType = 'Reference';
+const RIntKeys = [ 'code', 'question_num' ];
 async function load ()
 {
   try {
-    console.debug('dwh', 'load', ModelCode, SurveyCode);
-    const { Questionaries } = await queryExtendedData(ModelCode, QuestionaryType, SurveyCode);
-    const response = result(Questionaries, [ 0, QuestionaryType, 0 ]);
-    const form = response.$;
-    const IntKeys = [ 'action_id', 'sort_order', 'condition', 'question_num', 'question_group' ];
-    const BoolKeys = [ 'multiply_values', 'other_allowed' ];
-    form[QuestionaryType] = sortBy(
-      map(result(response.Rows, [ 0, 'Row' ]), (row) => {
-        const record = mapValues(row, head);
-        for (let key of IntKeys) if (key in record) record[key] = +record[key];
-        for (let key of BoolKeys) if (key in record) record[key] = !!+record[key];
-        return record;
-      }),
-      'sort_order');
-    console.debug('dwh', 'load', 'queryExtendedData', '(' + keys(form).join(', ') + ')',  size(form[QuestionaryType]));
+    console.debug('dwh', 'load', 'queryExtendedData', ModelCode, SurveyCode);
+    const { Questionaries, References } = await queryExtendedData(ModelCode, QuestionaryType, SurveyCode);
+    const questions = result(Questionaries, [ 0, QuestionaryType, 0 ]);
+    const form = questions.$;
+    const qs = map(result(questions.Rows, [ 0, 'Row' ]), (row) => {
+      const record = mapValues(row, head);
+      for (let key of QIntKeys) if (key in record) record[key] = +record[key];
+      for (let key of QBoolKeys) if (key in record) record[key] = !!+record[key];
+      return record;
+    });
+    form[QuestionaryType] = map(sortBy(qs, QSortKey), (record) => omit(record, QOmitKeys));
+    const refs = result(References, [ 0, ReferenceType, 0 ]);
+    const rs = map(result(refs.Rows, [ 0, 'Row' ]), (row) => {
+      const record = mapValues(row, head);
+      for (let key of RIntKeys) if (key in record) record[key] = +record[key];
+      return record;
+    });
+    form[ReferenceType] = rs;
+    console.debug('dwh', 'load', size(form[QuestionaryType]), '(' + keys(form).join(', ') + ')');
     return form;
   } catch (fail) {
     return warning('load', fail);

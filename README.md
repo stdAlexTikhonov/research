@@ -84,7 +84,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### GET /api/load ###
 
-Получает *Опросный лист*. Код обследования и
+Получает *Опросный лист*.
 
 #### Пример запроса ####
 
@@ -120,6 +120,13 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "other_allowed": false,
             "question_group": 6,
             "question_num": 6
+        }
+    ],
+    "Reference": [
+        {
+            "code": 6,
+            "question_num": 6,
+            "value": "Оцените, пожалуйста, официальную статистическую информацию..."
         }
     ]
 }
