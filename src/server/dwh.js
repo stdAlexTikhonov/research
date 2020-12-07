@@ -4,6 +4,8 @@ const assert = require('assert').strict;
 
 // Утилиты, https://lodash.com/docs/4.17.15
 const {
+  compact,
+  concat,
   head,
   keys,
   map,
@@ -13,6 +15,7 @@ const {
   result,
   size,
   sortBy,
+  without,
 } = require('lodash');
 
 // Веб-сервис, https://en.wikipedia.org/wiki/SOAP
@@ -91,9 +94,12 @@ const QuestionaryType = 'Questionary';
 const QIntKeys = [ 'action_id', 'sort_order', 'condition', 'question_num', 'question_group' ];
 const QBoolKeys = [ 'multiply_values', 'other_allowed' ];
 const QSortKey = 'sort_order';
-const QOmitKeys = [ QSortKey ];
+const QOmitKeys = [ QSortKey, 'action_id' ];
 const ReferenceType = 'Reference';
 const RIntKeys = [ 'code', 'question_num' ];
+const RBoolKeys = [ ];
+const ROmitKeys = [];
+const GroupRefCode = 'question_groups';
 async function load ()
 {
   try {
@@ -101,21 +107,36 @@ async function load ()
     const { Questionaries, References } = await queryExtendedData(ModelCode, QuestionaryType, SurveyCode);
     const questions = result(Questionaries, [ 0, QuestionaryType, 0 ]);
     const form = questions.$;
-    const qs = map(result(questions.Rows, [ 0, 'Row' ]), (row) => {
+    const qs = map(head(questions.Rows).Row, (row) => {
       const record = mapValues(row, head);
       for (let key of QIntKeys) if (key in record) record[key] = +record[key];
       for (let key of QBoolKeys) if (key in record) record[key] = !!+record[key];
       return record;
     });
-    form[QuestionaryType] = map(sortBy(qs, QSortKey), (record) => omit(record, QOmitKeys));
-    const refs = result(References, [ 0, ReferenceType, 0 ]);
-    const rs = map(result(refs.Rows, [ 0, 'Row' ]), (row) => {
-      const record = mapValues(row, head);
-      for (let key of RIntKeys) if (key in record) record[key] = +record[key];
-      return record;
-    });
-    form[ReferenceType] = rs;
-    console.debug('dwh', 'load', size(form[QuestionaryType]), '(' + keys(form).join(', ') + ')');
+    form.Questionary = map(sortBy(qs, QSortKey), (record) => omit(record, QOmitKeys));
+    const refs = result(head(References), [ ReferenceType ], []);
+    const rs = {};
+    let first = true;
+    for (let ref of refs) {
+      const Reference = compact(map(
+        concat(result(ref, [ 'Rows', 0, 'Row' ], []),
+               result(ref, [ 'Rows', 0, 'question_rows', 0, 'Row' ], [])),
+        (row) => {
+          const record = mapValues(row, head);
+          for (let key of RIntKeys) if (key in record) record[key] = +record[key];
+          for (let key of RBoolKeys) if (key in record) record[key] = !!+record[key];
+          return record;
+        }));
+      const that = ref.$;
+      const code = first ? GroupRefCode : that.code;
+      if (first) {
+        that[GroupRefCode] = true;
+        first = false;
+      }
+      rs[code] = omit({ ...that, Reference }, ROmitKeys);
+    }
+    form.References = rs;
+    console.debug('dwh', 'load', size(form.Questionary), '(' + keys(form).join(', ') + ')');
     return form;
   } catch (fail) {
     return warning('load', fail);

@@ -98,10 +98,26 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
     "caption": "Удовлетворенность пользователей официальной статистической информацией...",
     "Questionary": [
         {
-            "action_id": 382,
+            "code": "v1",
+            "value": "Пользуетесь ли Вы официальной статистической информацией, предоставляемой Службой?",
+            "question": "v1",
+            "multiply_values": false,
+            "other_allowed": false,
+            "question_num": 1
+        },
+        {
+            "code": "v2",
+            "value": "Как часто Вы пользуетесь официальной статистической информацией?..",
+            "parent_code": "v1",
+            "question": "v2",
+            "multiply_values": false,
+            "other_allowed": false,
+            "condition": 1,
+            "question_num": 2
+        },
+        {
             "code": "v5",
-            "value": "Отметьте, какую официальную статистическую информацию Вы используете?",
-            "sort_order": 5,
+            "value": "Какую официальную статистическую информацию Вы используете?",
             "parent_code": "v2",
             "question": "v5",
             "multiply_values": true,
@@ -110,25 +126,77 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "question_num": 5
         },
         {
-            "action_id": 389,
             "code": "v6.1",
             "value": "Уровень детализации информации",
-            "sort_order": 6,
+            "parent_code": "v2",
+            "question": "v6",
+            "multiply_values": false,
+            "other_allowed": false,
+            "question_group": 6,
+            "question_num": 6,
+        },
+        {
+            "code": "v6.3",
+            "value": "Оперативность",
             "parent_code": "v2",
             "question": "v6",
             "multiply_values": false,
             "other_allowed": false,
             "question_group": 6,
             "question_num": 6
-        }
+        },
     ],
-    "Reference": [
-        {
-            "code": 6,
-            "question_num": 6,
-            "value": "Оцените, пожалуйста, официальную статистическую информацию..."
+    "References": {
+        "question_groups": {
+            "code": "satisfaction_of_users_with_official_stat_inform_groupref",
+            "caption": "Удовлетворенность пользователей...",
+            "question_groups": true,
+            "Reference": [
+                {
+                    "code": 6,
+                    "question_num": 6,
+                    "value": "Оцените, пожалуйста, официальную статистическую информацию по 10-балльной шкале..."
+                },
+                {
+                    "code": 7,
+                    "question_num": 7,
+                    "value": "Насколько хорошо Вы осведомлены..."
+                }
+            ]
+        },
+        "v7": {
+            "code": "v7",
+            "caption": "Вопрос 07. Насколько хорошо Вы осведомлены о методологических разработках?..",
+            "Reference": [
+                {
+                    "code": 3,
+                    "value": "Практически ничего не знаю"
+                },
+                {
+                    "code": 4,
+                    "value": "Не знаю ничего"
+                },
+                {
+                    "code": 0,
+                    "value": "Затрудняюсь ответить"
+                }
+            ]
+        },
+        "v1": {
+            "code": "v1",
+            "caption": "Вопрос 01. Пользуетесь ли Вы официальной статистической информацией, предоставляемой Службой?",
+            "Reference": [
+                {
+                    "code": 1,
+                    "value": "Да"
+                },
+                {
+                    "code": 2,
+                    "value": "Нет"
+                }
+            ]
         }
-    ]
+    }
 }
 ```
 
