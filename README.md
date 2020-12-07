@@ -8,6 +8,8 @@ Web-интерфейс для заполнения *Анкет*.
 
 Используемые библиотеки определены в файле [package.json](./package.json).
 
+Каталог `data/` и сторонние библиотеки [не хранятся](https://git-scm.com/docs/gitignore) в репозитории.
+
 ## Зависимости ##
 
 В [Хранилище](https://www.contourcomponents.com/ru/dw) данных:
@@ -17,15 +19,17 @@ Web-интерфейс для заполнения *Анкет*.
 
 Для управления пакетами и служебными скриптами используется [npm](https://docs.npmjs.com/packages-and-modules).
 
-Сторонние библиотеки [не хранятся](https://git-scm.com/docs/gitignore) в репозитории.
-
 Требуемые пакеты скачиваются в каталог `node_modules/` при установке приложения.
-
-## Установка ##
 
 Проект инициирован с помощью [Create React App](https://github.com/facebook/create-react-app).
 
-    npm install
+Файл `data/dwh.wsdl` скачивается из *Хранилища* при разворачивании приложения.
+
+## Установка ##
+
+Комбинация `npm install` и `make data/dwh.wsdl`:
+
+    make install
 
 ## Сборка ##
 
@@ -44,9 +48,11 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### development ###
 
+Комбинация скриптов `npm run frontend` и `npm run backend`:
+
     npm start
 
-Открывает браузер с фронтендом на порту [3000](http://localhost:3000).
+При запуске *фронтенда* открывается браузер с сайтом на порте [3000](http://localhost:3000).
 
 ### production ###
 
@@ -78,15 +84,54 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### GET /api/load ###
 
-Получает *Опросный лист*:
+Получает *Опросный лист*. Код обследования и
 
-    curl -kLs -H 'Content-Type: application/json' localhost:3000/api/load
+#### Пример запроса ####
+
+    curl -kLs -H 'Content-Type: application/json' localhost:8123/api/load
+
+#### Пример ответа ####
+
+```json
+{
+    "code": "satisfaction_of_users_with_official_stat_inform",
+    "caption": "Удовлетворенность пользователей официальной статистической информацией...",
+    "Questionary": [
+        {
+            "action_id": 382,
+            "code": "v5",
+            "value": "Отметьте, какую официальную статистическую информацию Вы используете?",
+            "sort_order": 5,
+            "parent_code": "v2",
+            "question": "v5",
+            "multiply_values": true,
+            "other_allowed": true,
+            "question_tooltip": "Возможны несколько вариантов ответа",
+            "question_num": 5
+        },
+        {
+            "action_id": 389,
+            "code": "v6.1",
+            "value": "Уровень детализации информации",
+            "sort_order": 6,
+            "parent_code": "v2",
+            "question": "v6",
+            "multiply_values": false,
+            "other_allowed": false,
+            "question_group": 6,
+            "question_num": 6
+        }
+    ]
+}
+```
 
 ### POST /api/save ###
 
-Сохраняет *Анекту*:
+Сохраняет *Анкету*.
 
-    curl  -kLs  -H 'Content-Type: application/json' -X POST --data-binary '{}' localhost:8123/api/save
+#### Пример запроса ####
+
+    curl  -kLs  -H 'Content-Type: application/json' -X POST --data-binary '{}' localhost:3000/api/save
 
 ## Ссылки ##
 

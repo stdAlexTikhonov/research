@@ -94,9 +94,16 @@ async function load ()
     const { Questionaries } = await queryExtendedData(ModelCode, QuestionaryType, SurveyCode);
     const response = result(Questionaries, [ 0, QuestionaryType, 0 ]);
     const form = response.$;
-    form[QuestionaryType] = sortBy(map(result(response.Rows, [ 0, 'Row' ]),
-                                       (row) => mapValues(row, head),
-                                       'sort_order'));
+    const IntKeys = [ 'action_id', 'sort_order', 'condition', 'question_num', 'question_group' ];
+    const BoolKeys = [ 'multiply_values', 'other_allowed' ];
+    form[QuestionaryType] = sortBy(
+      map(result(response.Rows, [ 0, 'Row' ]), (row) => {
+        const record = mapValues(row, head);
+        for (let key of IntKeys) if (key in record) record[key] = +record[key];
+        for (let key of BoolKeys) if (key in record) record[key] = !!+record[key];
+        return record;
+      }),
+      'sort_order');
     console.debug('dwh', 'load', 'queryExtendedData', '(' + keys(form).join(', ') + ')',  size(form[QuestionaryType]));
     return form;
   } catch (fail) {
