@@ -4,13 +4,14 @@ const assert = require('assert').strict;
 
 // Утилиты, https://lodash.com/docs/4.17.15
 const {
-  compact,
   head,
   keys,
   map,
+  mapValues,
   partial,
   result,
   size,
+  sortBy,
 } = require('lodash');
 
 // Веб-сервис, https://en.wikipedia.org/wiki/SOAP
@@ -86,17 +87,17 @@ async function queryExtendedData (modelCode, objectType, objectCode)
 
 // Загружает Опросный лист из DWH.
 const QuestionaryType = 'Questionary';
-const ReferenceType = 'Reference';
 async function load ()
 {
   try {
     console.debug('dwh', 'load', ModelCode, SurveyCode);
-    const { Questionaries, References } = await queryExtendedData(ModelCode, QuestionaryType, SurveyCode);
-    const form = {
-      Questionary: result(Questionaries, [ 0, QuestionaryType ], null),
-      References: map(References, (ref) => result(ref, [ ReferenceType ])),
-    };
-    console.debug('dwh', 'load', 'queryExtendedData', '(' + keys(form).join(', ') + ')', size(form.Questionary), size(form.References));
+    const { Questionaries } = await queryExtendedData(ModelCode, QuestionaryType, SurveyCode);
+    const response = result(Questionaries, [ 0, QuestionaryType, 0 ]);
+    const form = response.$;
+    form[QuestionaryType] = sortBy(map(result(response.Rows, [ 0, 'Row' ]),
+                                       (row) => mapValues(row, head),
+                                       'sort_order'));
+    console.debug('dwh', 'load', 'queryExtendedData', '(' + keys(form).join(', ') + ')',  size(form[QuestionaryType]));
     return form;
   } catch (fail) {
     return warning('load', fail);
