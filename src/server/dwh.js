@@ -4,9 +4,12 @@ const assert = require('assert').strict;
 
 // Утилиты, https://lodash.com/docs/4.17.15
 const {
+  compact,
   head,
   keys,
+  map,
   partial,
+  result,
   size,
 } = require('lodash');
 
@@ -46,6 +49,11 @@ async function connection (soapWsdl)
 // Соединение с веб-сервисом Хранилища данных.
 const connect = partial(connection, DwhWsdlPath);
 
+const warning = (place, problem) => ({
+  message: (console.warn(place, 'error', problem.message), problem.message),
+  error: true
+});
+
 // Получает описание модели.
 async function exportModel (modelCode)
 {
@@ -60,18 +68,36 @@ async function exportModel (modelCode)
   return Model;
 }
 
-const warning = (place, problem) => ({
-  message: (console.warn(place, 'error', problem.message), problem.message),
-  error: true
-});
+// Получает описание модели.
+async function queryExtendedData (modelCode, objectType, objectCode)
+{
+  assert.ok(modelCode, 'No modelCode');
+  assert.ok(objectType, 'No objectType');
+  assert.ok(objectCode, 'No objectCode');
+  const client = await connect();
+  const request = { modelCode, objectType, objectCode };
+  console.debug('dwh', 'queryExtendedData', 'queryExtendedDataAsync', request);
+  const [ { xmlResponse } ] = await client.queryExtendedDataAsync(request);
+  console.debug('dwh', 'queryExtendedData', 'parseStringPromise', 'xmlResponse', size(xmlResponse));
+  const { Model } = await parseStringPromise(xmlResponse);
+  console.debug('dwh', 'queryExtendedData', 'Model', size(Model), '(' + keys(Model).join(', ') + ')');
+  return Model;
+}
 
 // Загружает Опросный лист из DWH.
+const QuestionaryType = 'Questionary';
+const ReferenceType = 'Reference';
 async function load ()
 {
   try {
-    console.debug('dwh', 'load', ModelCode);
-    const model = await exportModel(ModelCode);
-    return model;
+    console.debug('dwh', 'load', ModelCode, SurveyCode);
+    const { Questionaries, References } = await queryExtendedData(ModelCode, QuestionaryType, SurveyCode);
+    const form = {
+      Questionary: result(Questionaries, [ 0, QuestionaryType ], null),
+      References: map(References, (ref) => result(ref, [ ReferenceType ])),
+    };
+    console.debug('dwh', 'load', 'queryExtendedData', '(' + keys(form).join(', ') + ')', size(form.Questionary), size(form.References));
+    return form;
   } catch (fail) {
     return warning('load', fail);
   }
