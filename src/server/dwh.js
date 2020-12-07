@@ -90,14 +90,14 @@ async function queryExtendedData (modelCode, objectType, objectCode)
 }
 
 // Загружает Опросный лист из DWH.
-const QuestionaryType = 'Questionary';
-const QIntKeys = [ 'action_id', 'sort_order', 'condition', 'question_num', 'question_group' ];
-const QBoolKeys = [ 'multiply_values', 'other_allowed' ];
 const QSortKey = 'sort_order';
+const QuestionaryType = 'Questionary';
+const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group' ];
+const QBoolKeys = [ 'multiply_values', 'other_allowed' ];
 const QOmitKeys = [ QSortKey, 'action_id' ];
 const ReferenceType = 'Reference';
 const RIntKeys = [ 'code', 'question_num' ];
-const RBoolKeys = [ ];
+const RBoolKeys = [];
 const ROmitKeys = [];
 const GroupRefCode = 'question_groups';
 async function load ()
@@ -113,7 +113,6 @@ async function load ()
       for (let key of QBoolKeys) if (key in record) record[key] = !!+record[key];
       return record;
     });
-    form.Questionary = map(sortBy(qs, QSortKey), (record) => omit(record, QOmitKeys));
     const refs = result(head(References), [ ReferenceType ], []);
     const rs = {};
     let first = true;
@@ -135,6 +134,7 @@ async function load ()
       }
       rs[code] = omit({ ...that, Reference }, ROmitKeys);
     }
+    form.Questionary = map(sortBy(qs, QSortKey), (record) => omit(record, QOmitKeys));
     form.References = rs;
     console.debug('dwh', 'load', size(form.Questionary), '(' + keys(form).join(', ') + ')');
     return form;
