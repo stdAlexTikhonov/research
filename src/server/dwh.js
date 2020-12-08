@@ -132,11 +132,9 @@ async function load ()
         }));
       const that = ref.$;
       const code = first ? GroupRefCode : that.code;
-      if (first) {
-        that[GroupRefCode] = true;
-        first = false;
-      }
+      if (first) that[GroupRefCode] = true;
       rs[code] = omit({ ...that, Reference }, ROmitKeys);
+      if (first) first = false;
     }
     form.Questionary = map(sortBy(qs, QSortKey), (record) => omit(record, QOmitKeys));
     form.References = rs;
