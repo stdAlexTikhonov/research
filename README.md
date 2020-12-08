@@ -88,7 +88,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 #### Пример запроса ####
 
-    curl -kLs -H 'Content-Type: application/json' localhost:8123/api/load
+    curl -kLs -H 'Content-Type: application/json' localhost:3000/api/load/
 
 #### Пример ответа ####
 
