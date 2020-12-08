@@ -255,7 +255,11 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 #### Пример запроса ####
 
-    curl  -kLs  -H 'Content-Type: application/json' -X POST --data-binary '{}' localhost:3000/api/save
+```json
+{
+    "respondent": "name@example.com",
+}
+```
 
 ## Ссылки ##
 

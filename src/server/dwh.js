@@ -89,7 +89,6 @@ async function queryExtendedData (modelCode, objectType, objectCode)
   return Model;
 }
 
-// Загружает Опросный лист из DWH.
 const QSortKey = 'sort_order';
 const QuestionaryType = 'Questionary';
 const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group' ];
@@ -100,11 +99,13 @@ const RIntKeys = [ 'code', 'question_num' ];
 const RBoolKeys = [];
 const ROmitKeys = [];
 const GroupRefCode = 'question_groups';
-async function load ()
+// Загружает Опросный лист из DWH.
+async function load (survey)
 {
+  assert.ok(survey, 'No survey');
   try {
-    console.debug('dwh', 'load', 'queryExtendedData', ModelCode, SurveyCode);
-    const { Questionaries, References } = await queryExtendedData(ModelCode, QuestionaryType, SurveyCode);
+    console.debug('dwh', 'load', 'queryExtendedData', ModelCode, survey);
+    const { Questionaries, References } = await queryExtendedData(ModelCode, QuestionaryType, survey);
     const questions = result(Questionaries, [ 0, QuestionaryType, 0 ]);
     const form = questions.$;
     const qs = map(head(questions.Rows).Row, (row) => {
@@ -158,4 +159,4 @@ async function save (form)
   }
 }
 
-module.exports = { load, save };
+module.exports = { load, save, SurveyCode };
