@@ -126,7 +126,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "question_num": 5
         },
         {
-            "code": "v6.1",
+            "code": "v6_1",
             "value": "Уровень детализации информации",
             "parent_code": "v2",
             "question": "v6",
@@ -136,7 +136,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
             "question_num": 6,
         },
         {
-            "code": "v6.3",
+            "code": "v6_3",
             "value": "Оперативность",
             "parent_code": "v2",
             "question": "v6",
@@ -218,6 +218,10 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 ##### Необязательные поля #####
 
 * `question_tooltip` содержит текст для подсказки.
+* `default_value` значение по умолчанию (целое число).
+* `question_description` пояснение к вопросу.
+* `verification_formula` формула проверки ввода.
+* `error_message` текст сообщения об ошибке.
 
 ##### Параметры ответов #####
 
@@ -257,7 +261,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ```json
 {
-    "respondent": "name@example.com",
+    "respondent": "name@example.com"
 }
 ```
 

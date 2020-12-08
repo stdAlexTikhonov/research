@@ -151,7 +151,7 @@ async function save (form)
 {
   try {
     assert.ok(form, 'No form');
-    console.debug('dwh', 'save', size(form));
+    console.debug('dwh', 'save', size(form), form);
     const client = await connect();
     throw new Error('Not implemented');
   } catch (fail) {
