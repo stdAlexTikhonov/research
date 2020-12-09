@@ -45,8 +45,7 @@ export const App: React.FC<Props> = () => {
 
   useEffect(() => {
     get("/api/load").then(data => {
-      console.log(data);
-      setData(data.References);
+      setData(data);
       setKeys(Object.keys(data.References).slice(1).sort((a,b) => +(a.slice(1)) - +(b.slice(1))))
     });
   }, []);
