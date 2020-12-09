@@ -9,7 +9,7 @@ import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
 import { get } from "../../utils/api";
 import { DenseTable } from "../Table";
-import { Title } from "../Title";
+import { Question } from "../Question";
 import { Answers } from "../Answers";
 import { MultipleAns } from "../MultipleAns";
 import { Props } from "./type";
@@ -45,7 +45,7 @@ export const App: React.FC<Props> = () => {
 
   useEffect(() => {
     get("/api/load").then(data => {
-      console.log(data.References);
+      console.log(data);
       setData(data.References);
       setKeys(Object.keys(data.References).slice(1).sort((a,b) => +(a.slice(1)) - +(b.slice(1))))
     });
@@ -59,11 +59,11 @@ export const App: React.FC<Props> = () => {
       <Context.Provider
         value={{ step, itog, setItog, showCrumbs, setShowCrumbs, data, keys }}
       >
-        <div className={classes.root}>
+        {data && <div className={classes.root}>
           <Header />
           {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
           <div className={classes.viewer}>
-            {data && <Title />}
+            <Question />
             {/* {data[step].variants ? (
               <DenseTable
                 answers={data[step].answers}
@@ -86,7 +86,7 @@ export const App: React.FC<Props> = () => {
             )} */}
           </div>
           {keys && <Controls setStep={setStep} len={keys.length} />}
-        </div>
+        </div>}
       </Context.Provider>
     </ThemeProvider>
   );

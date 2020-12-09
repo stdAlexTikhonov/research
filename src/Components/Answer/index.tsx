@@ -19,9 +19,10 @@ export const Answer: React.FC<AnswerType> = ({
   set_width,
 }) => {
   const { setItog, step, itog } = useContext(Context)!;
-  const [userInput, setUserInput] = useState(
-    () => itog[`user_input_${step}`] || ""
-  );
+  // const [userInput, setUserInput] = useState(
+  //   () => itog[`user_input_${step}`] || ""
+  // );
+  const [userInput, setUserInput] = useState("");
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
       <FormControlLabel
@@ -71,7 +72,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   useEffect(() => {
     // setUserInput(itog[step].user_input);
     setChecked(itog[step] ? itog[step][value] : false);
-  }, [step]);
+  }, [itog, step, value]);
 
   const handleChange = (e: React.ChangeEvent<{}>) => {
     if (!checked_) {
