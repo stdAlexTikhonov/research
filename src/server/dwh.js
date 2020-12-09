@@ -116,6 +116,9 @@ async function load (survey)
         record.multiple_values = record.multiply_values;
         delete record.multiply_values;
       }
+      if (!!record.other_allowed) {
+        record.other_text = 'Другое (уточните)';
+      }
       return record;
     });
     const refs = result(head(References), [ ReferenceType ], []);
