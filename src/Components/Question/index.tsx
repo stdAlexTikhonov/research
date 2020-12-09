@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Title } from "../Title";
 import { Context } from "../../context";
 import { Answers } from "../Answers";
+import { MultipleAns } from "../MultipleAns";
 
 type Answer = {
   code: string;
@@ -31,7 +32,11 @@ export const Question = () => {
   return question && answers ? (
     <>
       <Title title={question.value} step={step} />
-      <Answers answers={answers} user_input={question.other_allowed} />
+      {question.multiple_values ? (
+        <MultipleAns answers={answers} user_input={question.other_allowed} />
+      ) : (
+        <Answers answers={answers} user_input={question.other_allowed} />
+      )}
     </>
   ) : null;
 };
