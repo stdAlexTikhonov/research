@@ -16,18 +16,23 @@ const useStyles = makeStyles({
   },
 });
 
-type Props = {
-  answers: string[];
-  variants: string[];
+type Answer = {
+  code: string;
+  value: string;
 };
 
-export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
+type Props = {
+  answers: Answer[];
+  // variants: string[];
+};
+
+export const DenseTable: React.FC<Props> = ({ answers }) => {
   const classes = useStyles();
 
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
-        <TableHead>
+        {/* <TableHead>
           <TableRow>
             <TableCell>{TITLE}</TableCell>
             <TableCell
@@ -52,16 +57,16 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
               ))}
             </TableCell>
           </TableRow>
-        </TableHead>
+        </TableHead> */}
         <TableBody>
-          {answers.map((answer: string, index: number) => (
-            <TableRow key={answer}>
+          {answers.map((answer: Answer, index: number) => (
+            <TableRow key={answer.code}>
               <TableCell component="th" scope="row">
-                {answer}
+                {answer.value}
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <Row values={variants} row_index={index} />
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
