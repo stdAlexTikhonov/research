@@ -21,7 +21,7 @@ export const generateUID = () => {
 export const get = async (url: string) => {
   const response = await fetch(window.location.origin + url, {
     credentials: "same-origin", // параметр определяющий передвать ли разные сессионные данные вместе с запросом
-    method: "POST", // метод POST
+    method: "GET", // метод POST
     headers: {
       "Content-Type": "application/json",
     },

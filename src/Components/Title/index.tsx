@@ -4,8 +4,7 @@ import { Typography } from "@material-ui/core";
 import { QUESTION } from "../../utils/constants";
 
 export const Title = () => {
-  const context = useContext(Context);
-  const { step, data } = context ? context : { step: 0, data: null };
+  const { step, data, keys } = useContext(Context)!;
 
   return (
     <>
@@ -17,10 +16,12 @@ export const Title = () => {
       >
         {`${QUESTION} ${step + 1}`}
       </Typography>
-      <Typography variant="h6" gutterBottom>
-        {data[step].question}
-      </Typography>
-      {data[step].subtitle && (
+      {data && (
+        <Typography variant="h6" gutterBottom>
+          {keys && data[keys[step]].caption}
+        </Typography>
+      )}
+      {/* {data[step].subtitle && (
         <Typography
           style={{ color: "#aaa" }}
           variant="caption"
@@ -29,7 +30,7 @@ export const Title = () => {
         >
           {data[step].subtitle}
         </Typography>
-      )}
+      )} */}
     </>
   );
 };
