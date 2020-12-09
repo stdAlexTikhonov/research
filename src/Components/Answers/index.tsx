@@ -3,36 +3,44 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
 import { Context } from "../../context";
 
+type Answer = {
+  code: string;
+  value: string;
+};
+
 type Props = {
-  answers: string[];
-  id: string;
+  answers: Answer[];
   user_input: boolean;
 };
 
-export const Answers: React.FC<Props> = ({ answers, id, user_input }) => {
-  const { setItog, step, itog } = useContext(Context)!;
+export const Answers: React.FC<Props> = ({ answers, user_input }) => {
+  const { setItog, step, itog, keys } = useContext(Context)!;
   const [value, setValue] = useState(null);
 
-  useEffect(() => {
-    itog[step] ? setValue(itog[step]) : setValue(null);
-  }, [step]);
+  // useEffect(() => {
+  //   itog[step] ? setValue(itog[step]) : setValue(null);
+  // }, [step]);
 
   const handleChange = (e: any) => {
-    setItog((prev: any) => ({
-      ...prev,
-      [`${step}`]: e.target.value,
-    }));
+    // setItog((prev: any) => ({
+    //   ...prev,
+    //   [`${step}`]: e.target.value,
+    // }));
 
     setValue(e.target.value);
   };
 
   return (
-    <RadioGroup name={id} value={value} onChange={handleChange}>
-      {answers.map((answer: string, index: number) => (
+    <RadioGroup
+      name={keys ? keys[step] : "name"}
+      value={value}
+      onChange={handleChange}
+    >
+      {answers.map((answer: Answer, index: number) => (
         <Answer
-          title={answer}
+          title={answer.value}
           key={index}
-          value={index}
+          value={answer.code}
           user_input={user_input && answers.length - 1 === index}
           selected={index == value}
         />

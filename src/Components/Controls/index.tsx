@@ -24,12 +24,12 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
       sendToServer();
     }
 
-    if (!itog[step]) {
-      setItog((prev: any) => ({
-        ...prev,
-        [`${step}`]: null,
-      }));
-    }
+    // if (!itog[step]) {
+    //   setItog((prev: any) => ({
+    //     ...prev,
+    //     [`${step}`]: null,
+    //   }));
+    // }
 
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
   };

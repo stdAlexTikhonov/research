@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useStyles } from "./styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
@@ -7,8 +7,9 @@ import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
 import { getData } from "../../utils/Data";
+import { get } from "../../utils/api";
 import { DenseTable } from "../Table";
-import { Title } from "../Title";
+import { Question } from "../Question";
 import { Answers } from "../Answers";
 import { MultipleAns } from "../MultipleAns";
 import { Props } from "./type";
@@ -32,25 +33,37 @@ const setInitialData = (datum: any) => {
 export const App: React.FC<Props> = () => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
-  const data = useMemo(() => getData(), []);
+  const [data, setData] = useState<any>(null);
+  const [keys, setKeys] = useState<any>(null);
+    
+
   const [itog, setItog] = useState(() => {
-    const transformed = data.map(setInitialData);
-    const res = Object.assign({}, transformed);
-    return res;
+    // const transformed = data.map(setInitialData);
+    // const res = Object.assign({}, transformed);
+    return data;
   });
+
+  useEffect(() => {
+    get("/api/load").then(data => {
+      setData(data);
+      setKeys(Object.keys(data.References).slice(1).sort((a,b) => +(a.slice(1)) - +(b.slice(1))))
+    });
+  }, []);
+
+
   const [showCrumbs, setShowCrumbs] = useState(false);
 
   return (
     <ThemeProvider theme={theme}>
       <Context.Provider
-        value={{ step, itog, setItog, showCrumbs, setShowCrumbs, data }}
+        value={{ step, itog, setItog, showCrumbs, setShowCrumbs, data, keys }}
       >
-        <div className={classes.root}>
+        {data && <div className={classes.root}>
           <Header />
           {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
           <div className={classes.viewer}>
-            <Title />
-            {data[step].variants ? (
+            <Question />
+            {/* {data[step].variants ? (
               <DenseTable
                 answers={data[step].answers}
                 variants={data[step].variants!}
@@ -69,10 +82,10 @@ export const App: React.FC<Props> = () => {
                   />
                 )}
               </div>
-            )}
+            )} */}
           </div>
-          <Controls setStep={setStep} len={data.length} />
-        </div>
+          {keys && <Controls setStep={setStep} len={keys.length} />}
+        </div>}
       </Context.Provider>
     </ThemeProvider>
   );
