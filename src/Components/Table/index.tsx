@@ -16,9 +16,20 @@ const useStyles = makeStyles({
   },
 });
 
+type Answer = {
+  code: string;
+  value: string;
+};
+
+type Variant = {
+  code: number;
+  value: string;
+};
+
 type Props = {
-  answers: string[];
-  variants: string[];
+  answers: Answer[];
+  variants: Variant[];
+  // variants: string[];
 };
 
 export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
@@ -37,7 +48,7 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                 justifyContent: "space-between",
               }}
             >
-              {variants.map((variant: string | number) => (
+              {variants.map((variant: Variant) => (
                 <div
                   style={{
                     width: variants.length < 10 ? 100 : "unset",
@@ -45,19 +56,19 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                     paddingRight: variants.length > 5 ? 14 : "unset",
                     paddingLeft: variants.length > 5 ? 14 : "unset",
                   }}
-                  key={variant}
+                  key={variant.code}
                 >
-                  {variant}
+                  {variants.length > 5 ? variant.code : variant.value}
                 </div>
               ))}
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {answers.map((answer: string, index: number) => (
-            <TableRow key={answer}>
+          {answers.map((answer: Answer, index: number) => (
+            <TableRow key={answer.code}>
               <TableCell component="th" scope="row">
-                {answer}
+                {answer.value}
               </TableCell>
               <TableCell>
                 <Row values={variants} row_index={index} />

@@ -17,3 +17,14 @@ export const generateUID = () => {
     Math.random().toString(36).substring(2, 15)
   );
 };
+
+export const get = async (url: string) => {
+  const response = await fetch(window.location.origin + url, {
+    credentials: "same-origin", // параметр определяющий передвать ли разные сессионные данные вместе с запросом
+    method: "GET", // метод POST
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.json();
+};

@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
-import { Context } from "../../context";
+import React from "react";
 import { Typography } from "@material-ui/core";
 import { QUESTION } from "../../utils/constants";
 
-export const Title = () => {
-  const context = useContext(Context);
-  const { step, data } = context ? context : { step: 0, data: null };
+type Props = {
+  title: string;
+  step: number;
+};
 
+export const Title: React.FC<Props> = ({ title, step }) => {
   return (
     <>
       <Typography
@@ -17,10 +18,12 @@ export const Title = () => {
       >
         {`${QUESTION} ${step + 1}`}
       </Typography>
+
       <Typography variant="h6" gutterBottom>
-        {data[step].question}
+        {title}
       </Typography>
-      {data[step].subtitle && (
+
+      {/* {data[step].subtitle && (
         <Typography
           style={{ color: "#aaa" }}
           variant="caption"
@@ -29,7 +32,7 @@ export const Title = () => {
         >
           {data[step].subtitle}
         </Typography>
-      )}
+      )} */}
     </>
   );
 };

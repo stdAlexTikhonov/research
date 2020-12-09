@@ -7,4 +7,5 @@ export const Context = React.createContext<{
   showCrumbs: boolean;
   setShowCrumbs: any;
   data: any;
+  keys: string[] | null;
 } | null>(null);

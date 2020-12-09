@@ -2,20 +2,24 @@ import React from "react";
 import FormGroup from "@material-ui/core/FormGroup";
 import { CheckboxAns } from "../Answer";
 
+type Answer = {
+  code: string;
+  value: string;
+};
+
 type Props = {
-  answers: string[];
-  id: string;
+  answers: Answer[];
   user_input: boolean;
 };
 
-export const MultipleAns: React.FC<Props> = ({ answers, id, user_input }) => {
+export const MultipleAns: React.FC<Props> = ({ answers, user_input }) => {
   return (
     <FormGroup>
-      {answers.map((answer: string, index: number) => (
+      {answers.map((answer: Answer, index: number) => (
         <CheckboxAns
-          title={answer}
-          key={index}
-          value={index}
+          title={answer.value}
+          key={answer.code}
+          value={answer.code}
           user_input={user_input && answers.length - 1 === index}
         />
       ))}

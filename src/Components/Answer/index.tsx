@@ -19,9 +19,10 @@ export const Answer: React.FC<AnswerType> = ({
   set_width,
 }) => {
   const { setItog, step, itog } = useContext(Context)!;
-  const [userInput, setUserInput] = useState(
-    () => itog[`user_input_${step}`] || ""
-  );
+  // const [userInput, setUserInput] = useState(
+  //   () => itog[`user_input_${step}`] || ""
+  // );
+  const [userInput, setUserInput] = useState("");
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
       <FormControlLabel
@@ -68,33 +69,33 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   const [checked_, setChecked] = useState(false);
   const [userInput, setUserInput] = useState("");
 
-  useEffect(() => {
-    // setUserInput(itog[step].user_input);
-    setChecked(itog[step] ? itog[step][value] : false);
-  }, [step]);
+  // useEffect(() => {
+  //   // setUserInput(itog[step].user_input);
+  //   setChecked(itog[step] ? itog[step][value] : false);
+  // }, [itog, step, value]);
 
   const handleChange = (e: React.ChangeEvent<{}>) => {
-    if (!checked_) {
-      setItog((prev: any) => ({
-        ...prev,
-        [`${step}`]: !!prev[step]
-          ? {
-              ...prev[step],
-              [`${value}`]: true,
-            }
-          : {
-              [`${value}`]: true,
-            },
-      }));
-    } else {
-      setItog((prev: any) => ({
-        ...prev,
-        [`${step}`]: {
-          ...prev[step],
-          [`${value}`]: false,
-        },
-      }));
-    }
+    // if (!checked_) {
+    //   setItog((prev: any) => ({
+    //     ...prev,
+    //     [`${step}`]: !!prev[step]
+    //       ? {
+    //           ...prev[step],
+    //           [`${value}`]: true,
+    //         }
+    //       : {
+    //           [`${value}`]: true,
+    //         },
+    //   }));
+    // } else {
+    //   setItog((prev: any) => ({
+    //     ...prev,
+    //     [`${step}`]: {
+    //       ...prev[step],
+    //       [`${value}`]: false,
+    //     },
+    //   }));
+    // }
     setChecked(!checked_);
   };
 
