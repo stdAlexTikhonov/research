@@ -222,6 +222,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 * `question_description` пояснение к вопросу.
 * `verification_formula` формула проверки ввода.
 * `error_message` текст сообщения об ошибке.
+* `other_text` — подпись к варианту ответа «Прочее».
 
 ##### Параметры ответов #####
 
