@@ -21,18 +21,24 @@ type Answer = {
   value: string;
 };
 
+type Variant = {
+  code: number;
+  value: string;
+};
+
 type Props = {
   answers: Answer[];
+  variants: Variant[];
   // variants: string[];
 };
 
-export const DenseTable: React.FC<Props> = ({ answers }) => {
+export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
   const classes = useStyles();
 
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
-        {/* <TableHead>
+        <TableHead>
           <TableRow>
             <TableCell>{TITLE}</TableCell>
             <TableCell
@@ -42,7 +48,7 @@ export const DenseTable: React.FC<Props> = ({ answers }) => {
                 justifyContent: "space-between",
               }}
             >
-              {variants.map((variant: string | number) => (
+              {variants.map((variant: Variant) => (
                 <div
                   style={{
                     width: variants.length < 10 ? 100 : "unset",
@@ -50,23 +56,23 @@ export const DenseTable: React.FC<Props> = ({ answers }) => {
                     paddingRight: variants.length > 5 ? 14 : "unset",
                     paddingLeft: variants.length > 5 ? 14 : "unset",
                   }}
-                  key={variant}
+                  key={variant.code}
                 >
-                  {variant}
+                  {variants.length > 5 ? variant.code : variant.value}
                 </div>
               ))}
             </TableCell>
           </TableRow>
-        </TableHead> */}
+        </TableHead>
         <TableBody>
           {answers.map((answer: Answer, index: number) => (
             <TableRow key={answer.code}>
               <TableCell component="th" scope="row">
                 {answer.value}
               </TableCell>
-              {/* <TableCell>
+              <TableCell>
                 <Row values={variants} row_index={index} />
-              </TableCell> */}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -36,7 +36,10 @@ export const GroupQuestion = () => {
   return question ? (
     <>
       <Title title={question.value} step={step} />
-      <DenseTable answers={questions} />
+      <DenseTable
+        answers={questions}
+        variants={data.References[keys![step]].Reference}
+      />
     </>
   ) : null;
 };
