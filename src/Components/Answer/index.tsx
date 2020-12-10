@@ -78,9 +78,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   // }, [itog, step, value]);
 
   const handleChange = (e: React.ChangeEvent<{}>) => {
-    console.log(value);
     if (!checked_) {
-      console.log("checked");
       setItog((prev: any) => ({
         ...prev,
         [`${keys![step]}`]: Object.assign({}, prev[`${keys![step]}`], {

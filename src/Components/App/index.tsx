@@ -6,7 +6,7 @@ import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
-import { get } from "../../utils/api";
+import { get, uuidv4 } from "../../utils/api";
 import { Question } from "../Question";
 import { Props } from "./type";
 
@@ -32,6 +32,7 @@ export const App: React.FC<Props> = () => {
   const [step, setStep] = useState<number>(0);
   const [data, setData] = useState<any>(null);
   const [keys, setKeys] = useState<any>(null);
+  const [uuid, setUuid] = useState<string>("");
 
   const [itog, setItog] = useState(() => {
     // const transformed = data.map(setInitialData);
@@ -40,6 +41,7 @@ export const App: React.FC<Props> = () => {
   });
 
   useEffect(() => {
+    setUuid(uuidv4());
     get("/api/load").then((data) => {
       setData(data);
       setKeys(
@@ -56,7 +58,16 @@ export const App: React.FC<Props> = () => {
   return (
     <ThemeProvider theme={theme}>
       <Context.Provider
-        value={{ step, itog, setItog, showCrumbs, setShowCrumbs, data, keys }}
+        value={{
+          step,
+          itog,
+          setItog,
+          showCrumbs,
+          setShowCrumbs,
+          data,
+          keys,
+          uuid,
+        }}
       >
         {data && (
           <div className={classes.root}>

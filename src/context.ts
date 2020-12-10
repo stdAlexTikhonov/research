@@ -8,4 +8,5 @@ export const Context = React.createContext<{
   setShowCrumbs: any;
   data: any;
   keys: string[] | null;
+  uuid: string;
 } | null>(null);

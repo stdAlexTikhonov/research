@@ -11,7 +11,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog } = context!;
+  const { step, itog, uuid } = context!;
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
@@ -19,9 +19,11 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   };
 
   const handleNext = () => {
-    if (step === len - 2 && !passed) {
-      console.log(itog);
-      sendToServer();
+    if (step === len - 1 && !passed) {
+      sendToServer({
+        respondet: uuid,
+        answers: itog,
+      });
     }
 
     // if (!itog[step]) {
@@ -34,9 +36,9 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
   };
 
-  const sendToServer = async () => {
+  const sendToServer = async (data: any) => {
     setPassed(true);
-    const res = await post("/api/save", itog);
+    const res = await post("/api/save", data);
     console.log(res);
   };
 

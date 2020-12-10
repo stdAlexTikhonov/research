@@ -18,6 +18,14 @@ export const generateUID = () => {
   );
 };
 
+export const uuidv4 = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
 export const get = async (url: string) => {
   const response = await fetch(window.location.origin + url, {
     credentials: "same-origin", // параметр определяющий передвать ли разные сессионные данные вместе с запросом
