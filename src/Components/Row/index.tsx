@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
 import { useStyles } from "./styles";
@@ -15,12 +15,14 @@ type Props = {
 };
 
 export const Row: React.FC<Props> = ({ values, row_index }) => {
-  const { setItog, step, keys } = useContext(Context)!;
-  const [value, setValue] = useState(null);
+  const { setItog, step, keys, itog } = useContext(Context)!;
+  const [value, setValue] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   setValue(itog[step] ? itog[step][row_index] : null);
-  // }, [itog, row_index, step]);
+  useEffect(() => {
+    const id = keys![step] + "_" + (row_index + 1);
+    itog[id] && setValue(itog[id].answers[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keys]);
 
   const handleChange = (e: any) => {
     setValue(e.target.value);

@@ -14,14 +14,16 @@ type Props = {
 };
 
 export const Answers: React.FC<Props> = ({ answers, user_input }) => {
-  const { setItog, step, keys } = useContext(Context)!;
-  const [value, setValue] = useState(null);
+  const { setItog, step, keys, itog } = useContext(Context)!;
+  const [value, setValue] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = keys![step];
+    itog[id] && setValue(itog[id].answers[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   const handleChange = (e: any) => {
-    // setItog((prev: any) => ({
-    //   ...prev,
-    //   [`${step}`]: e.target.value,
-    // }));
     setItog((prev: any) =>
       Object.assign({}, prev, {
         [`${keys![step]}`]: { answers: [e.target.value], other: null },
