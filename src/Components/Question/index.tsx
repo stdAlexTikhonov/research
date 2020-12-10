@@ -23,7 +23,6 @@ export const Question = () => {
       );
 
       if (question_data) {
-        console.log(question_data);
         setGQ(false);
         setQuestion(question_data);
         // console.log(question_data);

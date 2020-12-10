@@ -18,7 +18,7 @@ export const Answer: React.FC<AnswerType> = ({
   selected,
   set_width,
 }) => {
-  const { setItog, step, itog } = useContext(Context)!;
+  const { setItog, step, keys } = useContext(Context)!;
   // const [userInput, setUserInput] = useState(
   //   () => itog[`user_input_${step}`] || ""
   // );
@@ -39,7 +39,10 @@ export const Answer: React.FC<AnswerType> = ({
           setUserInput(e.target.value);
           setItog((prev: any) => ({
             ...prev,
-            [`user_input_${step}`]: e.target.value,
+            [`${keys![step]}`]: {
+              ...prev[`${keys![step]}`],
+              other: e.target.value,
+            },
           }));
         }}
         style={{ minWidth: 300, marginLeft: 20 }}
