@@ -43,7 +43,10 @@ async function connection (soapWsdl)
   try {
     assert.ok(soapWsdl, 'No soapWsdl');
     console.debug('dwh', 'connection', 'createClientAsync', soapWsdl);
-    client = await createClientAsync(soapWsdl);
+    const options = {
+      attributesKey: '$attributes'
+    };
+    client = await createClientAsync(soapWsdl, options);
     if (!client) throw new Error('Problem connecting to DWH');
   } catch (fail) {
     console.warn('dwh', 'connection', 'error', fail.message);
@@ -87,6 +90,35 @@ async function queryExtendedData (modelCode, objectType, objectCode)
   const { Model } = await parseStringPromise(xmlResponse);
   console.debug('dwh', 'queryExtendedData', 'Model', size(Model), '(' + keys(Model).join(', ') + ')');
   return Model;
+}
+
+// Вставляет строку в Series.
+const SeriesSuffix = '_timeseries';
+const SeriesType = 'Series';
+async function insertRow (modelCode, surveyCode, record)
+{
+  assert.ok(modelCode, 'No modelCode');
+  assert.ok(surveyCode, 'No surveyCode');
+  assert.ok(record, 'No record');
+  const seriesCode = surveyCode + SeriesSuffix;
+  const data = map(record, (value, key) => ({
+    Value: { $attributes: { concept: key, value } }
+  }));
+  const row = {
+    modelCode,
+    objectType: SeriesType,
+    objectCode: seriesCode,
+    rowData: {
+      Attributes: data
+    }
+  };
+  const client = await connect();
+  console.debug('dwh', 'insertRow', seriesCode, size(record));
+  const [ { rowId } ] = await client.insertRowAsync(row);
+  const intRowId = +rowId;
+  console.debug('dwh', 'insertRow', intRowId);
+  console.debug(client.lastRequest);
+  return intRowId;
 }
 
 const QSortKey = 'sort_order';
@@ -154,9 +186,17 @@ async function save (form)
 {
   try {
     assert.ok(form, 'No form');
-    console.debug('dwh', 'save', size(form), form);
-    const client = await connect();
-    throw new Error('Not implemented');
+    const { responent, questions } = form;
+    console.debug('dwh', 'save', size(form));
+    console.debug('dwh', 'save',  size(questions), JSON.stringify(form, null, 4));
+    const row = {
+      respondent_login: '1ade505a-3ae4-11eb-a158-0bdd491ae1a0',
+      respondent_ip: '127.0.0.1',
+      q_v8_3: 1
+    };
+    console.debug('dwh', 'save', row);
+    const result = await insertRow(ModelCode, SurveyCode, row);
+    console.debug('dwh', 'save', result);
   } catch (fail) {
     return warning('save', fail);
   }
