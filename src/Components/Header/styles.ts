@@ -23,6 +23,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.getContrastText(deepOrange[500]),
       marginLeft: 25,
       marginRight: 25,
+      width: 40,
+      height: 50,
     },
     typo: {
       fontWeight: "bold",
