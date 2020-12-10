@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Radio, FormControlLabel, Checkbox } from "@material-ui/core";
 import { Context } from "../../context";
 import TextField from "@material-ui/core/TextField";
@@ -18,7 +18,7 @@ export const Answer: React.FC<AnswerType> = ({
   selected,
   set_width,
 }) => {
-  const { setItog, step, itog } = useContext(Context)!;
+  const { setItog, step, keys } = useContext(Context)!;
   // const [userInput, setUserInput] = useState(
   //   () => itog[`user_input_${step}`] || ""
   // );
@@ -39,7 +39,10 @@ export const Answer: React.FC<AnswerType> = ({
           setUserInput(e.target.value);
           setItog((prev: any) => ({
             ...prev,
-            [`user_input_${step}`]: e.target.value,
+            [`${keys![step]}`]: {
+              ...prev[`${keys![step]}`],
+              other: e.target.value,
+            },
           }));
         }}
         style={{ minWidth: 300, marginLeft: 20 }}
@@ -65,7 +68,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   value,
   user_input,
 }) => {
-  const { setItog, step, itog } = useContext(Context)!;
+  const { setItog, step, keys } = useContext(Context)!;
   const [checked_, setChecked] = useState(false);
   const [userInput, setUserInput] = useState("");
 
@@ -75,27 +78,24 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   // }, [itog, step, value]);
 
   const handleChange = (e: React.ChangeEvent<{}>) => {
-    // if (!checked_) {
-    //   setItog((prev: any) => ({
-    //     ...prev,
-    //     [`${step}`]: !!prev[step]
-    //       ? {
-    //           ...prev[step],
-    //           [`${value}`]: true,
-    //         }
-    //       : {
-    //           [`${value}`]: true,
-    //         },
-    //   }));
-    // } else {
-    //   setItog((prev: any) => ({
-    //     ...prev,
-    //     [`${step}`]: {
-    //       ...prev[step],
-    //       [`${value}`]: false,
-    //     },
-    //   }));
-    // }
+    if (!checked_) {
+      setItog((prev: any) => ({
+        ...prev,
+        [`${keys![step]}`]: Object.assign({}, prev[`${keys![step]}`], {
+          answers: prev[`${keys![step]}`].answers.concat([value]),
+        }),
+      }));
+    } else {
+      setItog((prev: any) => ({
+        ...prev,
+        [`${keys![step]}`]: {
+          ...prev[`${keys![step]}`],
+          answers: prev[`${keys![step]}`].answers.filter(
+            (item: string) => item !== value
+          ),
+        },
+      }));
+    }
     setChecked(!checked_);
   };
 
@@ -115,9 +115,9 @@ export const CheckboxAns: React.FC<AnswerType> = ({
           setUserInput(e.target.value);
           setItog((prev: any) => ({
             ...prev,
-            [`${step}`]: {
-              ...prev[step],
-              [`user_input`]: e.target.value,
+            [`${keys![step]}`]: {
+              ...prev[`${keys![step]}`],
+              other: e.target.value,
             },
           }));
         }}

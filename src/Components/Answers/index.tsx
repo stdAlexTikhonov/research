@@ -14,18 +14,19 @@ type Props = {
 };
 
 export const Answers: React.FC<Props> = ({ answers, user_input }) => {
-  const { setItog, step, itog, keys } = useContext(Context)!;
+  const { setItog, step, keys } = useContext(Context)!;
   const [value, setValue] = useState(null);
-
-  // useEffect(() => {
-  //   itog[step] ? setValue(itog[step]) : setValue(null);
-  // }, [step]);
 
   const handleChange = (e: any) => {
     // setItog((prev: any) => ({
     //   ...prev,
     //   [`${step}`]: e.target.value,
     // }));
+    setItog((prev: any) =>
+      Object.assign({}, prev, {
+        [`${keys![step]}`]: { answers: [e.target.value], other: null },
+      })
+    );
 
     setValue(e.target.value);
   };
@@ -42,7 +43,9 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
           key={index}
           value={answer.code}
           user_input={user_input && answers.length - 1 === index}
-          selected={index == value}
+          selected={
+            value ? +value! === +answers[answers.length - 1].code : false
+          }
         />
       ))}
     </RadioGroup>

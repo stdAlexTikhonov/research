@@ -25,10 +25,19 @@ export const Question = () => {
       if (question_data) {
         setGQ(false);
         setQuestion(question_data);
-        // console.log(question_data);
+
         const key = keys[step];
 
-        setAnswers(data.References[key].Reference);
+        if (question_data.other_allowed)
+          setAnswers(
+            data.References[key].Reference.concat([
+              {
+                code: data.References[key].Reference.length + 1,
+                value: question_data.other_text,
+              },
+            ])
+          );
+        else setAnswers(data.References[key].Reference);
       } else setGQ(true);
     }
 

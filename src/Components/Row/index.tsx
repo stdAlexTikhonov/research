@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
 import { useStyles } from "./styles";
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const Row: React.FC<Props> = ({ values, row_index }) => {
-  const { setItog, step, itog } = useContext(Context)!;
+  const { setItog, step, keys } = useContext(Context)!;
   const [value, setValue] = useState(null);
 
   // useEffect(() => {
@@ -24,13 +24,16 @@ export const Row: React.FC<Props> = ({ values, row_index }) => {
 
   const handleChange = (e: any) => {
     setValue(e.target.value);
-    // setItog((prev: any) => ({
-    //   ...prev,
-    //   [`${step}`]: {
-    //     ...prev[step],
-    //     [`${row_index}`]: e.target.value,
-    //   },
-    // }));
+    const id = keys![step] + "_" + (row_index + 1);
+
+    const timeout = setTimeout(function () {
+      setItog((prev: any) =>
+        Object.assign({}, prev, {
+          [`${id}`]: { answers: [e.target.value], other: null },
+        })
+      );
+      clearTimeout(timeout);
+    }, 0);
   };
   const classes = useStyles();
 

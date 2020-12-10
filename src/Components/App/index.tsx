@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useStyles } from "./styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
@@ -6,12 +6,8 @@ import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
-import { getData } from "../../utils/Data";
-import { get } from "../../utils/api";
-import { DenseTable } from "../Table";
+import { get, uuidv4 } from "../../utils/api";
 import { Question } from "../Question";
-import { Answers } from "../Answers";
-import { MultipleAns } from "../MultipleAns";
 import { Props } from "./type";
 
 const theme = createMuiTheme({
@@ -22,20 +18,21 @@ const theme = createMuiTheme({
   },
 });
 
-const setInitialData = (datum: any) => {
-  if (datum.multiple)
-    return Object.assign({}, Array(datum.answers.length).fill(false));
-  else if (datum.variants)
-    return Object.assign({}, Array(datum.answers.length).fill(""));
-  else return null;
-};
+const setInitialData = (datum: any) =>
+  datum.Questionary.reduce(function (result: any, item: any, index: number) {
+    result[item.code] = {
+      answers: [],
+      other: null,
+    }; //a, b, c
+    return result;
+  }, {});
 
 export const App: React.FC<Props> = () => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
   const [data, setData] = useState<any>(null);
   const [keys, setKeys] = useState<any>(null);
-    
+  const [uuid, setUuid] = useState<string>("");
 
   const [itog, setItog] = useState(() => {
     // const transformed = data.map(setInitialData);
@@ -44,26 +41,41 @@ export const App: React.FC<Props> = () => {
   });
 
   useEffect(() => {
-    get("/api/load").then(data => {
+    setUuid(uuidv4());
+    get("/api/load").then((data) => {
       setData(data);
-      setKeys(Object.keys(data.References).slice(1).sort((a,b) => +(a.slice(1)) - +(b.slice(1))))
+      setKeys(
+        Object.keys(data.References)
+          .slice(1)
+          .sort((a, b) => +a.slice(1) - +b.slice(1))
+      );
+      setItog(setInitialData(data));
     });
   }, []);
-
 
   const [showCrumbs, setShowCrumbs] = useState(false);
 
   return (
     <ThemeProvider theme={theme}>
       <Context.Provider
-        value={{ step, itog, setItog, showCrumbs, setShowCrumbs, data, keys }}
+        value={{
+          step,
+          itog,
+          setItog,
+          showCrumbs,
+          setShowCrumbs,
+          data,
+          keys,
+          uuid,
+        }}
       >
-        {data && <div className={classes.root}>
-          <Header />
-          {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
-          <div className={classes.viewer}>
-            <Question />
-            {/* {data[step].variants ? (
+        {data && (
+          <div className={classes.root}>
+            <Header />
+            {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
+            <div className={classes.viewer}>
+              <Question />
+              {/* {data[step].variants ? (
               <DenseTable
                 answers={data[step].answers}
                 variants={data[step].variants!}
@@ -83,9 +95,10 @@ export const App: React.FC<Props> = () => {
                 )}
               </div>
             )} */}
+            </div>
+            {keys && <Controls setStep={setStep} len={keys.length} />}
           </div>
-          {keys && <Controls setStep={setStep} len={keys.length} />}
-        </div>}
+        )}
       </Context.Provider>
     </ThemeProvider>
   );
