@@ -17,10 +17,6 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
   const { setItog, step, itog, keys } = useContext(Context)!;
   const [value, setValue] = useState(null);
 
-  // useEffect(() => {
-  //   itog[step] ? setValue(itog[step]) : setValue(null);
-  // }, [step]);
-
   const handleChange = (e: any) => {
     // setItog((prev: any) => ({
     //   ...prev,
@@ -47,7 +43,7 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
           key={index}
           value={answer.code}
           user_input={user_input && answers.length - 1 === index}
-          selected={index === value}
+          selected={value ? +value! === index : false}
         />
       ))}
     </RadioGroup>
