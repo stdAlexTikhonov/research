@@ -18,6 +18,8 @@ const {
   without,
 } = require('lodash');
 
+const moment = require('moment');
+
 // Веб-сервис, https://en.wikipedia.org/wiki/SOAP
 const { createClientAsync } = require('soap');
 
@@ -101,6 +103,8 @@ async function insertRow (modelCode, surveyCode, record)
   assert.ok(surveyCode, 'No surveyCode');
   assert.ok(record, 'No record');
   const seriesCode = surveyCode + SeriesSuffix;
+  record.period = moment().format('YYYY-12-31');
+  console.debug('dwh', 'insertRow', record);
   const data = map(record, (value, key) => ({
     Value: { $attributes: { concept: key, value } }
   }));
@@ -119,6 +123,33 @@ async function insertRow (modelCode, surveyCode, record)
   console.debug('dwh', 'insertRow', intRowId);
   console.debug(client.lastRequest);
   return intRowId;
+}
+
+async function updateRow (modelCode, surveyCode, rowId, record)
+{
+  assert.ok(modelCode, 'No modelCode');
+  assert.ok(surveyCode, 'No surveyCode');
+  assert.ok(record, 'No record');
+  const seriesCode = surveyCode + SeriesSuffix;
+  record.period = moment().format('YYYY-12-31');
+  console.debug('dwh', 'updateRow', record);
+  const data = map(record, (value, key) => ({
+    Value: { $attributes: { concept: key, value } }
+  }));
+  const row = {
+    modelCode,
+    objectType: SeriesType,
+    objectCode: seriesCode,
+    rowId,
+    rowData: {
+      Attributes: data
+    }
+  };
+  const client = await connect();
+  console.debug('dwh', 'updateRow', seriesCode, size(record));
+  const result = await client.updateRowAsync(row);
+  // console.debug('dwh', 'updateRow', client.lastRequest);
+  return result;
 }
 
 const QSortKey = 'sort_order';
@@ -187,16 +218,18 @@ async function save (form)
   try {
     assert.ok(form, 'No form');
     const { responent, questions } = form;
-    console.debug('dwh', 'save', size(form));
-    console.debug('dwh', 'save',  size(questions), JSON.stringify(form, null, 4));
-    const row = {
+    console.debug('dwh', 'save', ModelCode, SurveyCode, size(form));
+    // console.debug('dwh', 'save',  size(questions), JSON.stringify(form, null, 4));
+    const record = {
       respondent_login: '1ade505a-3ae4-11eb-a158-0bdd491ae1a0',
       respondent_ip: '127.0.0.1',
-      q_v8_3: 1
+      q_1: 1
     };
-    console.debug('dwh', 'save', row);
-    const result = await insertRow(ModelCode, SurveyCode, row);
-    console.debug('dwh', 'save', result);
+    // console.debug('dwh', 'save', record);
+    const rowId = await insertRow(ModelCode, SurveyCode, record);
+    // await updateRow(ModelCode, SurveyCode, rowId, record);
+    return { rowId };
+    console.debug('dwh', 'save', 'ok');
   } catch (fail) {
     return warning('save', fail);
   }
