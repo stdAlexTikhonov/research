@@ -18,10 +18,15 @@ export const Answer: React.FC<AnswerType> = ({
   selected,
   set_width,
 }) => {
-  const { setItog, step, keys } = useContext(Context)!;
-  // const [userInput, setUserInput] = useState(
-  //   () => itog[`user_input_${step}`] || ""
-  // );
+  const { setItog, step, keys, itog } = useContext(Context)!;
+
+  useEffect(() => {
+    const id = keys![step];
+
+    itog[id] && setUserInput(itog[id].other);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
   const [userInput, setUserInput] = useState("");
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
