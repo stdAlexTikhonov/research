@@ -68,7 +68,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   value,
   user_input,
 }) => {
-  const { setItog, step, itog } = useContext(Context)!;
+  const { setItog, step, itog, keys } = useContext(Context)!;
   const [checked_, setChecked] = useState(false);
   const [userInput, setUserInput] = useState("");
 
@@ -78,27 +78,26 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   // }, [itog, step, value]);
 
   const handleChange = (e: React.ChangeEvent<{}>) => {
-    // if (!checked_) {
-    //   setItog((prev: any) => ({
-    //     ...prev,
-    //     [`${step}`]: !!prev[step]
-    //       ? {
-    //           ...prev[step],
-    //           [`${value}`]: true,
-    //         }
-    //       : {
-    //           [`${value}`]: true,
-    //         },
-    //   }));
-    // } else {
-    //   setItog((prev: any) => ({
-    //     ...prev,
-    //     [`${step}`]: {
-    //       ...prev[step],
-    //       [`${value}`]: false,
-    //     },
-    //   }));
-    // }
+    console.log(value);
+    if (!checked_) {
+      console.log("checked");
+      setItog((prev: any) => ({
+        ...prev,
+        [`${keys![step]}`]: Object.assign({}, prev[`${keys![step]}`], {
+          answers: prev[`${keys![step]}`].answers.concat([value]),
+        }),
+      }));
+    } else {
+      setItog((prev: any) => ({
+        ...prev,
+        [`${keys![step]}`]: {
+          ...prev[`${keys![step]}`],
+          answers: prev[`${keys![step]}`].answers.filter(
+            (item: string) => item !== value
+          ),
+        },
+      }));
+    }
     setChecked(!checked_);
   };
 
