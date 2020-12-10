@@ -11,7 +11,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog, setItog } = context!;
+  const { step, itog } = context!;
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {

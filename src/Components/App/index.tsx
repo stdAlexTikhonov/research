@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useStyles } from "./styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
@@ -6,12 +6,8 @@ import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
-import { getData } from "../../utils/Data";
 import { get } from "../../utils/api";
-import { DenseTable } from "../Table";
 import { Question } from "../Question";
-import { Answers } from "../Answers";
-import { MultipleAns } from "../MultipleAns";
 import { Props } from "./type";
 
 const theme = createMuiTheme({

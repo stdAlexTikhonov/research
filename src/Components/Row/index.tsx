@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
 import { useStyles } from "./styles";
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const Row: React.FC<Props> = ({ values, row_index }) => {
-  const { setItog, step, itog, keys } = useContext(Context)!;
+  const { setItog, step, keys } = useContext(Context)!;
   const [value, setValue] = useState(null);
 
   // useEffect(() => {
