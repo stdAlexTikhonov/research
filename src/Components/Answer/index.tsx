@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Radio, FormControlLabel, Checkbox } from "@material-ui/core";
 import { Context } from "../../context";
 import TextField from "@material-ui/core/TextField";
@@ -68,14 +68,15 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   value,
   user_input,
 }) => {
-  const { setItog, step, keys } = useContext(Context)!;
+  const { setItog, step, keys, itog } = useContext(Context)!;
   const [checked_, setChecked] = useState(false);
   const [userInput, setUserInput] = useState("");
 
-  // useEffect(() => {
-  //   // setUserInput(itog[step].user_input);
-  //   setChecked(itog[step] ? itog[step][value] : false);
-  // }, [itog, step, value]);
+  useEffect(() => {
+    const id = keys![step];
+    itog[id] && setChecked(itog[id].answers.includes(value));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   const handleChange = (e: React.ChangeEvent<{}>) => {
     if (!checked_) {
