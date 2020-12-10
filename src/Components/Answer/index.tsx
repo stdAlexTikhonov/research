@@ -117,9 +117,9 @@ export const CheckboxAns: React.FC<AnswerType> = ({
           setUserInput(e.target.value);
           setItog((prev: any) => ({
             ...prev,
-            [`${step}`]: {
-              ...prev[step],
-              [`user_input`]: e.target.value,
+            [`${keys![step]}`]: {
+              ...prev[`${keys![step]}`],
+              other: e.target.value,
             },
           }));
         }}
