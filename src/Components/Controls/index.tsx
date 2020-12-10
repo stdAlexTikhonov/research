@@ -60,7 +60,6 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           variant="contained"
           color={"primary"}
           onClick={handleNext}
-          disabled={step === len - 1}
           className={classes.button}
         >
           {NEXT}
