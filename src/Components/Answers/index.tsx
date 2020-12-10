@@ -26,6 +26,11 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
     //   ...prev,
     //   [`${step}`]: e.target.value,
     // }));
+    setItog((prev: any) =>
+      Object.assign({}, prev, {
+        [`${keys![step]}`]: { answers: [e.target.value], other: null },
+      })
+    );
 
     setValue(e.target.value);
   };
@@ -42,7 +47,7 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
           key={index}
           value={answer.code}
           user_input={user_input && answers.length - 1 === index}
-          selected={index == value}
+          selected={index === value}
         />
       ))}
     </RadioGroup>
