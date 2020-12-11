@@ -239,7 +239,8 @@ async function load (survey)
 
 // Сохраняет Анкету в DWH.
 const QuestionPrefix = 'q_';
-const AnswerSuffix = '_a_';
+const AnswerSuffix = '_';
+const OtherSuffix = '_other';
 async function save (survey, login, answers, ip)
 {
   try {
@@ -266,6 +267,7 @@ async function save (survey, login, answers, ip)
     for (let code in answers) {
       const info = answers[code];
       let key = QuestionPrefix + code;
+      // TODO: Получать по опоснику вместо проверки массив/число.
       if (isArray(info.answers)) {
         info.answers = compact(info.answers);
         let n = 0;
@@ -276,6 +278,9 @@ async function save (survey, login, answers, ip)
         }
       } else {
         record[key] = +info.answers;
+      }
+      if (!!info.other) {
+        record[key + OtherSuffix] = info.other;
       }
     }
 
