@@ -7,6 +7,7 @@ const {
   compact,
   concat,
   head,
+  isArray,
   keys,
   map,
   mapValues,
@@ -238,6 +239,7 @@ async function load (survey)
 
 // Сохраняет Анкету в DWH.
 const QuestionPrefix = 'q_';
+const AnswerSuffix = '_a_';
 async function save (survey, login, answers, ip)
 {
   try {
@@ -252,7 +254,7 @@ async function save (survey, login, answers, ip)
       period: SurveyPeriod
     };
     const [ { DataSet } ] = await query(ModelCode, seriesCode, conditions);
-    console.debug(DataSet);
+    // console.debug(DataSet);
     const found = !!size(DataSet.Group[0].Series[0]);
 
     const record = {
@@ -263,11 +265,21 @@ async function save (survey, login, answers, ip)
 
     for (let code in answers) {
       const info = answers[code];
+      let key = QuestionPrefix + code;
+      if (isArray(info.answers)) {
+        let n = 0;
+        for (let ans of info.answers) {
+          ++n;
+          const k = key + AnswerSuffix + n;
+          record[k] = +ans;
+        }
+      } else {
+        record[key] = +info.answers;
+      }
     }
-    record[QuestionPrefix + 'v1'] = 1;
 
     if (!found) {
-      console.debug('dwh', 'save', 'insertRow', ModelCode, seriesCode, size(record));
+      console.debug('dwh', 'save', 'insertRow', ModelCode, seriesCode, size(record), record);
       const rowId = await insertRow(ModelCode, seriesCode, record);
       return { rowId };
     } else {
