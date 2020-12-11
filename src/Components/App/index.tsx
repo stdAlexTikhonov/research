@@ -21,8 +21,8 @@ const theme = createMuiTheme({
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
     result[item.code] = {
-      answers: [],
-      other: null,
+      answers: [null],
+      other: "",
     }; //a, b, c
     return result;
   }, {});
