@@ -1,5 +1,5 @@
 export const post = async (url: string, data: any) => {
-  const response = await fetch(window.location.origin + url, {
+  const response = await fetch(process.env.REACT_APP_SURVEY_BACK + url, {
     credentials: "same-origin", // параметр определяющий передвать ли разные сессионные данные вместе с запросом
     method: "POST", // метод POST
     headers: {
@@ -27,7 +27,7 @@ export const uuidv4 = () => {
 };
 
 export const get = async (url: string) => {
-  const response = await fetch(window.location.origin + url, {
+  const response = await fetch(process.env.REACT_APP_SURVEY_BACK + url, {
     credentials: "same-origin", // параметр определяющий передвать ли разные сессионные данные вместе с запросом
     method: "GET", // метод POST
     headers: {

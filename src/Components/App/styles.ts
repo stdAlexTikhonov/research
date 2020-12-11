@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: "100%",
       flexDirection: "column",
       justifyContent: "flex-start",
-      height: "100vh",
+      flexGrow: 1,
     },
     viewer: {
       maxWidth: 900,
