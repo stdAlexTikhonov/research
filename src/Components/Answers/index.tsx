@@ -26,7 +26,7 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
   const handleChange = (e: any) => {
     setItog((prev: any) =>
       Object.assign({}, prev, {
-        [`${keys![step]}`]: { answers: [e.target.value], other: null },
+        [`${keys![step]}`]: { answers: e.target.value, other: "" },
       })
     );
 

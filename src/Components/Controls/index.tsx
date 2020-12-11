@@ -21,7 +21,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   const handleNext = () => {
     if (step === len - 1 && !passed) {
       sendToServer({
-        respondet: uuid,
+        respondent: uuid,
         answers: itog,
       });
     }
