@@ -180,7 +180,7 @@ async function query (modelCode, seriesCode, conditions)
 const QSortKey = 'sort_order';
 const QuestionaryType = 'Questionary';
 const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group' ];
-const QBoolKeys = [ 'multiply_values', 'other_allowed' ];
+const QBoolKeys = [ 'multiple_values', 'other_allowed' ];
 const QOmitKeys = [ QSortKey, 'action_id' ];
 const ReferenceType = 'Reference';
 const RIntKeys = [ 'code', 'question_num' ];
@@ -271,13 +271,17 @@ async function save (survey, login, answers, ip)
       if (isArray(info.answers)) {
         info.answers = compact(info.answers);
         let n = 0;
-        for (let ans of info.answers) {
+        for (let answer of info.answers) {
           ++n;
           const k = key + AnswerSuffix + n;
-          record[k] = +ans;
+          const v = +answer
+          record[k] = v;
         }
       } else {
-        record[key] = +info.answers;
+        const a = +info.answers;
+        if (!!a) {
+          record[key] = a;
+        }
       }
       if (!!info.other) {
         record[key + OtherSuffix] = info.other;
