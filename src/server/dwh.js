@@ -180,7 +180,7 @@ async function query (modelCode, seriesCode, conditions)
 const QSortKey = 'sort_order';
 const QuestionaryType = 'Questionary';
 const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group' ];
-const QBoolKeys = [ 'multiply_values', 'other_allowed' ];
+const QBoolKeys = [ 'multiple_values', 'other_allowed' ];
 const QOmitKeys = [ QSortKey, 'action_id' ];
 const ReferenceType = 'Reference';
 const RIntKeys = [ 'code', 'question_num' ];
