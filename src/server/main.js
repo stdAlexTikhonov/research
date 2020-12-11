@@ -8,6 +8,8 @@ const assert = require('assert').strict;
 const express = require('express');
 const app = express();
 
+const cors = require("cors");
+
 const page = express.Router();
 const api = express.Router();
 
@@ -19,6 +21,8 @@ const {
 const { now } = require('./lib');
 
 const { save, load, SurveyCode } = require('./dwh');
+
+app.use(cors());
 
 // Узнаем IP даже за прокси (https://stackoverflow.com/a/14631683).
 app.set('trust proxy', true);
