@@ -79,7 +79,7 @@ api.use(express.json());
 // Сохраняет Анкету.
 api.post('/save', async (req, res) => {
   try {
-    const data = await save(req.body, req.ip);
+    const data = await save(SurveyCode, req.body.respondent, req.body.answers, req.ip);
     res.json(data);
     console.debug('api', 'save', 'done', size(data));
   } catch (fail) {

@@ -39,8 +39,6 @@ const SurveyCode = process.env.SURVEY_CODE;
 assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 
 const SeriesSuffix = '_timeseries';
-const SeriesCode = SurveyCode + SeriesSuffix;
-
 const SurveyPeriod = moment().format('YYYY-12-31');
 
 // Клиент для обращений к веб-сервису Хранилища.
@@ -240,21 +238,22 @@ async function load (survey)
 
 // Сохраняет Анкету в DWH.
 const QuestionPrefix = 'q_';
-async function save (form, ip)
+async function save (survey, login, answers, ip)
 {
   try {
-    assert.ok(form, 'No form');
-    const { responent, questions } = form;
-    console.debug('dwh', 'save', ModelCode, SurveyCode, size(form), form);
-    // console.debug('dwh', 'save',  size(questions), JSON.stringify(form, null, 4));
-    const login = form.respondent;
+    assert.ok(survey, 'No survey');
+    assert.ok(login, 'No login');
+    assert.ok(answers, 'No answers');
+    const seriesCode = survey + SeriesSuffix;
+    console.debug('dwh', 'save', ModelCode, survey, login, size(answers), answers, ip);
+    // console.debug('dwh', 'save',  size(answers), JSON.stringify(data, null, 4));
     const conditions = {
       respondent_login: login,
       period: SurveyPeriod
     };
-    const [ { DataSet } ] = await query(ModelCode, SeriesCode, conditions);
-    console.debug('DataSet', size(DataSet), JSON.stringify(DataSet));
-    const found = false;
+    const [ { DataSet } ] = await query(ModelCode, seriesCode, conditions);
+    console.debug(DataSet);
+    const found = !!size(DataSet.Group[0].Series[0]);
 
     const record = {
       respondent_login: login,
@@ -262,16 +261,19 @@ async function save (form, ip)
       period: SurveyPeriod,
     };
 
+    for (let code in answers) {
+      const info = answers[code];
+    }
     record[QuestionPrefix + 'v1'] = 1;
 
     if (!found) {
-      console.debug('dwh', 'save', 'insertRow', ModelCode, SeriesCode);
-      const rowId = await insertRow(ModelCode, SeriesCode, record);
+      console.debug('dwh', 'save', 'insertRow', ModelCode, seriesCode, size(record));
+      const rowId = await insertRow(ModelCode, seriesCode, record);
       return { rowId };
     } else {
       const rowId = 1; // FIXME
-      console.debug('dwh', 'save', 'updateRow', rowId, record);
-      await updateRow(ModelCode, SeriesCode, rowId, record);
+      console.debug('dwh', 'save', 'updateRow', ModelCode, seriesCode, rowId, size(record));
+      await updateRow(ModelCode, seriesCode, rowId, record);
     }
     console.debug('dwh', 'save', 'ok');
   } catch (fail) {
