@@ -11,13 +11,13 @@ type Answer = {
 };
 
 export const Question = () => {
-  const { step, data, keys, itog, setStep } = useContext(Context)!;
+  const { step, data, keys, itog, setStep, dir } = useContext(Context)!;
   const [question, setQuestion] = useState<any>("");
   const [answers, setAnswers] = useState<Answer[]>();
   const [group_question, setGQ] = useState(false);
 
   const shouldSkip = (data: any) =>
-    data.parent_code && +itog[data.parent_code].answers === +data.condition;
+    data.condition && +itog[data.parent_code].answers !== +data.condition;
 
   useEffect(() => {
     if (keys) {
@@ -26,7 +26,7 @@ export const Question = () => {
       );
 
       if (question_data) {
-        shouldSkip(question_data) && setStep((prev: number) => prev + 1);
+        shouldSkip(question_data) && setStep((prev: number) => prev + dir);
         setGQ(false);
         setQuestion(question_data);
 

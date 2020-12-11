@@ -11,11 +11,12 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog, uuid } = context!;
+  const { step, itog, uuid, setDir } = context!;
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
     setStep((prev: number) => (prev > 0 ? prev - 1 : 0));
+    setDir(-1);
   };
 
   const handleNext = () => {
@@ -25,7 +26,6 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
         answers: itog,
       });
     }
-
     // if (!itog[step]) {
     //   setItog((prev: any) => ({
     //     ...prev,
@@ -34,6 +34,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
     // }
 
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
+    setDir(1);
   };
 
   const sendToServer = async (data: any) => {

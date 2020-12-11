@@ -33,6 +33,7 @@ export const App: React.FC<Props> = () => {
   const [data, setData] = useState<any>(null);
   const [keys, setKeys] = useState<any>(null);
   const [uuid, setUuid] = useState<string>("");
+  const [dir, setDir] = useState<number>(1);
 
   const [itog, setItog] = useState(() => {
     // const transformed = data.map(setInitialData);
@@ -69,6 +70,8 @@ export const App: React.FC<Props> = () => {
           keys,
           uuid,
           setStep,
+          dir,
+          setDir,
         }}
       >
         {data && (
