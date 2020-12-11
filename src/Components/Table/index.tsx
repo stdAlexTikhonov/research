@@ -19,6 +19,7 @@ const useStyles = makeStyles({
 type Answer = {
   code: string;
   value: string;
+  should_show: boolean;
 };
 
 type Variant = {
@@ -65,16 +66,18 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {answers.map((answer: Answer, index: number) => (
-            <TableRow key={answer.code}>
-              <TableCell component="th" scope="row">
-                {answer.value}
-              </TableCell>
-              <TableCell>
-                <Row values={variants} row_index={index} />
-              </TableCell>
-            </TableRow>
-          ))}
+          {answers.map((answer: Answer, index: number) =>
+            answer.should_show ? (
+              <TableRow key={answer.code}>
+                <TableCell component="th" scope="row">
+                  {answer.value}
+                </TableCell>
+                <TableCell>
+                  <Row values={variants} row_index={index} />
+                </TableCell>
+              </TableRow>
+            ) : null
+          )}
         </TableBody>
       </Table>
     </TableContainer>

@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Context } from "../../context";
-import { Title } from "../Title";
 import { DenseTable } from "../Table";
 
 //   const question_group = group_question[0].question_group;
@@ -12,7 +11,7 @@ import { DenseTable } from "../Table";
 //   );
 
 export const GroupQuestion = () => {
-  const { data, step, keys } = useContext(Context)!;
+  const { data, step, keys, itog } = useContext(Context)!;
 
   const [questions, setQuestions] = useState<any>();
 
@@ -23,26 +22,38 @@ export const GroupQuestion = () => {
 
     if (q) {
       const questions_ = JSON.parse(q);
-      setQuestions(questions_);
+      const transformed = questions_.map((question: any, index: number) => ({
+        ...question,
+        should_show:
+          !question.condition ||
+          +question.condition === +itog[question.parent_code].answers,
+      }));
+      setQuestions(transformed);
     } else {
       const questions_ = data.Questionary.filter(
         (item: any) => item.question === keys![step]
       );
 
-      setQuestions(questions_);
+      const transformed = questions_.map((question: any, index: number) => ({
+        ...question,
+        should_show:
+          !question.condition ||
+          +question.condition === +itog[question.parent_code].answers,
+      }));
 
+      setQuestions(transformed);
       // const question_group = questions_[0].question_group;
 
       // const question_data = data.References.question_groups.Reference.find(
       //   (item: any) => item.code === question_group
       // );
       // setQuestion(question_data);
-
       localStorage.setItem(`${keys![step]}`, JSON.stringify(questions_));
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [step]);
+
   return questions ? (
     <>
       <DenseTable
