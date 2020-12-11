@@ -22,7 +22,7 @@ const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
     result[item.code] = {
       answers: [null],
-      other: null,
+      other: "",
     }; //a, b, c
     return result;
   }, {});
