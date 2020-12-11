@@ -267,6 +267,7 @@ async function save (survey, login, answers, ip)
       const info = answers[code];
       let key = QuestionPrefix + code;
       if (isArray(info.answers)) {
+        info.answers = compact(info.answers);
         let n = 0;
         for (let ans of info.answers) {
           ++n;
@@ -279,7 +280,7 @@ async function save (survey, login, answers, ip)
     }
 
     if (!found) {
-      console.debug('dwh', 'save', 'insertRow', ModelCode, seriesCode, size(record), record);
+      console.debug('dwh', 'save', 'insertRow', ModelCode, seriesCode, size(record));
       const rowId = await insertRow(ModelCode, seriesCode, record);
       return { rowId };
     } else {
