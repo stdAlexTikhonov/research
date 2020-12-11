@@ -79,7 +79,9 @@ export const CheckboxAns: React.FC<AnswerType> = ({
 
   useEffect(() => {
     const id = keys![step];
-    itog[id] && setChecked(itog[id].answers.includes(value));
+    itog[id] &&
+      itog[id].answers &&
+      setChecked(itog[id].answers.includes(value));
     itog[id] && setUserInput(itog[id].other);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

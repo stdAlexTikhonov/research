@@ -21,7 +21,7 @@ const theme = createMuiTheme({
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
     result[item.code] = {
-      answers: [null],
+      answers: item.multiple_values ? [null] : null,
       other: "",
     }; //a, b, c
     return result;
@@ -49,6 +49,7 @@ export const App: React.FC<Props> = () => {
           .slice(1)
           .sort((a, b) => +a.slice(1) - +b.slice(1))
       );
+
       setItog(setInitialData(data));
     });
   }, []);
@@ -67,6 +68,7 @@ export const App: React.FC<Props> = () => {
           data,
           keys,
           uuid,
+          setStep,
         }}
       >
         {data && (

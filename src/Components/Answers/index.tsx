@@ -19,7 +19,7 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
 
   useEffect(() => {
     const id = keys![step];
-    itog[id] && setValue(itog[id].answers[0]);
+    itog[id] && setValue(itog[id].answers);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 

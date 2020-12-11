@@ -20,9 +20,9 @@ export const Row: React.FC<Props> = ({ values, row_index }) => {
 
   useEffect(() => {
     const id = keys![step] + "_" + (row_index + 1);
-    itog[id] && setValue(itog[id].answers[0]);
+    itog[id] && setValue(itog[id].answers);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keys]);
+  }, [step]);
 
   const handleChange = (e: any) => {
     setValue(e.target.value);
