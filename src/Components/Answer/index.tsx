@@ -81,15 +81,18 @@ export const CheckboxAns: React.FC<AnswerType> = ({
     const id = keys![step];
     itog[id] && setChecked(itog[id].answers.includes(value));
     itog[id] && setUserInput(itog[id].other);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
   const handleChange = (e: React.ChangeEvent<{}>) => {
     if (!checked_) {
+      const new_answers = itog[`${keys![step]}`].answers.concat([value]);
+      const filtered = new_answers.filter((item: any) => item !== null);
       setItog((prev: any) => ({
         ...prev,
         [`${keys![step]}`]: Object.assign({}, prev[`${keys![step]}`], {
-          answers: prev[`${keys![step]}`].answers.concat([value]),
+          answers: filtered,
         }),
       }));
     } else {

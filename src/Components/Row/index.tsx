@@ -31,7 +31,7 @@ export const Row: React.FC<Props> = ({ values, row_index }) => {
     const timeout = setTimeout(function () {
       setItog((prev: any) =>
         Object.assign({}, prev, {
-          [`${id}`]: { answers: [e.target.value], other: null },
+          [`${id}`]: { answers: e.target.value, other: "" },
         })
       );
       clearTimeout(timeout);
