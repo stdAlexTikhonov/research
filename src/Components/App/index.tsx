@@ -9,6 +9,7 @@ import { BreadCrumbs } from "../BreadCrumbs";
 import { get, uuidv4 } from "../../utils/api";
 import { Question } from "../Question";
 import { Props } from "./type";
+import { Typography } from "@material-ui/core";
 
 const theme = createMuiTheme({
   palette: {
@@ -34,6 +35,7 @@ export const App: React.FC<Props> = () => {
   const [keys, setKeys] = useState<any>(null);
   const [uuid, setUuid] = useState<string>("");
   const [dir, setDir] = useState<number>(1);
+  const [title, setTitle] = useState<string>("");
 
   const [itog, setItog] = useState(() => {
     // const transformed = data.map(setInitialData);
@@ -45,6 +47,7 @@ export const App: React.FC<Props> = () => {
     setUuid(uuidv4());
     get("/api/load").then((data) => {
       setData(data);
+      setTitle(data.caption);
       setKeys(
         Object.keys(data.References)
           .slice(1)
@@ -77,6 +80,15 @@ export const App: React.FC<Props> = () => {
         {data && (
           <div className={classes.root}>
             {/* <Header /> */}
+
+            <Typography
+              variant="h6"
+              gutterBottom
+              style={{ padding: 20, paddingBottom: 0, fontSize: 14 }}
+            >
+              {title}
+            </Typography>
+
             {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
             <div className={classes.viewer}>
               <Question />

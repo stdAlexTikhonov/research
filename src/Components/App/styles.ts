@@ -10,7 +10,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: "100vh",
     },
     viewer: {
-      padding: 20,
       maxWidth: 900,
       minWidth: 900,
       flexGrow: 1,
