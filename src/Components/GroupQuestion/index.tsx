@@ -13,29 +13,38 @@ import { DenseTable } from "../Table";
 
 export const GroupQuestion = () => {
   const { data, step, keys } = useContext(Context)!;
-  const [question, setQuestion] = useState<any>();
+
   const [questions, setQuestions] = useState<any>();
 
   useEffect(() => {
     //Групповые вопросы
-    const questions_ = data.Questionary.filter(
-      (item: any) => item.question === keys![step]
-    );
 
-    setQuestions(questions_);
+    const q = localStorage.getItem(`${keys![step]}`);
 
-    const question_group = questions_[0].question_group;
+    if (q) {
+      const questions_ = JSON.parse(q);
+      setQuestions(questions_);
+    } else {
+      const questions_ = data.Questionary.filter(
+        (item: any) => item.question === keys![step]
+      );
 
-    setQuestion(
-      data.References.question_groups.Reference.find(
-        (item: any) => item.code === question_group
-      )
-    );
+      setQuestions(questions_);
+
+      // const question_group = questions_[0].question_group;
+
+      // const question_data = data.References.question_groups.Reference.find(
+      //   (item: any) => item.code === question_group
+      // );
+      // setQuestion(question_data);
+
+      localStorage.setItem(`${keys![step]}`, JSON.stringify(questions_));
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
-  return question ? (
+  }, []);
+  return questions ? (
     <>
-      <Title title={question.value} step={step} />
       <DenseTable
         answers={questions}
         variants={data.References[keys![step]].Reference}
