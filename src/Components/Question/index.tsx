@@ -49,11 +49,13 @@ export const Question = () => {
   ) : question && answers ? (
     <>
       <Title title={question.value} step={step} />
-      {question.multiple_values ? (
-        <MultipleAns answers={answers} user_input={question.other_allowed} />
-      ) : (
-        <Answers answers={answers} user_input={question.other_allowed} />
-      )}
+      <div style={{ width: "100%", overflow: "auto" }}>
+        {question.multiple_values ? (
+          <MultipleAns answers={answers} user_input={question.other_allowed} />
+        ) : (
+          <Answers answers={answers} user_input={question.other_allowed} />
+        )}
+      </div>
     </>
   ) : null;
 };
