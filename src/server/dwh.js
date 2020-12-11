@@ -271,13 +271,17 @@ async function save (survey, login, answers, ip)
       if (isArray(info.answers)) {
         info.answers = compact(info.answers);
         let n = 0;
-        for (let ans of info.answers) {
+        for (let answer of info.answers) {
           ++n;
           const k = key + AnswerSuffix + n;
-          record[k] = +ans;
+          const v = +answer
+          record[k] = v;
         }
       } else {
-        record[key] = +info.answers;
+        const a = +info.answers;
+        if (!!a) {
+          record[key] = a;
+        }
       }
       if (!!info.other) {
         record[key + OtherSuffix] = info.other;
