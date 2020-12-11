@@ -38,6 +38,11 @@ assert.ok(ModelCode, 'No MODEL_CODE in env');
 const SurveyCode = process.env.SURVEY_CODE;
 assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 
+const SeriesSuffix = '_timeseries';
+const SeriesCode = SurveyCode + SeriesSuffix;
+
+const SurveyPeriod = moment().format('YYYY-12-31');
+
 // Клиент для обращений к веб-сервису Хранилища.
 async function connection (soapWsdl)
 {
@@ -46,7 +51,8 @@ async function connection (soapWsdl)
     assert.ok(soapWsdl, 'No soapWsdl');
     console.debug('dwh', 'connection', 'createClientAsync', soapWsdl);
     const options = {
-      attributesKey: '$attributes'
+      attributesKey: '$attributes',
+      namespaceArrayElements: false,
     };
     client = await createClientAsync(soapWsdl, options);
     if (!client) throw new Error('Problem connecting to DWH');
@@ -95,15 +101,12 @@ async function queryExtendedData (modelCode, objectType, objectCode)
 }
 
 // Вставляет строку в Series.
-const SeriesSuffix = '_timeseries';
 const SeriesType = 'Series';
-async function insertRow (modelCode, surveyCode, record)
+async function insertRow (modelCode, seriesCode, record)
 {
   assert.ok(modelCode, 'No modelCode');
-  assert.ok(surveyCode, 'No surveyCode');
+  assert.ok(seriesCode, 'No seriesCode');
   assert.ok(record, 'No record');
-  const seriesCode = surveyCode + SeriesSuffix;
-  record.period = moment().format('YYYY-12-31');
   console.debug('dwh', 'insertRow', record);
   const data = map(record, (value, key) => ({
     Value: { $attributes: { concept: key, value } }
@@ -121,17 +124,15 @@ async function insertRow (modelCode, surveyCode, record)
   const [ { rowId } ] = await client.insertRowAsync(row);
   const intRowId = +rowId;
   console.debug('dwh', 'insertRow', intRowId);
-  console.debug(client.lastRequest);
+  // console.debug(JSON.stringify(row, null, 4), client.lastRequest);
   return intRowId;
 }
 
-async function updateRow (modelCode, surveyCode, rowId, record)
+async function updateRow (modelCode, seriesCode, rowId, record)
 {
   assert.ok(modelCode, 'No modelCode');
-  assert.ok(surveyCode, 'No surveyCode');
+  assert.ok(seriesCode, 'No seriesCode');
   assert.ok(record, 'No record');
-  const seriesCode = surveyCode + SeriesSuffix;
-  record.period = moment().format('YYYY-12-31');
   console.debug('dwh', 'updateRow', record);
   const data = map(record, (value, key) => ({
     Value: { $attributes: { concept: key, value } }
@@ -148,7 +149,32 @@ async function updateRow (modelCode, surveyCode, rowId, record)
   const client = await connect();
   console.debug('dwh', 'updateRow', seriesCode, size(record));
   const result = await client.updateRowAsync(row);
-  // console.debug('dwh', 'updateRow', client.lastRequest);
+  // console.debug('dwh', 'updateRow', row, client.lastRequest);
+  return result;
+}
+
+async function query (modelCode, seriesCode, conditions)
+{
+  assert.ok(modelCode, 'No modelCode');
+  assert.ok(seriesCode, 'No seriesCode');
+  assert.ok(conditions, 'No conditions');
+  console.debug('dwh', 'query', modelCode, seriesCode);
+  const client = await connect();
+  const request = {
+    modelCode,
+    objectType: SeriesType,
+    objectCode: seriesCode,
+    conditions: map(conditions, (item, fieldCode) => ({
+      item: {
+        fieldCode,
+        operator: 'Equals',
+        parameters: { item },
+      }
+    })),
+    pageNumber: -1,
+    pageSize: -1,
+  };
+  const result = await client.queryAsync(request);
   return result;
 }
 
@@ -179,7 +205,7 @@ async function load (survey)
         record.multiple_values = record.multiply_values;
         delete record.multiply_values;
       }
-      if (!!record.other_allowed) {
+      if (!!record.other_allowed && !record.other_text) {
         record.other_text = 'Другое (уточните)';
       }
       return record;
@@ -213,22 +239,40 @@ async function load (survey)
 }
 
 // Сохраняет Анкету в DWH.
-async function save (form)
+const QuestionPrefix = 'q_';
+async function save (form, ip)
 {
   try {
     assert.ok(form, 'No form');
     const { responent, questions } = form;
-    console.debug('dwh', 'save', ModelCode, SurveyCode, size(form));
+    console.debug('dwh', 'save', ModelCode, SurveyCode, size(form), form);
     // console.debug('dwh', 'save',  size(questions), JSON.stringify(form, null, 4));
-    const record = {
-      respondent_login: '1ade505a-3ae4-11eb-a158-0bdd491ae1a0',
-      respondent_ip: '127.0.0.1',
-      q_1: 1
+    const login = form.respondent;
+    const conditions = {
+      respondent_login: login,
+      period: SurveyPeriod
     };
-    // console.debug('dwh', 'save', record);
-    const rowId = await insertRow(ModelCode, SurveyCode, record);
-    // await updateRow(ModelCode, SurveyCode, rowId, record);
-    return { rowId };
+    const [ { DataSet } ] = await query(ModelCode, SeriesCode, conditions);
+    console.debug('DataSet', size(DataSet), JSON.stringify(DataSet));
+    const found = false;
+
+    const record = {
+      respondent_login: login,
+      respondent_ip: ip,
+      period: SurveyPeriod,
+    };
+
+    record[QuestionPrefix + 'v1'] = 1;
+
+    if (!found) {
+      console.debug('dwh', 'save', 'insertRow', ModelCode, SeriesCode);
+      const rowId = await insertRow(ModelCode, SeriesCode, record);
+      return { rowId };
+    } else {
+      const rowId = 1; // FIXME
+      console.debug('dwh', 'save', 'updateRow', rowId, record);
+      await updateRow(ModelCode, SeriesCode, rowId, record);
+    }
     console.debug('dwh', 'save', 'ok');
   } catch (fail) {
     return warning('save', fail);
