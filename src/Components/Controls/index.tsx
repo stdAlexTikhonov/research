@@ -61,6 +61,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           variant="contained"
           color={"primary"}
           onClick={handleNext}
+          disabled={passed && step === 22}
           className={classes.button}
         >
           {NEXT}
