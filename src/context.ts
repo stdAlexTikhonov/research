@@ -9,4 +9,5 @@ export const Context = React.createContext<{
   data: any;
   keys: string[] | null;
   uuid: string;
+  setStep: any;
 } | null>(null);
