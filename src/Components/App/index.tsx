@@ -71,30 +71,10 @@ export const App: React.FC<Props> = () => {
       >
         {data && (
           <div className={classes.root}>
-            <Header />
+            {/* <Header /> */}
             {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
             <div className={classes.viewer}>
               <Question />
-              {/* {data[step].variants ? (
-              <DenseTable
-                answers={data[step].answers}
-                variants={data[step].variants!}
-              />
-            ) : (
-              <div className={classes.answers}>
-                {data[step].multiple ? (
-                  <MultipleAns
-                    {...data[step]}
-                    user_input={!!data[step].user_answer}
-                  />
-                ) : (
-                  <Answers
-                    {...data[step]}
-                    user_input={!!data[step].user_answer}
-                  />
-                )}
-              </div>
-            )} */}
             </div>
             {keys && <Controls setStep={setStep} len={keys.length} />}
           </div>
