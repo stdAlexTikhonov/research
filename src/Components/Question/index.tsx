@@ -76,6 +76,7 @@ export const Question = () => {
       <Title
         title={group_question ? question.title : question.value}
         step={step}
+        tooltip={question.question_tooltip}
       />
       <div style={{ width: "100%", overflow: "auto" }}>
         {group_question ? (

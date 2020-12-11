@@ -5,9 +5,10 @@ import { QUESTION } from "../../utils/constants";
 type Props = {
   title: string;
   step: number;
+  tooltip?: string;
 };
 
-export const Title: React.FC<Props> = ({ title, step }) => {
+export const Title: React.FC<Props> = ({ title, step, tooltip }) => {
   return (
     <>
       <Typography
@@ -23,16 +24,16 @@ export const Title: React.FC<Props> = ({ title, step }) => {
         {title}
       </Typography>
 
-      {/* {data[step].subtitle && (
+      {tooltip && (
         <Typography
           style={{ color: "#aaa" }}
           variant="caption"
           display="block"
           gutterBottom
         >
-          {data[step].subtitle}
+          {tooltip}
         </Typography>
-      )} */}
+      )}
     </>
   );
 };
