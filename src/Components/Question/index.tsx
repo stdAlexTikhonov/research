@@ -38,18 +38,44 @@ export const Question = () => {
             ])
           );
         else setAnswers(data.References[key].Reference);
-      } else setGQ(true);
+      } else {
+        const qg_data = localStorage.getItem(`${keys[step]}_group`);
+
+        if (qg_data) setQuestion(JSON.parse(qg_data));
+        else {
+          const question_data = data.Questionary.find(
+            (item: any) => item.code === keys[step] + "_1"
+          );
+
+          const question_group_data = data.References.question_groups.Reference.find(
+            (item: any) => item.code === question_data.question_group
+          );
+
+          question_data.title = question_group_data.value;
+
+          setQuestion(question_data);
+          localStorage.setItem(
+            `${keys[step]}_group`,
+            JSON.stringify(question_data)
+          );
+        }
+
+        setGQ(true);
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keys, step]);
 
-  return group_question ? (
-    <GroupQuestion />
-  ) : question && answers ? (
+  return question && answers ? (
     <>
-      <Title title={question.value} step={step} />
-      {question.multiple_values ? (
+      <Title
+        title={group_question ? question.title : question.value}
+        step={step}
+      />
+      {group_question ? (
+        <GroupQuestion />
+      ) : question.multiple_values ? (
         <MultipleAns answers={answers} user_input={question.other_allowed} />
       ) : (
         <Answers answers={answers} user_input={question.other_allowed} />
