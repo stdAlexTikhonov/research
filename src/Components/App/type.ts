@@ -3,3 +3,8 @@ export type Props = {
   version: string | undefined;
   env: string | undefined;
 };
+
+export type ListItemProp = {
+  code: string;
+  caption: string;
+};

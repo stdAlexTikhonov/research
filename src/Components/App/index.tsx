@@ -8,8 +8,9 @@ import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
 import { get, uuidv4 } from "../../utils/api";
 import { Question } from "../Question";
-import { Props } from "./type";
+import { Props, ListItemProp } from "./type";
 import { Typography } from "@material-ui/core";
+import { CustomList } from "../CustomList";
 
 const theme = createMuiTheme({
   palette: {
@@ -36,6 +37,7 @@ export const App: React.FC<Props> = () => {
   const [uuid, setUuid] = useState<string>("");
   const [dir, setDir] = useState<number>(1);
   const [title, setTitle] = useState<string>("");
+  const [list, setList] = useState<ListItemProp[]>([]);
 
   const [itog, setItog] = useState(() => {
     // const transformed = data.map(setInitialData);
@@ -45,7 +47,14 @@ export const App: React.FC<Props> = () => {
 
   useEffect(() => {
     setUuid(uuidv4());
-    get("/api/load").then((data) => {
+    get("/api/list").then((data) => {
+      setList(data);
+    });
+  }, []);
+
+  const handleData = (code: string) => {
+    get(`/api/load?code=${code}`).then((data) => {
+      console.log(data);
       setData(data);
       setTitle(data.caption);
       setKeys(
@@ -55,8 +64,9 @@ export const App: React.FC<Props> = () => {
       );
 
       setItog(setInitialData(data));
+      setList([]);
     });
-  }, []);
+  };
 
   const [showCrumbs, setShowCrumbs] = useState(false);
 
@@ -96,6 +106,7 @@ export const App: React.FC<Props> = () => {
             {keys && <Controls setStep={setStep} len={keys.length} />}
           </div>
         )}
+        {list && <CustomList list={list} handleData={handleData} />}
       </Context.Provider>
     </ThemeProvider>
   );

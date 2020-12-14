@@ -13,6 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 900,
       minWidth: 900,
       flexGrow: 1,
+      padding: "0 20px",
       margin: "auto",
       overflow: "auto",
       display: "flex",
