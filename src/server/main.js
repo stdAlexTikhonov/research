@@ -14,13 +14,15 @@ const page = express.Router();
 const api = express.Router();
 
 const {
-  size,
+  isEmpty,
   isString,
+  result,
+  size,
 } = require('lodash');
 
 const { now } = require('./lib');
 
-const { save, load, SurveyCode } = require('./dwh');
+const { save, load, list, SurveyCode } = require('./dwh');
 
 app.use(cors());
 
@@ -94,12 +96,23 @@ api.post('/save', async (req, res) => {
 // Возвращает Опросный лист.
 api.get('/load', async (req, res) => {
   try {
-    const code = SurveyCode;
-    assert.ok(code, 'No Survey Code');
+    const code = result(req.query, 'code', SurveyCode);
+    if (isEmpty(code)) throw new Error('No Survey Code');
     console.debug('api', 'load', 'survey', code);
     const data = await load(code);
     res.json(data);
     console.debug('api', 'load', 'done', size(data));
+  } catch (fail) {
+    badRequest(req, res, fail);
+  }
+});
+
+// Возвращает список Обследований.
+api.get('/list', async (req, res) => {
+  try {
+    const data = await list();
+    res.json(data);
+    console.debug('api', 'list', 'done', size(data));
   } catch (fail) {
     badRequest(req, res, fail);
   }

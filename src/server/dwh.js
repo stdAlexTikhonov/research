@@ -69,6 +69,21 @@ const warning = (place, problem) => ({
   error: true
 });
 
+// Получает список объектов указанного типа.
+async function getList (modelCode, objectType)
+{
+  assert.ok(modelCode, 'No modelCode');
+  assert.ok(objectType, 'No objectType');
+  const client = await connect();
+  console.debug('dwh', 'getList', 'modelCode', modelCode, 'objectType', objectType);
+  const request = { modelCode, objectType };
+  const [ { listXml } ] = await client.getListAsync(request);
+  console.debug('dwh', 'getList', 'listXml', size(listXml));
+  const { list } = await parseStringPromise(listXml);
+  console.debug('dwh', 'getList', 'list', size(list));
+  return list;
+}
+
 // Получает описание модели.
 async function exportModel (modelCode)
 {
@@ -179,7 +194,7 @@ async function query (modelCode, seriesCode, conditions)
 
 const QSortKey = 'sort_order';
 const QuestionaryType = 'Questionary';
-const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group' ];
+const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group', 'default_value' ];
 const QBoolKeys = [ 'multiple_values', 'other_allowed' ];
 const QOmitKeys = [ QSortKey, 'action_id' ];
 const ReferenceType = 'Reference';
@@ -204,8 +219,12 @@ async function load (survey)
         record.multiple_values = record.multiply_values;
         delete record.multiply_values;
       }
-      if (!!record.other_allowed && !record.other_text) {
-        record.other_text = 'Другое (уточните)';
+      if (!!record.other_allowed) {
+        record.other_text = 'Другое (уточните)'; // TODO: В конфиг.
+        if (!!record.other_caption) {
+          record.other_text = record.other_caption;
+          delete record.other_caption; // TODO: Оставить только caption.
+        }
       }
       return record;
     });
@@ -234,6 +253,23 @@ async function load (survey)
     return form;
   } catch (fail) {
     return warning('load', fail);
+  }
+}
+
+// Загружает Опросный лист из DWH.
+async function list ()
+{
+  try {
+    console.debug('dwh', 'list', ModelCode);
+    const { item } = await getList(ModelCode, QuestionaryType);
+    console.debug('dwh', 'list', 'getList', size(item));
+    const found = item.map((record) => {
+      const { code, caption } = record.$;
+      return { code, caption };
+    });
+    return found;
+  } catch (fail) {
+    return warning('list', fail);
   }
 }
 
@@ -303,4 +339,4 @@ async function save (survey, login, answers, ip)
   }
 }
 
-module.exports = { load, save, SurveyCode };
+module.exports = { list, load, save, SurveyCode };
