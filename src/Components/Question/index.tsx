@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import { Title } from "../Title";
 import { Context } from "../../context";
 import { Answers } from "../Answers";
@@ -11,7 +11,17 @@ type Answer = {
 };
 
 export const Question = () => {
-  const { step, data, keys, itog, setStep, dir } = useContext(Context)!;
+  const {
+    step,
+    data,
+    keys,
+    itog,
+    setStep,
+    dir,
+    shouldSkipp,
+    setSkipped,
+    skipped,
+  } = useContext(Context)!;
   const [question, setQuestion] = useState<any>("");
   const [answers, setAnswers] = useState<Answer[]>();
   const [group_question, setGQ] = useState(false);
@@ -26,7 +36,16 @@ export const Question = () => {
       );
 
       if (question_data) {
-        shouldSkip(question_data) && setStep((prev: number) => prev + dir);
+        shouldSkip(question_data) &&
+          !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
+          setSkipped((prev: string[]) =>
+            prev.concat(shouldSkipp[question_data.parent_code])
+          );
+
+        if (shouldSkip(question_data)) setStep((prev: number) => prev + dir);
+        else if (skipped.includes(question_data.parent_code))
+          setStep((prev: number) => prev + dir);
+
         setGQ(false);
         setQuestion(question_data);
 

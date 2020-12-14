@@ -13,4 +13,6 @@ export const Context = React.createContext<{
   dir: number;
   setDir: any;
   shouldSkipp: any;
+  skipped: string[];
+  setSkipped: any;
 } | null>(null);
