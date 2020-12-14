@@ -38,6 +38,7 @@ export const App: React.FC<Props> = () => {
   const [dir, setDir] = useState<number>(1);
   const [title, setTitle] = useState<string>("");
   const [list, setList] = useState<ListItemProp[]>([]);
+  const [shouldSkipp, setShouldSkipp] = useState<any>(null);
 
   const [itog, setItog] = useState(() => {
     // const transformed = data.map(setInitialData);
@@ -54,8 +55,17 @@ export const App: React.FC<Props> = () => {
 
   const handleData = (code: string) => {
     get(`/api/load?code=${code}`).then((data) => {
-      console.log(data);
       setData(data);
+      const test = data.Questionary.reduce(
+        (a: any, b: any) => ({
+          ...a,
+          [`${b.parent_code}`]: a[`${b.parent_code}`]
+            ? a[`${b.parent_code}`].concat([b.code])
+            : [b.code],
+        }),
+        {}
+      );
+      setShouldSkipp(test);
       setTitle(data.caption);
       setKeys(
         Object.keys(data.References)
@@ -85,6 +95,7 @@ export const App: React.FC<Props> = () => {
           setStep,
           dir,
           setDir,
+          shouldSkipp,
         }}
       >
         {data && (

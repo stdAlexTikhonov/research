@@ -12,4 +12,5 @@ export const Context = React.createContext<{
   setStep: any;
   dir: number;
   setDir: any;
+  shouldSkipp: any;
 } | null>(null);
