@@ -24,10 +24,12 @@ export const GroupQuestion = () => {
       const questions_ = JSON.parse(q);
       const transformed = questions_.map((question: any, index: number) => ({
         ...question,
-        should_show:
-          !question.condition ||
-          +question.condition === +itog[question.parent_code].answers,
+        should_show: question.condition
+          ? +question.condition === +itog[question.parent_code].answers ||
+            +question.condition === -1
+          : true,
       }));
+
       setQuestions(transformed);
     } else {
       const questions_ = data.Questionary.filter(
