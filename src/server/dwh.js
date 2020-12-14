@@ -179,7 +179,7 @@ async function query (modelCode, seriesCode, conditions)
 
 const QSortKey = 'sort_order';
 const QuestionaryType = 'Questionary';
-const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group' ];
+const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group', 'default_value' ];
 const QBoolKeys = [ 'multiple_values', 'other_allowed' ];
 const QOmitKeys = [ QSortKey, 'action_id' ];
 const ReferenceType = 'Reference';
@@ -204,8 +204,12 @@ async function load (survey)
         record.multiple_values = record.multiply_values;
         delete record.multiply_values;
       }
-      if (!!record.other_allowed && !record.other_text) {
-        record.other_text = 'Другое (уточните)';
+      if (!!record.other_allowed) {
+        record.other_text = 'Другое (уточните)'; // TODO: В конфиг.
+        if (!!record.other_caption) {
+          record.other_text = record.other_caption;
+          delete record.other_caption; // TODO: Оставить только caption.
+        }
       }
       return record;
     });
@@ -235,6 +239,16 @@ async function load (survey)
   } catch (fail) {
     return warning('load', fail);
   }
+}
+
+// Загружает Опросный лист из DWH.
+async function list ()
+{
+  // FIMXE!
+  return  [
+    { code: SurveyCode,
+      caption: 'Обследование' }
+  ];
 }
 
 // Сохраняет Анкету в DWH.
@@ -303,4 +317,4 @@ async function save (survey, login, answers, ip)
   }
 }
 
-module.exports = { load, save, SurveyCode };
+module.exports = { list, load, save, SurveyCode };
