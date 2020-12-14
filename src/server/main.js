@@ -20,7 +20,7 @@ const {
 
 const { now } = require('./lib');
 
-const { save, load, SurveyCode } = require('./dwh');
+const { save, load, list, SurveyCode } = require('./dwh');
 
 app.use(cors());
 
@@ -100,6 +100,17 @@ api.get('/load', async (req, res) => {
     const data = await load(code);
     res.json(data);
     console.debug('api', 'load', 'done', size(data));
+  } catch (fail) {
+    badRequest(req, res, fail);
+  }
+});
+
+// Возвращает список Обследований.
+api.get('/list', async (req, res) => {
+  try {
+    const data = await list();
+    res.json(data);
+    console.debug('api', 'list', 'done', size(data));
   } catch (fail) {
     badRequest(req, res, fail);
   }
