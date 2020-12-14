@@ -69,6 +69,21 @@ const warning = (place, problem) => ({
   error: true
 });
 
+// Получает список объектов указанного типа.
+async function getList (modelCode, objectType)
+{
+  assert.ok(modelCode, 'No modelCode');
+  assert.ok(objectType, 'No objectType');
+  const client = await connect();
+  console.debug('dwh', 'getList', 'modelCode', modelCode, 'objectType', objectType);
+  const request = { modelCode, objectType };
+  const [ { listXml } ] = await client.getListAsync(request);
+  console.debug('dwh', 'getList', 'listXml', size(listXml));
+  const { list } = await parseStringPromise(listXml);
+  console.debug('dwh', 'getList', 'list', size(list));
+  return list;
+}
+
 // Получает описание модели.
 async function exportModel (modelCode)
 {
@@ -244,11 +259,18 @@ async function load (survey)
 // Загружает Опросный лист из DWH.
 async function list ()
 {
-  // FIMXE!
-  return  [
-    { code: SurveyCode,
-      caption: 'Обследование' }
-  ];
+  try {
+    console.debug('dwh', 'list', ModelCode);
+    const { item } = await getList(ModelCode, QuestionaryType);
+    console.debug('dwh', 'list', 'getList', size(item));
+    const found = item.map((record) => {
+      const { code, caption } = record.$;
+      return { code, caption };
+    });
+    return found;
+  } catch (fail) {
+    return warning('list', fail);
+  }
 }
 
 // Сохраняет Анкету в DWH.

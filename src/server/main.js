@@ -14,8 +14,10 @@ const page = express.Router();
 const api = express.Router();
 
 const {
-  size,
+  isEmpty,
   isString,
+  result,
+  size,
 } = require('lodash');
 
 const { now } = require('./lib');
@@ -94,8 +96,8 @@ api.post('/save', async (req, res) => {
 // Возвращает Опросный лист.
 api.get('/load', async (req, res) => {
   try {
-    const code = SurveyCode;
-    assert.ok(code, 'No Survey Code');
+    const code = result(req.query, 'code', SurveyCode);
+    if (isEmpty(code)) throw new Error('No Survey Code');
     console.debug('api', 'load', 'survey', code);
     const data = await load(code);
     res.json(data);

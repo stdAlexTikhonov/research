@@ -82,13 +82,29 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ## API ##
 
-### GET /api/load ###
+### GET /api/list ###
 
-Получает *Опросный лист*.
+Получает список *Опросных листов*.
 
 #### Пример запроса ####
 
-    curl -kLs -H 'Content-Type: application/json' localhost:3000/api/load/
+    curl -kLs -H 'Content-Type: application/json' localhost:8123/api/list/
+
+#### Ответ ####
+
+Ответ содержит массив объектов с ключами `code` и `caption`.
+
+### GET /api/load ###
+
+Получает полное описание *Опросного листа*.
+
+#### Пример запроса ####
+
+    curl -kLs -H 'Content-Type: application/json' 'localhost:3000/api/load/?code=satisfaction_of_users_with_official_stat_inform'
+
+#### Параметр ####
+
+В единственном параметре `code` указывается код *Опросного листа*.
 
 #### Пример ответа ####
 
