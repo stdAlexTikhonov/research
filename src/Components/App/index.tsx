@@ -40,6 +40,7 @@ export const App: React.FC<Props> = () => {
   const [list, setList] = useState<ListItemProp[]>([]);
   const [shouldSkipp, setShouldSkipp] = useState<any>(null);
   const [skipped, setSkipped] = useState<string[]>([]);
+  const [nextDsb, setNextDsb] = useState<boolean>(false);
 
   const [itog, setItog] = useState(() => {
     // const transformed = data.map(setInitialData);
@@ -100,6 +101,8 @@ export const App: React.FC<Props> = () => {
           shouldSkipp,
           skipped,
           setSkipped,
+          nextDsb,
+          setNextDsb,
         }}
       >
         {data && (

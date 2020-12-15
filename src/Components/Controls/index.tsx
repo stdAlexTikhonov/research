@@ -11,7 +11,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog, uuid, setDir } = context!;
+  const { step, itog, uuid, setDir, nextDsb, setNextDsb } = context!;
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
@@ -35,6 +35,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
     setDir(1);
+    setNextDsb(true);
   };
 
   const sendToServer = async (data: any) => {
@@ -61,7 +62,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           variant="contained"
           color={"primary"}
           onClick={handleNext}
-          disabled={passed && step === 22}
+          disabled={(passed && step === 22) || nextDsb}
           className={classes.button}
         >
           {NEXT}

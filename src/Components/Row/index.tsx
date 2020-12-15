@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const Row: React.FC<Props> = ({ values, row_index }) => {
-  const { setItog, step, keys, itog } = useContext(Context)!;
+  const { setItog, step, keys, itog, setNextDsb } = useContext(Context)!;
   const [value, setValue] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,6 +36,7 @@ export const Row: React.FC<Props> = ({ values, row_index }) => {
       );
       clearTimeout(timeout);
     }, 0);
+    setNextDsb(false);
   };
   const classes = useStyles();
 

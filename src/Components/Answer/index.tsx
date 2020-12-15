@@ -73,7 +73,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   value,
   user_input,
 }) => {
-  const { setItog, step, keys, itog } = useContext(Context)!;
+  const { setItog, step, keys, itog, setNextDsb } = useContext(Context)!;
   const [checked_, setChecked] = useState(false);
   const [userInput, setUserInput] = useState("");
 
@@ -91,6 +91,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
     if (!checked_) {
       const new_answers = itog[`${keys![step]}`].answers.concat([value]);
       const filtered = new_answers.filter((item: any) => item !== null);
+      setNextDsb(filtered.length === 0);
       setItog((prev: any) => ({
         ...prev,
         [`${keys![step]}`]: Object.assign({}, prev[`${keys![step]}`], {
@@ -98,13 +99,15 @@ export const CheckboxAns: React.FC<AnswerType> = ({
         }),
       }));
     } else {
+      const filtered = itog[`${keys![step]}`].answers.filter(
+        (item: string) => item !== value
+      );
+      setNextDsb(filtered.length === 0);
       setItog((prev: any) => ({
         ...prev,
         [`${keys![step]}`]: {
           ...prev[`${keys![step]}`],
-          answers: prev[`${keys![step]}`].answers.filter(
-            (item: string) => item !== value
-          ),
+          answers: filtered,
         },
       }));
     }

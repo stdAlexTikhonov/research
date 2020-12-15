@@ -15,4 +15,6 @@ export const Context = React.createContext<{
   shouldSkipp: any;
   skipped: string[];
   setSkipped: any;
+  nextDsb: boolean;
+  setNextDsb: any;
 } | null>(null);

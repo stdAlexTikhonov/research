@@ -21,6 +21,7 @@ export const Question = () => {
     shouldSkipp,
     setSkipped,
     skipped,
+    setNextDsb,
   } = useContext(Context)!;
   const [question, setQuestion] = useState<any>("");
   const [answers, setAnswers] = useState<Answer[]>();
@@ -30,6 +31,7 @@ export const Question = () => {
     data.condition && +itog[data.parent_code].answers !== +data.condition;
 
   useEffect(() => {
+    step === 0 && setNextDsb(true);
     if (keys) {
       const question_data = data.Questionary.find(
         (item: any) => item.code === keys[step]

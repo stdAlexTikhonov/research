@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const Answers: React.FC<Props> = ({ answers, user_input }) => {
-  const { setItog, step, keys, itog } = useContext(Context)!;
+  const { setItog, step, keys, itog, setNextDsb } = useContext(Context)!;
   const [value, setValue] = useState<string | null>(null);
 
   useEffect(() => {
@@ -31,6 +31,7 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
     );
 
     setValue(e.target.value);
+    setNextDsb(false);
   };
 
   return (
