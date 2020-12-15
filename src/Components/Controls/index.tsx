@@ -37,7 +37,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
     setDir(1);
     setNextDsb(true);
-    localStorage.setItem(uuid, JSON.stringify(itog));
+    //localStorage.setItem(uuid, JSON.stringify(itog));
   };
 
   const sendToServer = async (data: any) => {
