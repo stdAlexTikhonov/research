@@ -8,6 +8,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       justifyContent: "flex-start",
       flexGrow: 1,
+      overflow: "auto",
+      height: "100vh", //это можно затереть
     },
     viewer: {
       maxWidth: 900,

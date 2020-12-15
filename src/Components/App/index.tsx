@@ -123,7 +123,7 @@ export const App: React.FC<Props> = () => {
             {keys && <Controls setStep={setStep} len={keys.length} />}
           </div>
         )}
-        {list && <CustomList list={list} handleData={handleData} />}
+        {list.length > 0 && <CustomList list={list} handleData={handleData} />}
       </Context.Provider>
     </ThemeProvider>
   );
