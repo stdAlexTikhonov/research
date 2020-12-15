@@ -40,13 +40,17 @@ function SimpleDialog(props: SimpleDialogProps) {
   );
 }
 
-export const FinalDialog = () => {
+export const FinalDialog: React.FC<{ passed: boolean; onClick: any }> = ({
+  passed,
+  onClick,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   const classes = useStyles();
 
   const handleClickOpen = () => {
     setOpen(true);
+    onClick();
   };
 
   const handleClose = () => {
@@ -60,6 +64,7 @@ export const FinalDialog = () => {
         color="primary"
         onClick={handleClickOpen}
         className={classes.button}
+        disabled={passed}
       >
         {NEXT}
       </Button>

@@ -59,16 +59,19 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           {BACK}
         </Button>
 
-        <Button
-          variant="contained"
-          color={"primary"}
-          onClick={handleNext}
-          disabled={(passed && step === 22) || nextDsb}
-          className={classes.button}
-        >
-          {NEXT}
-        </Button>
-        {step === 22 && <FinalDialog />}
+        {step === 22 ? (
+          <FinalDialog passed={passed || nextDsb} onClick={handleNext} />
+        ) : (
+          <Button
+            variant="contained"
+            color={"primary"}
+            onClick={handleNext}
+            disabled={nextDsb}
+            className={classes.button}
+          >
+            {NEXT}
+          </Button>
+        )}
       </div>
     </div>
   );
