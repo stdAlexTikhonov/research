@@ -67,7 +67,6 @@ export const App: React.FC<Props> = () => {
         }),
         {}
       );
-      console.log(test);
       setShouldSkipp(test);
       setTitle(data.caption);
       setKeys(

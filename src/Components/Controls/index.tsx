@@ -4,6 +4,7 @@ import { useStyles } from "./styles";
 import { BACK, NEXT } from "../../utils/constants";
 import { Context } from "../../context";
 import { post } from "../../utils/api";
+import { FinalDialog } from "../FinalDialog";
 
 export const Controls: React.FC<{ setStep: any; len: number }> = ({
   setStep,
@@ -67,6 +68,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
         >
           {NEXT}
         </Button>
+        {step === 22 && <FinalDialog />}
       </div>
     </div>
   );

@@ -5,13 +5,11 @@ import { App } from "./Components/App";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App
-      name={process.env.REACT_APP_NAME}
-      version={process.env.REACT_APP_VERSION}
-      env={process.env.NODE_ENV}
-    />
-  </React.StrictMode>,
+  <App
+    name={process.env.REACT_APP_NAME}
+    version={process.env.REACT_APP_VERSION}
+    env={process.env.NODE_ENV}
+  />,
   document.getElementById("root")
 );
 
