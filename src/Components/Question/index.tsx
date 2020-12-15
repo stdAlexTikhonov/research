@@ -67,14 +67,29 @@ export const Question = () => {
         if (qg_data) {
           const parsed = JSON.parse(qg_data);
           setQuestion(parsed);
-          if (skipped.includes(parsed.parent_code))
+
+          if (shouldSkip(parsed))
+            !skipped.includes(shouldSkipp[parsed.parent_code][0]) &&
+              setSkipped((prev: string[]) =>
+                prev.concat(shouldSkipp[parsed.parent_code])
+              );
+
+          if (shouldSkip(parsed)) setStep((prev: number) => prev + dir);
+          else if (skipped.includes(parsed.parent_code))
             setStep((prev: number) => prev + dir);
         } else {
           const question_data = data.Questionary.find(
             (item: any) => item.code === keys[step] + "_1"
           );
 
-          if (skipped.includes(question_data.parent_code))
+          if (shouldSkip(question_data))
+            !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
+              setSkipped((prev: string[]) =>
+                prev.concat(shouldSkipp[question_data.parent_code])
+              );
+
+          if (shouldSkip(question_data)) setStep((prev: number) => prev + dir);
+          else if (skipped.includes(question_data.parent_code))
             setStep((prev: number) => prev + dir);
 
           const question_group_data = data.References.question_groups.Reference.find(
