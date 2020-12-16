@@ -35,14 +35,44 @@ export const App: React.FC<Props> = () => {
   const [itog, setItog] = useState();
 
   useEffect(() => {
-    setUuid(uuidv4());
-    get("/api/list").then((data) => {
-      setList(data);
-    });
+    const uuidFromStorage = localStorage.getItem("uuid");
+    if (uuidFromStorage) {
+      const dataFromStorage = localStorage.getItem(uuidFromStorage);
+      const parsed = JSON.parse(dataFromStorage!);
+
+      setData(parsed);
+
+      const test = parsed.Questionary.reduce(
+        (a: any, b: any) => ({
+          ...a,
+          [`${b.parent_code}`]: a[`${b.parent_code}`]
+            ? a[`${b.parent_code}`].concat([b.code])
+            : [b.code],
+        }),
+        {}
+      );
+      setShouldSkipp(test);
+      setTitle(parsed.caption);
+      setKeys(
+        Object.keys(parsed.References)
+          .slice(1)
+          .sort((a, b) => +a.slice(1) - +b.slice(1))
+      );
+
+      setItog(setInitialData(parsed));
+    } else {
+      const id = uuidv4();
+      setUuid(id);
+      localStorage.setItem("uuid", id);
+      get("/api/list").then((data) => {
+        setList(data);
+      });
+    }
   }, []);
 
   const handleData = (code: string) => {
     get(`/api/load?code=${code}`).then((data) => {
+      localStorage.setItem(uuid, JSON.stringify(data));
       setData(data);
 
       const test = data.Questionary.reduce(
