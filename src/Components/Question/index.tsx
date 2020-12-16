@@ -43,11 +43,19 @@ export const Question = () => {
           else setNextDsb(!itog[`${keys![step]}`].answers);
         }
 
-        if (shouldSkip(question_data))
+        if (shouldSkip(question_data)) {
           !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
             setSkipped((prev: string[]) =>
               prev.concat(shouldSkipp[question_data.parent_code])
             );
+        } else {
+          setSkipped((prev: string[]) =>
+            prev.filter(
+              (item: any) =>
+                !shouldSkipp[question_data.parent_code].includes(item)
+            )
+          );
+        }
 
         if (shouldSkip(question_data)) setStep((prev: number) => prev + dir);
         else if (skipped.includes(question_data.parent_code))
