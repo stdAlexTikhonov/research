@@ -41,7 +41,10 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
 
   useEffect(() => {
     const passed = Object.keys(localAnswers);
-    if (answers.length === passed.length) setNextDsb(false);
+    if (
+      answers.filter((item: any) => item.should_show).length === passed.length
+    )
+      setNextDsb(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localAnswers]);
 
