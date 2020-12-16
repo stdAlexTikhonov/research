@@ -66,7 +66,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           {BACK}
         </Button>
 
-        {step === 22 ? (
+        {step === len - 1 ? (
           <FinalDialog passed={passed || nextDsb} onClick={handleNext} />
         ) : (
           <Button
