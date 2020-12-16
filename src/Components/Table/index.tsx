@@ -14,6 +14,7 @@ import { Context } from "../../context";
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
+    paddingRight: 150,
   },
 });
 
@@ -57,16 +58,21 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
-          <TableRow>
-            <TableCell>{TITLE}</TableCell>
+          <TableRow
+            style={{ borderBottom: "1px solid rgba(224, 224, 224, 1)" }}
+          >
+            <TableCell style={{ border: "none" }}>{TITLE}</TableCell>
             <TableCell
               style={{
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
+                border: "none",
+                alignItems: "flex-end",
+                minHeight: 30,
               }}
             >
-              {variants.map((variant: Variant) => (
+              {variants.map((variant: Variant, index: number) => (
                 <div
                   style={{
                     width: variants.length < 10 ? 100 : "unset",
@@ -76,10 +82,37 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                   }}
                   key={variant.code}
                 >
-                  {variants.length > 5 ? variant.code : variant.value}
+                  {variants.length > 5 ? (
+                    <span
+                      style={{
+                        position: "relative",
+                        maxWidth: 38,
+                        minWidth: 38,
+                        minHeight: 25,
+                      }}
+                    >
+                      {index === variants.length - 1 ? (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: -40,
+                            left: -15,
+                            textAlign: "left",
+                          }}
+                        >
+                          {variant.value}
+                        </div>
+                      ) : (
+                        variant.value
+                      )}
+                    </span>
+                  ) : (
+                    variant.value
+                  )}
                 </div>
               ))}
             </TableCell>
+            <TableCell style={{ width: 30 }}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -96,6 +129,7 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                     setAnswers={setLocalAnswers}
                   />
                 </TableCell>
+                <TableCell style={{ width: 30 }}></TableCell>
               </TableRow>
             ) : null
           )}

@@ -28,7 +28,9 @@ export const Question = () => {
   const [group_question, setGQ] = useState(false);
 
   const shouldSkip = (data: any) =>
-    data.condition && +itog[data.parent_code].answers !== +data.condition;
+    data &&
+    data.condition &&
+    +itog[data.parent_code].answers !== +data.condition;
 
   useEffect(() => {
     if (keys) {

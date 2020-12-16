@@ -81,7 +81,7 @@ export const App: React.FC<Props> = () => {
     get(`/api/load?code=${code}`).then((data) => {
       localStorage.setItem(uuid, JSON.stringify(data));
       setData(data);
-
+      console.log(data);
       const test = data.Questionary.reduce(
         (a: any, b: any) => ({
           ...a,
