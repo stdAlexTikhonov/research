@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useStyles } from "./styles";
-import { createMuiTheme } from "@material-ui/core/styles";
-import { ThemeProvider } from "@material-ui/styles";
 import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
@@ -11,14 +9,6 @@ import { Question } from "../Question";
 import { Props, ListItemProp } from "./type";
 import { Typography } from "@material-ui/core";
 import { CustomList } from "../CustomList";
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#2959B2",
-    },
-  },
-});
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -83,48 +73,46 @@ export const App: React.FC<Props> = () => {
   const [showCrumbs, setShowCrumbs] = useState(false);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Context.Provider
-        value={{
-          step,
-          itog,
-          setItog,
-          showCrumbs,
-          setShowCrumbs,
-          data,
-          keys,
-          uuid,
-          setStep,
-          dir,
-          setDir,
-          shouldSkipp,
-          skipped,
-          setSkipped,
-          nextDsb,
-          setNextDsb,
-        }}
-      >
-        {data && (
-          <div className={classes.root}>
-            {/* <Header /> */}
+    <Context.Provider
+      value={{
+        step,
+        itog,
+        setItog,
+        showCrumbs,
+        setShowCrumbs,
+        data,
+        keys,
+        uuid,
+        setStep,
+        dir,
+        setDir,
+        shouldSkipp,
+        skipped,
+        setSkipped,
+        nextDsb,
+        setNextDsb,
+      }}
+    >
+      {data && (
+        <div className={classes.root}>
+          {/* <Header /> */}
 
-            <Typography
-              variant="h6"
-              gutterBottom
-              style={{ padding: 20, paddingBottom: 0, fontSize: 14 }}
-            >
-              {title}
-            </Typography>
+          <Typography
+            variant="h6"
+            gutterBottom
+            style={{ padding: 20, paddingBottom: 0, fontSize: 14 }}
+          >
+            {title}
+          </Typography>
 
-            {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
-            <div className={classes.viewer}>
-              <Question />
-            </div>
-            {keys && <Controls setStep={setStep} len={keys.length} />}
+          {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
+          <div className={classes.viewer}>
+            <Question />
           </div>
-        )}
-        {list.length > 0 && <CustomList list={list} handleData={handleData} />}
-      </Context.Provider>
-    </ThemeProvider>
+          {keys && <Controls setStep={setStep} len={keys.length} />}
+        </div>
+      )}
+      {list.length > 0 && <CustomList list={list} handleData={handleData} />}
+    </Context.Provider>
   );
 };
