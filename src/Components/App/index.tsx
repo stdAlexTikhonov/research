@@ -9,6 +9,9 @@ import { Question } from "../Question";
 import { Props, ListItemProp } from "./type";
 import { Typography } from "@material-ui/core";
 import { CustomList } from "../CustomList";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import { AGAIN_AND_AGAIN } from "../../utils/constants";
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -33,6 +36,7 @@ export const App: React.FC<Props> = () => {
   const [shouldSkipp, setShouldSkipp] = useState<any>(null);
   const [skipped, setSkipped] = useState<string[]>([]);
   const [nextDsb, setNextDsb] = useState<boolean>(true);
+  const [refuse, setRefuse] = useState(false);
 
   const [itog, setItog] = useState();
 
@@ -68,9 +72,6 @@ export const App: React.FC<Props> = () => {
         setStep(parseInt(step_!));
       } else setItog(setInitialData(parsed));
     } else {
-      const id = uuidv4();
-      setUuid(id);
-      localStorage.setItem("uuid", id);
       get("/api/list").then((data) => {
         setList(data);
       });
@@ -78,30 +79,36 @@ export const App: React.FC<Props> = () => {
   }, []);
 
   const handleData = (code: string) => {
-    get(`/api/load?code=${code}`).then((data) => {
-      localStorage.setItem(uuid, JSON.stringify(data));
-      setData(data);
-      console.log(data);
-      const test = data.Questionary.reduce(
-        (a: any, b: any) => ({
-          ...a,
-          [`${b.parent_code}`]: a[`${b.parent_code}`]
-            ? a[`${b.parent_code}`].concat([b.code])
-            : [b.code],
-        }),
-        {}
-      );
-      setShouldSkipp(test);
-      setTitle(data.caption);
-      setKeys(
-        Object.keys(data.References)
-          .slice(1)
-          .sort((a, b) => +a.slice(1) - +b.slice(1))
-      );
+    const year = localStorage.getItem(code);
+    if (year) setRefuse(true);
+    else {
+      const id = uuidv4();
+      setUuid(id);
+      localStorage.setItem("uuid", id);
+      get(`/api/load?code=${code}`).then((data) => {
+        localStorage.setItem(id, JSON.stringify(data));
+        setData(data);
+        const test = data.Questionary.reduce(
+          (a: any, b: any) => ({
+            ...a,
+            [`${b.parent_code}`]: a[`${b.parent_code}`]
+              ? a[`${b.parent_code}`].concat([b.code])
+              : [b.code],
+          }),
+          {}
+        );
+        setShouldSkipp(test);
+        setTitle(data.caption);
+        setKeys(
+          Object.keys(data.References)
+            .slice(1)
+            .sort((a, b) => +a.slice(1) - +b.slice(1))
+        );
 
-      setItog(setInitialData(data));
-      setList([]);
-    });
+        setItog(setInitialData(data));
+        setList([]);
+      });
+    }
   };
 
   const [showCrumbs, setShowCrumbs] = useState(false);
@@ -147,6 +154,13 @@ export const App: React.FC<Props> = () => {
         </div>
       )}
       {list.length > 0 && <CustomList list={list} handleData={handleData} />}
+      <Dialog
+        aria-labelledby="simple-dialog-title"
+        open={refuse}
+        onClose={() => setRefuse(false)}
+      >
+        <DialogTitle id="simple-dialog-title">{AGAIN_AND_AGAIN}</DialogTitle>
+      </Dialog>
     </Context.Provider>
   );
 };

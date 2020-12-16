@@ -12,7 +12,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog, uuid, setDir, nextDsb } = context!;
+  const { step, itog, uuid, setDir, nextDsb, data } = context!;
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
@@ -31,6 +31,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
       localStorage.removeItem("itog_" + uuid);
       localStorage.removeItem("uuid");
       localStorage.removeItem(uuid);
+      localStorage.setItem(data.code, new Date().getFullYear().toString());
     } else {
       localStorage.setItem(`step_${uuid}`, (step + 1).toString());
       localStorage.setItem(`itog_${uuid}`, JSON.stringify(itog));
