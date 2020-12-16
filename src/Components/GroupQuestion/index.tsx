@@ -54,7 +54,7 @@ export const GroupQuestion = () => {
       // setQuestion(question_data);
       const disable = transformed.some((item: any) => !itog[item.code].answers);
       setNextDsb(disable);
-      localStorage.setItem(`${keys![step]}`, JSON.stringify(questions_));
+      // localStorage.setItem(`${keys![step]}`, JSON.stringify(questions_));
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

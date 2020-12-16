@@ -114,10 +114,10 @@ export const Question = () => {
           question_data.title = question_group_data.value;
 
           setQuestion(question_data);
-          localStorage.setItem(
-            `${keys[step]}_group`,
-            JSON.stringify(question_data)
-          );
+          // localStorage.setItem(
+          //   `${keys[step]}_group`,
+          //   JSON.stringify(question_data)
+          // );
         }
 
         setGQ(true);
