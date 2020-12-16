@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,6 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { TITLE } from "../../utils/constants";
 import { Row } from "../Row";
+import { Context } from "../../context";
 
 const useStyles = makeStyles({
   table: {
@@ -35,6 +36,14 @@ type Props = {
 
 export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
   const classes = useStyles();
+  const { setNextDsb } = useContext(Context)!;
+  const [localAnswers, setLocalAnswers] = useState<any>({});
+
+  useEffect(() => {
+    const passed = Object.keys(localAnswers);
+    if (answers.length === passed.length) setNextDsb(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localAnswers]);
 
   return (
     <TableContainer component={Paper}>
@@ -73,7 +82,11 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                   {answer.value}
                 </TableCell>
                 <TableCell>
-                  <Row values={variants} row_index={index} />
+                  <Row
+                    values={variants}
+                    row_index={index}
+                    setAnswers={setLocalAnswers}
+                  />
                 </TableCell>
               </TableRow>
             ) : null
