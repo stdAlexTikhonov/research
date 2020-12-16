@@ -14,7 +14,7 @@ type Props = {
 
 export const MultipleAns: React.FC<Props> = ({ answers, user_input }) => {
   return (
-    <FormGroup>
+    <FormGroup style={{ paddingLeft: 15 }}>
       {answers.map((answer: Answer, index: number) => (
         <CheckboxAns
           title={answer.value}
