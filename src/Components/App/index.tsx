@@ -13,7 +13,9 @@ import { CustomList } from "../CustomList";
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
     result[item.code] = {
-      answers: item.multiple_values ? [null] : null,
+      answers: item.multiple_values
+        ? item.default_value || [null]
+        : item.default_value,
       other: "",
     }; //a, b, c
     return result;
