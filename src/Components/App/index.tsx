@@ -37,6 +37,7 @@ export const App: React.FC<Props> = () => {
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
     if (uuidFromStorage) {
+      setUuid(uuidFromStorage);
       const dataFromStorage = localStorage.getItem(uuidFromStorage);
       const parsed = JSON.parse(dataFromStorage!);
 
@@ -58,8 +59,12 @@ export const App: React.FC<Props> = () => {
           .slice(1)
           .sort((a, b) => +a.slice(1) - +b.slice(1))
       );
-
-      setItog(setInitialData(parsed));
+      const get_itog = localStorage.getItem(`itog_${uuidFromStorage}`);
+      if (get_itog) {
+        setItog(JSON.parse(get_itog));
+        const step_ = localStorage.getItem(`step_${uuidFromStorage}`);
+        setStep(parseInt(step_!));
+      } else setItog(setInitialData(parsed));
     } else {
       const id = uuidv4();
       setUuid(id);

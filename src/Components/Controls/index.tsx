@@ -18,6 +18,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   const handleBack = () => {
     setStep((prev: number) => (prev > 0 ? prev - 1 : 0));
     setDir(-1);
+    localStorage.setItem(`step_${uuid}`, (step - 1).toString());
   };
 
   const handleNext = () => {
@@ -35,9 +36,10 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
     // }
 
     setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
-    setDir(1);
 
-    //localStorage.setItem(uuid, JSON.stringify(itog));
+    setDir(1);
+    localStorage.setItem(`step_${uuid}`, (step + 1).toString());
+    localStorage.setItem(`itog_${uuid}`, JSON.stringify(itog));
   };
 
   const sendToServer = async (data: any) => {
