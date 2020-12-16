@@ -31,13 +31,18 @@ export const Question = () => {
     data.condition && +itog[data.parent_code].answers !== +data.condition;
 
   useEffect(() => {
-    step === 0 && setNextDsb(true);
     if (keys) {
       const question_data = data.Questionary.find(
         (item: any) => item.code === keys[step]
       );
 
       if (question_data) {
+        if (itog) {
+          if (Array.isArray(itog[`${keys![step]}`].answers))
+            setNextDsb(!itog[`${keys![step]}`].answers[0]);
+          else setNextDsb(!itog[`${keys![step]}`].answers);
+        }
+
         if (shouldSkip(question_data))
           !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
             setSkipped((prev: string[]) =>

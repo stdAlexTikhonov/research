@@ -30,13 +30,9 @@ export const App: React.FC<Props> = () => {
   const [list, setList] = useState<ListItemProp[]>([]);
   const [shouldSkipp, setShouldSkipp] = useState<any>(null);
   const [skipped, setSkipped] = useState<string[]>([]);
-  const [nextDsb, setNextDsb] = useState<boolean>(false);
+  const [nextDsb, setNextDsb] = useState<boolean>(true);
 
-  const [itog, setItog] = useState(() => {
-    // const transformed = data.map(setInitialData);
-    // const res = Object.assign({}, transformed);
-    return data;
-  });
+  const [itog, setItog] = useState();
 
   useEffect(() => {
     setUuid(uuidv4());
@@ -48,6 +44,7 @@ export const App: React.FC<Props> = () => {
   const handleData = (code: string) => {
     get(`/api/load?code=${code}`).then((data) => {
       setData(data);
+
       const test = data.Questionary.reduce(
         (a: any, b: any) => ({
           ...a,

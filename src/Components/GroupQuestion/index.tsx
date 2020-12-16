@@ -11,7 +11,7 @@ import { DenseTable } from "../Table";
 //   );
 
 export const GroupQuestion = () => {
-  const { data, step, keys, itog } = useContext(Context)!;
+  const { data, step, keys, itog, setNextDsb } = useContext(Context)!;
 
   const [questions, setQuestions] = useState<any>();
 
@@ -30,6 +30,8 @@ export const GroupQuestion = () => {
           : true,
       }));
 
+      const disable = transformed.some((item: any) => !itog[item.code].answers);
+      setNextDsb(disable);
       setQuestions(transformed);
     } else {
       const questions_ = data.Questionary.filter(
@@ -50,6 +52,8 @@ export const GroupQuestion = () => {
       //   (item: any) => item.code === question_group
       // );
       // setQuestion(question_data);
+      const disable = transformed.some((item: any) => !itog[item.code].answers);
+      setNextDsb(disable);
       localStorage.setItem(`${keys![step]}`, JSON.stringify(questions_));
     }
 
