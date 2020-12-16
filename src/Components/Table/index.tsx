@@ -45,6 +45,11 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localAnswers]);
 
+  useEffect(() => {
+    setLocalAnswers({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answers]);
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">

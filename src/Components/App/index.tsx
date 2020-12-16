@@ -15,7 +15,7 @@ const setInitialData = (datum: any) =>
     result[item.code] = {
       answers: item.multiple_values
         ? item.default_value || [null]
-        : item.default_value,
+        : item.default_value || null,
       other: "",
     }; //a, b, c
     return result;
