@@ -27,6 +27,15 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
         respondent: uuid,
         answers: itog,
       });
+      localStorage.removeItem("step_" + uuid);
+      localStorage.removeItem("itog_" + uuid);
+      localStorage.removeItem("uuid");
+      localStorage.removeItem(uuid);
+    } else {
+      localStorage.setItem(`step_${uuid}`, (step + 1).toString());
+      localStorage.setItem(`itog_${uuid}`, JSON.stringify(itog));
+      setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
+      setDir(1);
     }
     // if (!itog[step]) {
     //   setItog((prev: any) => ({
@@ -34,12 +43,6 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
     //     [`${step}`]: null,
     //   }));
     // }
-
-    setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
-
-    setDir(1);
-    localStorage.setItem(`step_${uuid}`, (step + 1).toString());
-    localStorage.setItem(`itog_${uuid}`, JSON.stringify(itog));
   };
 
   const sendToServer = async (data: any) => {

@@ -25,16 +25,8 @@ export interface SimpleDialogProps {
 function SimpleDialog(props: SimpleDialogProps) {
   const { onClose, open } = props;
 
-  const handleClose = () => {
-    onClose();
-  };
-
   return (
-    <Dialog
-      onClose={handleClose}
-      aria-labelledby="simple-dialog-title"
-      open={open}
-    >
+    <Dialog aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title">{FINAL_TITLE}</DialogTitle>
     </Dialog>
   );
