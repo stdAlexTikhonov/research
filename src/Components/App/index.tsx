@@ -24,6 +24,13 @@ const setInitialData = (datum: any) =>
     return result;
   }, {});
 
+const getTrueKeys = (datum: any) =>
+  datum.Questionary.reduce(function (result: any, item: any, index: number) {
+    item.code = item.code.split("_")[0];
+    result[item.code] = null; //a, b, c
+    return result;
+  }, {});
+
 export const App: React.FC<Props> = () => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
