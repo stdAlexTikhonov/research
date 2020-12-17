@@ -4,7 +4,7 @@ import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
-import { get, uuidv4, getFullList } from "../../utils/api";
+import { get, uuidv4, commonTransform } from "../../utils/api";
 import { Question } from "../Question";
 import { Props, ListItemProp } from "./type";
 import { Typography } from "@material-ui/core";
@@ -23,47 +23,6 @@ const setInitialData = (datum: any) =>
     }; //a, b, c
     return result;
   }, {});
-
-const common = (data: any) => {
-  const test = data.Questionary.reduce(
-    (a: any, b: any, i: number, arr: any) => {
-      const code = b.code;
-      const acc = a[`${b.parent_code}`];
-
-      return {
-        ...a,
-        [`${b.parent_code}`]: acc
-          ? acc.includes(code)
-            ? acc
-            : acc.concat([code])
-          : [code],
-      };
-    },
-    {}
-  );
-
-  const test_keys = Object.keys(test).reverse();
-
-  const itog = test_keys.reduce(
-    (a: any, key: string) => ({
-      ...a,
-      [`${key}`]: getFullList(key, test),
-    }),
-    {}
-  );
-
-  //filtering group questions
-  for (let key in itog) {
-    const arr = itog[key].map((item: string) => item.split("_")[0]);
-    arr.sort((a: any, b: any) => +a.slice(1) - +b.slice(1));
-    const filtered = arr.filter(
-      (item: string, index: number) => arr.indexOf(item) === index
-    );
-    itog[key] = filtered;
-  }
-
-  return itog;
-};
 
 export const App: React.FC<Props> = () => {
   const classes = useStyles();
@@ -89,7 +48,7 @@ export const App: React.FC<Props> = () => {
       setData(parsed);
 
       //
-      const itog = common(parsed);
+      const itog = commonTransform(parsed);
 
       setShouldSkipp(itog);
       setTitle(parsed.caption);
@@ -122,7 +81,7 @@ export const App: React.FC<Props> = () => {
         localStorage.setItem(id, JSON.stringify(data));
         setData(data);
 
-        const itog = common(data);
+        const itog = commonTransform(data);
 
         setShouldSkipp(itog);
         setTitle(data.caption);

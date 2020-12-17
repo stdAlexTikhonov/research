@@ -44,3 +44,44 @@ export const get = async (url: string) => {
   });
   return response.json();
 };
+
+export const commonTransform = (data: any) => {
+  const test = data.Questionary.reduce(
+    (a: any, b: any, i: number, arr: any) => {
+      const code = b.code;
+      const acc = a[`${b.parent_code}`];
+
+      return {
+        ...a,
+        [`${b.parent_code}`]: acc
+          ? acc.includes(code)
+            ? acc
+            : acc.concat([code])
+          : [code],
+      };
+    },
+    {}
+  );
+
+  const test_keys = Object.keys(test).reverse();
+
+  const itog = test_keys.reduce(
+    (a: any, key: string) => ({
+      ...a,
+      [`${key}`]: getFullList(key, test),
+    }),
+    {}
+  );
+
+  //filtering group questions
+  for (let key in itog) {
+    const arr = itog[key].map((item: string) => item.split("_")[0]);
+    arr.sort((a: any, b: any) => +a.slice(1) - +b.slice(1));
+    const filtered = arr.filter(
+      (item: string, index: number) => arr.indexOf(item) === index
+    );
+    itog[key] = filtered;
+  }
+
+  return itog;
+};
