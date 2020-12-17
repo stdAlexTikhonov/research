@@ -37,47 +37,23 @@ export const Question = () => {
 
   useEffect(() => {
     setPrevStep(step);
-    if (keys) {
+    if (localKeys) {
       const question_data = data.Questionary.find(
-        (item: any) => item.code === keys[step]
+        (item: any) => item.code === localKeys[step]
       );
 
       if (question_data) {
         setQuestion(() => question_data);
-        // if (shouldSkip(question)) console.log(shouldSkipp[keys[step]]);
-        // const skip = shouldSkipp[question_data.code];
-        // const last_key = skip && skip[skip.length - 1];
-
-        // if (last_key) setStep(keys.indexOf(last_key) + 1);
 
         if (itog) {
-          if (Array.isArray(itog[`${keys![step]}`].answers))
-            setNextDsb(!itog[`${keys![step]}`].answers[0]);
-          else setNextDsb(!itog[`${keys![step]}`].answers);
+          if (Array.isArray(itog[`${localKeys![step]}`].answers))
+            setNextDsb(!itog[`${localKeys![step]}`].answers[0]);
+          else setNextDsb(!itog[`${localKeys![step]}`].answers);
         }
-
-        // if (shouldSkip(question_data)) {
-        //   !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
-        //     setSkipped((prev: string[]) =>
-        //       prev.concat(shouldSkipp[question_data.parent_code])
-        //     );
-        // } else {
-        //   setSkipped((prev: string[]) =>
-        //     prev.filter(
-        //       (item: any) =>
-        //         !shouldSkipp[question_data.parent_code].includes(item)
-        //     )
-        //   );
-        // }
-
-        // if (last_key && shouldSkip(question_data))
-        //   setStep(keys.indexOf(last_key) + 1);
-        // else if (last_key && skipped.includes(question_data.parent_code))
-        //   setStep(keys.indexOf(last_key) + 1);
 
         setGQ(false);
 
-        const key = keys[step];
+        const key = localKeys[step];
 
         if (question_data.other_allowed)
           setAnswers(
@@ -90,49 +66,15 @@ export const Question = () => {
           );
         else setAnswers(data.References[key].Reference);
       } else {
-        console.log("hello");
-        const qg_data = localStorage.getItem(`${keys[step]}_group`);
+        const qg_data = localStorage.getItem(`${localKeys[step]}_group`);
 
         if (qg_data) {
           const parsed = JSON.parse(qg_data);
           setQuestion(() => parsed);
-          // if (shouldSkip(question)) console.log(shouldSkipp[keys[step]]);
-
-          // const skip = shouldSkipp[parsed.code];
-          // const last_key = skip && skip[skip.length - 1];
-
-          // if (last_key) setStep(keys.indexOf(last_key) + 1);
-
-          // if (shouldSkip(parsed))
-          //   !skipped.includes(shouldSkipp[parsed.parent_code][0]) &&
-          //     setSkipped((prev: string[]) =>
-          //       prev.concat(shouldSkipp[parsed.parent_code])
-          //     );
-
-          // if (last_key && shouldSkip(parsed))
-          //   setStep(keys.indexOf(last_key) + 1);
-          // else if (last_key && skipped.includes(parsed.parent_code))
-          //   setStep(keys.indexOf(last_key) + 1);
         } else {
           const question_data = data.Questionary.find(
-            (item: any) => item.code === keys[step] + "_1"
+            (item: any) => item.code === localKeys[step] + "_1"
           );
-
-          const skip = shouldSkipp[question_data.code];
-          const last_key = skip && skip[skip.length - 1];
-
-          // if (last_key) setStep(keys.indexOf(last_key) + 1);
-
-          // if (shouldSkip(question_data))
-          //   !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
-          //     setSkipped((prev: string[]) =>
-          //       prev.concat(shouldSkipp[question_data.parent_code])
-          //     );
-
-          // if (last_key && shouldSkip(question_data))
-          //   setStep(keys.indexOf(last_key) + 1);
-          // else if (last_key && skipped.includes(question_data.parent_code))
-          //   setStep(keys.indexOf(last_key) + 1);
 
           const question_group_data = data.References.question_groups.Reference.find(
             (item: any) => item.code === question_data.question_group
@@ -141,10 +83,6 @@ export const Question = () => {
           question_data.title = question_group_data.value;
 
           setQuestion(question_data);
-          // localStorage.setItem(
-          //   `${keys[step]}_group`,
-          //   JSON.stringify(question_data)
-          // );
         }
 
         setGQ(true);
@@ -152,7 +90,7 @@ export const Question = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keys, step]);
+  }, [step]);
 
   return question && answers ? (
     <>
