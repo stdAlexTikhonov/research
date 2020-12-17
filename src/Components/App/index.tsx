@@ -12,7 +12,6 @@ import { CustomList } from "../CustomList";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { AGAIN_AND_AGAIN } from "../../utils/constants";
-import { ArrowBackTwoTone } from "@material-ui/icons";
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -75,7 +74,7 @@ export const App: React.FC<Props> = () => {
         }),
         {}
       );
-
+      console.log(itog);
       //filtering group questions
       for (let key in itog) {
         const arr = itog[key].map((item: string) => item.split("_")[0]);
@@ -121,16 +120,14 @@ export const App: React.FC<Props> = () => {
             const code = b.code;
             const acc = a[`${b.parent_code}`];
 
-            return data.References[b.parent_code]
-              ? {
-                  ...a,
-                  [`${b.parent_code}`]: acc
-                    ? acc.includes(code)
-                      ? acc
-                      : acc.concat([code])
-                    : [code],
-                }
-              : a;
+            return {
+              ...a,
+              [`${b.parent_code}`]: acc
+                ? acc.includes(code)
+                  ? acc
+                  : acc.concat([code])
+                : [code],
+            };
           },
           {}
         );
@@ -145,6 +142,7 @@ export const App: React.FC<Props> = () => {
           {}
         );
 
+        console.log(itog);
         //filtering group questions
         for (let key in itog) {
           const arr = itog[key].map((item: string) => item.split("_")[0]);
