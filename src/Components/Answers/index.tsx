@@ -50,7 +50,7 @@ export const Answers: React.FC<Props> = ({
     const key = keys![step];
     const arr = shouldSkipp[key];
 
-    if (shouldSkip(e.target.value) !== undefined)
+    if (shouldSkip(e.target.value) !== undefined && arr)
       if (shouldSkip(e.target.value))
         copy = copy?.filter((item: string) => !arr.includes(item));
       else if (copy?.indexOf(arr[0]) === -1) copy?.splice(step, 0, ...arr);
