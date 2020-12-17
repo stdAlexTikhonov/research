@@ -38,6 +38,7 @@ export const Question = () => {
       );
 
       if (question_data) {
+        if (shouldSkip(question_data)) console.log(shouldSkipp[keys[step]]);
         // const skip = shouldSkipp[question_data.code];
         // const last_key = skip && skip[skip.length - 1];
 
@@ -89,6 +90,7 @@ export const Question = () => {
         if (qg_data) {
           const parsed = JSON.parse(qg_data);
           setQuestion(parsed);
+          if (shouldSkip(parsed)) console.log(shouldSkipp[keys[step]]);
 
           // const skip = shouldSkipp[parsed.code];
           // const last_key = skip && skip[skip.length - 1];

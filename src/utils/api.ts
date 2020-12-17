@@ -26,6 +26,16 @@ export const uuidv4 = () => {
   });
 };
 
+export const getFullList = (code: string, obj: any) => {
+  obj[code].forEach((item: any, i: number) => {
+    if (obj[item]) obj[code] = obj[code].concat(obj[item]);
+  });
+
+  obj[code].sort((a: any, b: any) => +a.slice(1) - +b.slice(1));
+
+  return obj[code].slice();
+};
+
 export const get = async (url: string) => {
   const response = await fetch(process.env.REACT_APP_SURVEY_BACK + url, {
     credentials: "same-origin", // параметр определяющий передвать ли разные сессионные данные вместе с запросом

@@ -4,7 +4,7 @@ import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
-import { get, uuidv4 } from "../../utils/api";
+import { get, uuidv4, getFullList } from "../../utils/api";
 import { Question } from "../Question";
 import { Props, ListItemProp } from "./type";
 import { Typography } from "@material-ui/core";
@@ -67,7 +67,17 @@ export const App: React.FC<Props> = () => {
         {}
       );
 
-      setShouldSkipp(test);
+      const test_keys = Object.keys(test).reverse();
+
+      const itog = test_keys.reduce(
+        (a: any, key: string) => ({
+          ...a,
+          [`${key}`]: getFullList(key, test),
+        }),
+        {}
+      );
+
+      setShouldSkipp(itog);
       setTitle(parsed.caption);
       setKeys(
         Object.keys(parsed.References)
@@ -86,13 +96,6 @@ export const App: React.FC<Props> = () => {
       });
     }
   }, []);
-
-  const getCode = (a: any, b: any, i: number, arr: any) =>
-    a[arr[i - 1].parent_code]
-      ? a[arr[i - 1].parent_code].includes(b.parent_code)
-        ? arr[i - 1].parent_code
-        : b.parent_code
-      : null;
 
   const handleData = (code: string) => {
     const year = localStorage.getItem(code);
@@ -123,7 +126,17 @@ export const App: React.FC<Props> = () => {
           {}
         );
 
-        setShouldSkipp(test);
+        const test_keys = Object.keys(test).reverse();
+
+        const itog = test_keys.reduce(
+          (a: any, key: string) => ({
+            ...a,
+            [`${key}`]: getFullList(key, test),
+          }),
+          {}
+        );
+
+        setShouldSkipp(itog);
         setTitle(data.caption);
         setKeys(
           Object.keys(data.References)
