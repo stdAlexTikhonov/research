@@ -55,7 +55,6 @@ export const Answers: React.FC<Props> = ({
         copy = copy?.filter((item: string) => !arr.includes(item));
       else if (copy?.indexOf(arr[0]) === -1) copy?.splice(step, 0, ...arr);
     copy && setLocalKeys(copy);
-    console.log(copy);
   };
 
   return (

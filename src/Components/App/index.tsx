@@ -74,7 +74,7 @@ export const App: React.FC<Props> = () => {
         }),
         {}
       );
-      console.log(itog);
+
       //filtering group questions
       for (let key in itog) {
         const arr = itog[key].map((item: string) => item.split("_")[0]);
