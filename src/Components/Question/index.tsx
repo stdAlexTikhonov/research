@@ -89,6 +89,7 @@ export const Question = () => {
           );
         else setAnswers(data.References[key].Reference);
       } else {
+        console.log("hello");
         const qg_data = localStorage.getItem(`${keys[step]}_group`);
 
         if (qg_data) {

@@ -19,9 +19,15 @@ export const Answers: React.FC<Props> = ({
   user_input,
   shouldSkip,
 }) => {
-  const { setItog, step, keys, itog, setNextDsb, shouldSkipp } = useContext(
-    Context
-  )!;
+  const {
+    setItog,
+    step,
+    keys,
+    itog,
+    setNextDsb,
+    shouldSkipp,
+    setLocalKeys,
+  } = useContext(Context)!;
   const [value, setValue] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,6 +54,7 @@ export const Answers: React.FC<Props> = ({
       if (shouldSkip(e.target.value))
         copy = copy?.filter((item: string) => !arr.includes(item));
       else if (copy?.indexOf(arr[0]) === -1) copy?.splice(step, 0, ...arr);
+    copy && setLocalKeys(copy);
     console.log(copy);
   };
 

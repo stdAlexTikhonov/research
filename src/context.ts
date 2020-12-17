@@ -15,4 +15,6 @@ export const Context = React.createContext<{
   setSkipped: any;
   nextDsb: boolean;
   setNextDsb: any;
+  localKeys: any;
+  setLocalKeys: any;
 } | null>(null);

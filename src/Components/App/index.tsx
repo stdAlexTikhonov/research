@@ -38,6 +38,7 @@ export const App: React.FC<Props> = () => {
   const [nextDsb, setNextDsb] = useState<boolean>(true);
   const [refuse, setRefuse] = useState(false);
   const [itog, setItog] = useState();
+  const [localKeys, setLocalKeys] = useState<string[]>([]);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -187,6 +188,8 @@ export const App: React.FC<Props> = () => {
         setSkipped,
         nextDsb,
         setNextDsb,
+        localKeys,
+        setLocalKeys,
       }}
     >
       {data && (
