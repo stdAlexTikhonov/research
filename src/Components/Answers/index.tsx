@@ -22,7 +22,6 @@ export const Answers: React.FC<Props> = ({
   const {
     setItog,
     step,
-    localKeys,
     keys,
     itog,
     setNextDsb,
@@ -32,7 +31,7 @@ export const Answers: React.FC<Props> = ({
   const [value, setValue] = useState<string | null>(null);
 
   useEffect(() => {
-    const id = localKeys![step];
+    const id = keys![step];
     itog[id] && setValue(itog[id].answers);
     // console.log(shouldSkip());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,7 +40,7 @@ export const Answers: React.FC<Props> = ({
   const handleChange = (e: any) => {
     setItog((prev: any) =>
       Object.assign({}, prev, {
-        [`${localKeys![step]}`]: { answers: e.target.value, other: "" },
+        [`${keys![step]}`]: { answers: e.target.value, other: "" },
       })
     );
 
@@ -51,16 +50,17 @@ export const Answers: React.FC<Props> = ({
     const key = keys![step];
     const arr = shouldSkipp[key];
 
-    if (shouldSkip(e.target.value) !== undefined && arr)
+    if (shouldSkip(e.target.value) !== undefined)
       if (shouldSkip(e.target.value))
         copy = copy?.filter((item: string) => !arr.includes(item));
       else if (copy?.indexOf(arr[0]) === -1) copy?.splice(step, 0, ...arr);
     copy && setLocalKeys(copy);
+    console.log(copy);
   };
 
   return (
     <RadioGroup
-      name={localKeys ? localKeys[step] : "name"}
+      name={keys ? keys[step] : "name"}
       value={value}
       onChange={handleChange}
     >
