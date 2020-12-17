@@ -11,16 +11,21 @@ type Answer = {
 type Props = {
   answers: Answer[];
   user_input: boolean;
+  shouldSkip: any;
 };
 
-export const Answers: React.FC<Props> = ({ answers, user_input }) => {
+export const Answers: React.FC<Props> = ({
+  answers,
+  user_input,
+  shouldSkip,
+}) => {
   const { setItog, step, keys, itog, setNextDsb } = useContext(Context)!;
   const [value, setValue] = useState<string | null>(null);
 
   useEffect(() => {
     const id = keys![step];
     itog[id] && setValue(itog[id].answers);
-
+    // console.log(shouldSkip());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
@@ -33,6 +38,7 @@ export const Answers: React.FC<Props> = ({ answers, user_input }) => {
 
     setValue(e.target.value);
     setNextDsb(false);
+    console.log(shouldSkip(e.target.value));
   };
 
   return (

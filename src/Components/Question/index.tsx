@@ -27,8 +27,12 @@ export const Question = () => {
   const [group_question, setGQ] = useState(false);
   const [prevStep, setPrevStep] = useState<number>(0);
 
-  const shouldSkip = (data: any) =>
-    data.condition && +itog[data.parent_code].answers !== +data.condition;
+  const shouldSkip = (answer: string | number) => {
+    const question = data.Questionary.find(
+      (item: any) => item.code.split("_")[0] === keys![step + 1]
+    );
+    return question.condition && +answer !== +question.condition;
+  };
 
   useEffect(() => {
     setPrevStep(step);
@@ -38,7 +42,8 @@ export const Question = () => {
       );
 
       if (question_data) {
-        if (shouldSkip(question_data)) console.log(shouldSkipp[keys[step]]);
+        setQuestion(() => question_data);
+        // if (shouldSkip(question)) console.log(shouldSkipp[keys[step]]);
         // const skip = shouldSkipp[question_data.code];
         // const last_key = skip && skip[skip.length - 1];
 
@@ -70,7 +75,6 @@ export const Question = () => {
         //   setStep(keys.indexOf(last_key) + 1);
 
         setGQ(false);
-        setQuestion(question_data);
 
         const key = keys[step];
 
@@ -89,8 +93,8 @@ export const Question = () => {
 
         if (qg_data) {
           const parsed = JSON.parse(qg_data);
-          setQuestion(parsed);
-          if (shouldSkip(parsed)) console.log(shouldSkipp[keys[step]]);
+          setQuestion(() => parsed);
+          // if (shouldSkip(question)) console.log(shouldSkipp[keys[step]]);
 
           // const skip = shouldSkipp[parsed.code];
           // const last_key = skip && skip[skip.length - 1];
@@ -161,7 +165,11 @@ export const Question = () => {
         ) : question.multiple_values ? (
           <MultipleAns answers={answers} user_input={question.other_allowed} />
         ) : (
-          <Answers answers={answers} user_input={question.other_allowed} />
+          <Answers
+            answers={answers}
+            user_input={question.other_allowed}
+            shouldSkip={shouldSkip}
+          />
         )}
       </div>
     </>
