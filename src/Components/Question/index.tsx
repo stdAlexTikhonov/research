@@ -17,7 +17,6 @@ export const Question = () => {
     keys,
     itog,
     setStep,
-    dir,
     shouldSkipp,
     setSkipped,
     skipped,
@@ -26,42 +25,48 @@ export const Question = () => {
   const [question, setQuestion] = useState<any>("");
   const [answers, setAnswers] = useState<Answer[]>();
   const [group_question, setGQ] = useState(false);
+  const [prevStep, setPrevStep] = useState<number>(0);
 
   const shouldSkip = (data: any) =>
-    data &&
-    data.condition &&
-    +itog[data.parent_code].answers !== +data.condition;
+    data.condition && +itog[data.parent_code].answers !== +data.condition;
 
   useEffect(() => {
+    setPrevStep(step);
     if (keys) {
       const question_data = data.Questionary.find(
         (item: any) => item.code === keys[step]
       );
 
       if (question_data) {
+        // const skip = shouldSkipp[question_data.code];
+        // const last_key = skip && skip[skip.length - 1];
+
+        // if (last_key) setStep(keys.indexOf(last_key) + 1);
+
         if (itog) {
           if (Array.isArray(itog[`${keys![step]}`].answers))
             setNextDsb(!itog[`${keys![step]}`].answers[0]);
           else setNextDsb(!itog[`${keys![step]}`].answers);
         }
 
-        if (shouldSkip(question_data)) {
-          !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
-            setSkipped((prev: string[]) =>
-              prev.concat(shouldSkipp[question_data.parent_code])
-            );
-        } else {
-          setSkipped((prev: string[]) =>
-            prev.filter(
-              (item: any) =>
-                !shouldSkipp[question_data.parent_code].includes(item)
-            )
-          );
-        }
+        // if (shouldSkip(question_data)) {
+        //   !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
+        //     setSkipped((prev: string[]) =>
+        //       prev.concat(shouldSkipp[question_data.parent_code])
+        //     );
+        // } else {
+        //   setSkipped((prev: string[]) =>
+        //     prev.filter(
+        //       (item: any) =>
+        //         !shouldSkipp[question_data.parent_code].includes(item)
+        //     )
+        //   );
+        // }
 
-        if (shouldSkip(question_data)) setStep((prev: number) => prev + dir);
-        else if (skipped.includes(question_data.parent_code))
-          setStep((prev: number) => prev + dir);
+        // if (last_key && shouldSkip(question_data))
+        //   setStep(keys.indexOf(last_key) + 1);
+        // else if (last_key && skipped.includes(question_data.parent_code))
+        //   setStep(keys.indexOf(last_key) + 1);
 
         setGQ(false);
         setQuestion(question_data);
@@ -85,29 +90,41 @@ export const Question = () => {
           const parsed = JSON.parse(qg_data);
           setQuestion(parsed);
 
-          if (shouldSkip(parsed))
-            !skipped.includes(shouldSkipp[parsed.parent_code][0]) &&
-              setSkipped((prev: string[]) =>
-                prev.concat(shouldSkipp[parsed.parent_code])
-              );
+          // const skip = shouldSkipp[parsed.code];
+          // const last_key = skip && skip[skip.length - 1];
 
-          if (shouldSkip(parsed)) setStep((prev: number) => prev + dir);
-          else if (skipped.includes(parsed.parent_code))
-            setStep((prev: number) => prev + dir);
+          // if (last_key) setStep(keys.indexOf(last_key) + 1);
+
+          // if (shouldSkip(parsed))
+          //   !skipped.includes(shouldSkipp[parsed.parent_code][0]) &&
+          //     setSkipped((prev: string[]) =>
+          //       prev.concat(shouldSkipp[parsed.parent_code])
+          //     );
+
+          // if (last_key && shouldSkip(parsed))
+          //   setStep(keys.indexOf(last_key) + 1);
+          // else if (last_key && skipped.includes(parsed.parent_code))
+          //   setStep(keys.indexOf(last_key) + 1);
         } else {
           const question_data = data.Questionary.find(
             (item: any) => item.code === keys[step] + "_1"
           );
 
-          if (shouldSkip(question_data))
-            !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
-              setSkipped((prev: string[]) =>
-                prev.concat(shouldSkipp[question_data.parent_code])
-              );
+          const skip = shouldSkipp[question_data.code];
+          const last_key = skip && skip[skip.length - 1];
 
-          if (shouldSkip(question_data)) setStep((prev: number) => prev + dir);
-          else if (skipped.includes(question_data.parent_code))
-            setStep((prev: number) => prev + dir);
+          // if (last_key) setStep(keys.indexOf(last_key) + 1);
+
+          // if (shouldSkip(question_data))
+          //   !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
+          //     setSkipped((prev: string[]) =>
+          //       prev.concat(shouldSkipp[question_data.parent_code])
+          //     );
+
+          // if (last_key && shouldSkip(question_data))
+          //   setStep(keys.indexOf(last_key) + 1);
+          // else if (last_key && skipped.includes(question_data.parent_code))
+          //   setStep(keys.indexOf(last_key) + 1);
 
           const question_group_data = data.References.question_groups.Reference.find(
             (item: any) => item.code === question_data.question_group

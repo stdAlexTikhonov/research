@@ -10,8 +10,6 @@ export const Context = React.createContext<{
   keys: string[] | null;
   uuid: string;
   setStep: any;
-  dir: number;
-  setDir: any;
   shouldSkipp: any;
   skipped: string[];
   setSkipped: any;

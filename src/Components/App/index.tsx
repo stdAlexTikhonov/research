@@ -30,14 +30,13 @@ export const App: React.FC<Props> = () => {
   const [data, setData] = useState<any>(null);
   const [keys, setKeys] = useState<any>(null);
   const [uuid, setUuid] = useState<string>("");
-  const [dir, setDir] = useState<number>(1);
+
   const [title, setTitle] = useState<string>("");
   const [list, setList] = useState<ListItemProp[]>([]);
   const [shouldSkipp, setShouldSkipp] = useState<any>(null);
   const [skipped, setSkipped] = useState<string[]>([]);
   const [nextDsb, setNextDsb] = useState<boolean>(true);
   const [refuse, setRefuse] = useState(false);
-
   const [itog, setItog] = useState();
 
   useEffect(() => {
@@ -50,14 +49,24 @@ export const App: React.FC<Props> = () => {
       setData(parsed);
 
       const test = parsed.Questionary.reduce(
-        (a: any, b: any) => ({
-          ...a,
-          [`${b.parent_code}`]: a[`${b.parent_code}`]
-            ? a[`${b.parent_code}`].concat([b.code])
-            : [b.code],
-        }),
+        (a: any, b: any, i: number, arr: any) => {
+          const code = b.code.split("_")[0];
+          const acc = a[`${b.parent_code}`];
+
+          return parsed.References[b.parent_code]
+            ? {
+                ...a,
+                [`${b.parent_code}`]: acc
+                  ? acc.includes(code)
+                    ? acc
+                    : acc.concat([code])
+                  : [code],
+              }
+            : a;
+        },
         {}
       );
+
       setShouldSkipp(test);
       setTitle(parsed.caption);
       setKeys(
@@ -78,6 +87,13 @@ export const App: React.FC<Props> = () => {
     }
   }, []);
 
+  const getCode = (a: any, b: any, i: number, arr: any) =>
+    a[arr[i - 1].parent_code]
+      ? a[arr[i - 1].parent_code].includes(b.parent_code)
+        ? arr[i - 1].parent_code
+        : b.parent_code
+      : null;
+
   const handleData = (code: string) => {
     const year = localStorage.getItem(code);
     if (year) setRefuse(true);
@@ -89,14 +105,24 @@ export const App: React.FC<Props> = () => {
         localStorage.setItem(id, JSON.stringify(data));
         setData(data);
         const test = data.Questionary.reduce(
-          (a: any, b: any) => ({
-            ...a,
-            [`${b.parent_code}`]: a[`${b.parent_code}`]
-              ? a[`${b.parent_code}`].concat([b.code])
-              : [b.code],
-          }),
+          (a: any, b: any, i: number, arr: any) => {
+            const code = b.code.split("_")[0];
+            const acc = a[`${b.parent_code}`];
+
+            return data.References[b.parent_code]
+              ? {
+                  ...a,
+                  [`${b.parent_code}`]: acc
+                    ? acc.includes(code)
+                      ? acc
+                      : acc.concat([code])
+                    : [code],
+                }
+              : a;
+          },
           {}
         );
+
         setShouldSkipp(test);
         setTitle(data.caption);
         setKeys(
@@ -125,8 +151,6 @@ export const App: React.FC<Props> = () => {
         keys,
         uuid,
         setStep,
-        dir,
-        setDir,
         shouldSkipp,
         skipped,
         setSkipped,
