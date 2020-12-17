@@ -31,8 +31,6 @@ export const getFullList = (code: string, obj: any) => {
     if (obj[item]) obj[code] = obj[code].concat(obj[item]);
   });
 
-  obj[code].sort((a: any, b: any) => +a.slice(1) - +b.slice(1));
-
   return obj[code].slice();
 };
 

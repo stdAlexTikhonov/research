@@ -12,6 +12,7 @@ import { CustomList } from "../CustomList";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { AGAIN_AND_AGAIN } from "../../utils/constants";
+import { ArrowBackTwoTone } from "@material-ui/icons";
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -30,7 +31,6 @@ export const App: React.FC<Props> = () => {
   const [data, setData] = useState<any>(null);
   const [keys, setKeys] = useState<any>(null);
   const [uuid, setUuid] = useState<string>("");
-
   const [title, setTitle] = useState<string>("");
   const [list, setList] = useState<ListItemProp[]>([]);
   const [shouldSkipp, setShouldSkipp] = useState<any>(null);
@@ -50,19 +50,17 @@ export const App: React.FC<Props> = () => {
 
       const test = parsed.Questionary.reduce(
         (a: any, b: any, i: number, arr: any) => {
-          const code = b.code.split("_")[0];
+          const code = b.code;
           const acc = a[`${b.parent_code}`];
 
-          return parsed.References[b.parent_code]
-            ? {
-                ...a,
-                [`${b.parent_code}`]: acc
-                  ? acc.includes(code)
-                    ? acc
-                    : acc.concat([code])
-                  : [code],
-              }
-            : a;
+          return {
+            ...a,
+            [`${b.parent_code}`]: acc
+              ? acc.includes(code)
+                ? acc
+                : acc.concat([code])
+              : [code],
+          };
         },
         {}
       );
@@ -76,6 +74,16 @@ export const App: React.FC<Props> = () => {
         }),
         {}
       );
+
+      //filtering group questions
+      for (let key in itog) {
+        const arr = itog[key].map((item: string) => item.split("_")[0]);
+        arr.sort((a: any, b: any) => +a.slice(1) - +b.slice(1));
+        const filtered = arr.filter(
+          (item: string, index: number) => arr.indexOf(item) === index
+        );
+        itog[key] = filtered;
+      }
 
       setShouldSkipp(itog);
       setTitle(parsed.caption);
@@ -109,7 +117,7 @@ export const App: React.FC<Props> = () => {
         setData(data);
         const test = data.Questionary.reduce(
           (a: any, b: any, i: number, arr: any) => {
-            const code = b.code.split("_")[0];
+            const code = b.code;
             const acc = a[`${b.parent_code}`];
 
             return data.References[b.parent_code]
@@ -135,6 +143,16 @@ export const App: React.FC<Props> = () => {
           }),
           {}
         );
+
+        //filtering group questions
+        for (let key in itog) {
+          const arr = itog[key].map((item: string) => item.split("_")[0]);
+          arr.sort((a: any, b: any) => +a.slice(1) - +b.slice(1));
+          const filtered = arr.filter(
+            (item: string, index: number) => arr.indexOf(item) === index
+          );
+          itog[key] = filtered;
+        }
 
         setShouldSkipp(itog);
         setTitle(data.caption);
