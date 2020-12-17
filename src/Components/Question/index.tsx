@@ -15,6 +15,7 @@ export const Question = () => {
     step,
     data,
     keys,
+    localKeys,
     itog,
     setStep,
     shouldSkipp,
