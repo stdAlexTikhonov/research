@@ -88,11 +88,11 @@ export const App: React.FC<Props> = () => {
 
       setShouldSkipp(itog);
       setTitle(parsed.caption);
-      const init_keys = Object.keys(parsed.References)
-        .slice(1)
-        .sort((a, b) => +a.slice(1) - +b.slice(1));
-      setKeys(init_keys);
-      setLocalKeys(init_keys);
+      setKeys(
+        Object.keys(parsed.References)
+          .slice(1)
+          .sort((a, b) => +a.slice(1) - +b.slice(1))
+      );
       const get_itog = localStorage.getItem(`itog_${uuidFromStorage}`);
       if (get_itog) {
         setItog(JSON.parse(get_itog));
@@ -157,11 +157,11 @@ export const App: React.FC<Props> = () => {
 
         setShouldSkipp(itog);
         setTitle(data.caption);
-        const init_keys = Object.keys(data.References)
-          .slice(1)
-          .sort((a, b) => +a.slice(1) - +b.slice(1));
-        setKeys(init_keys);
-        setLocalKeys(init_keys);
+        setKeys(
+          Object.keys(data.References)
+            .slice(1)
+            .sort((a, b) => +a.slice(1) - +b.slice(1))
+        );
 
         setItog(setInitialData(data));
         setList([]);
