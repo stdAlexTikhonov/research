@@ -94,7 +94,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
     if (!checked_) {
       const new_answers = itog[`${localKeys![step]}`].answers.concat([value]);
       const filtered = new_answers.filter((item: any) => item !== null);
-      console.log(localKeys);
+
       setNextDsb(filtered.length === 0);
       setItog((prev: any) => ({
         ...prev,

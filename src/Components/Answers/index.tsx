@@ -46,7 +46,7 @@ export const Answers: React.FC<Props> = ({
         [`${localKeys![step]}`]: { answers: e.target.value, other: "" },
       })
     );
-    console.log(localKeys);
+
     setValue(e.target.value);
     setNextDsb(false);
     let copy = keys?.slice();
@@ -59,9 +59,6 @@ export const Answers: React.FC<Props> = ({
       else if (copy?.indexOf(arr[0]) === -1) copy?.splice(step, 0, ...arr);
 
       copy && setLocalKeys(copy);
-      console.log(copy);
-    } else {
-      console.log("hi");
     }
   };
 
