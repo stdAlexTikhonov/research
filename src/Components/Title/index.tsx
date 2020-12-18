@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../../context";
 import { Typography } from "@material-ui/core";
 import { QUESTION } from "../../utils/constants";
 
@@ -9,6 +10,9 @@ type Props = {
 };
 
 export const Title: React.FC<Props> = ({ title, step, tooltip }) => {
+  const { keys, localKeys } = useContext(Context)!;
+  const local_step = keys!.indexOf(localKeys[step]);
+
   return (
     <>
       <Typography
@@ -17,7 +21,7 @@ export const Title: React.FC<Props> = ({ title, step, tooltip }) => {
         display="block"
         gutterBottom
       >
-        {`${QUESTION} ${step + 1}`}
+        {`${QUESTION} ${local_step > -1 ? local_step + 1 : step + 1}`}
       </Typography>
 
       <Typography variant="h6" gutterBottom>

@@ -12,17 +12,17 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog, uuid, setDir, nextDsb } = context!;
+  const { step, itog, uuid, nextDsb, data, localKeys, keys } = context!;
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
-    setStep((prev: number) => (prev > 0 ? prev - 1 : 0));
-    setDir(-1);
-    localStorage.setItem(`step_${uuid}`, (step - 1).toString());
+    if (step > 0) setStep((prev: number) => prev - 1);
+    const key = localKeys[step - 1];
+    localStorage.setItem(`step_${uuid}`, keys!.indexOf(key).toString());
   };
 
   const handleNext = () => {
-    if (step === len - 1 && !passed) {
+    if (step === localKeys.length - 1 && !passed) {
       sendToServer({
         respondent: uuid,
         answers: itog,
@@ -31,18 +31,15 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
       localStorage.removeItem("itog_" + uuid);
       localStorage.removeItem("uuid");
       localStorage.removeItem(uuid);
+      localStorage.setItem(data.code, new Date().getFullYear().toString());
     } else {
-      localStorage.setItem(`step_${uuid}`, (step + 1).toString());
+      const key = localKeys[step < localKeys.length - 1 ? step + 1 : step];
+      localStorage.setItem(`step_${uuid}`, keys!.indexOf(key).toString());
       localStorage.setItem(`itog_${uuid}`, JSON.stringify(itog));
-      setStep((prev: number) => (prev < len - 1 ? prev + 1 : prev));
-      setDir(1);
+      setStep((prev: number) =>
+        prev < localKeys.length - 1 ? prev + 1 : prev
+      );
     }
-    // if (!itog[step]) {
-    //   setItog((prev: any) => ({
-    //     ...prev,
-    //     [`${step}`]: null,
-    //   }));
-    // }
   };
 
   const sendToServer = async (data: any) => {
@@ -65,7 +62,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           {BACK}
         </Button>
 
-        {step === 22 ? (
+        {step === localKeys.length - 1 ? (
           <FinalDialog passed={passed || nextDsb} onClick={handleNext} />
         ) : (
           <Button

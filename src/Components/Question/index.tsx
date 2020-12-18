@@ -11,60 +11,39 @@ type Answer = {
 };
 
 export const Question = () => {
-  const {
-    step,
-    data,
-    keys,
-    itog,
-    setStep,
-    dir,
-    shouldSkipp,
-    setSkipped,
-    skipped,
-    setNextDsb,
-  } = useContext(Context)!;
+  const { step, data, keys, itog, setNextDsb, localKeys } = useContext(
+    Context
+  )!;
   const [question, setQuestion] = useState<any>("");
   const [answers, setAnswers] = useState<Answer[]>();
   const [group_question, setGQ] = useState(false);
 
-  const shouldSkip = (data: any) =>
-    data.condition && +itog[data.parent_code].answers !== +data.condition;
+  const shouldSkip = (answer: string | number) => {
+    const question = data.Questionary.find(
+      (item: any) => item.code.split("_")[0] === keys![step + 1]
+    );
+
+    return question && question.condition && +answer !== +question.condition;
+  };
 
   useEffect(() => {
-    if (keys) {
+    if (localKeys) {
       const question_data = data.Questionary.find(
-        (item: any) => item.code === keys[step]
+        (item: any) => item.code === localKeys[step]
       );
 
       if (question_data) {
+        setQuestion(() => question_data);
+
         if (itog) {
-          if (Array.isArray(itog[`${keys![step]}`].answers))
-            setNextDsb(!itog[`${keys![step]}`].answers[0]);
-          else setNextDsb(!itog[`${keys![step]}`].answers);
+          if (Array.isArray(itog[`${localKeys![step]}`].answers))
+            setNextDsb(!itog[`${localKeys![step]}`].answers[0]);
+          else setNextDsb(!itog[`${localKeys![step]}`].answers);
         }
-
-        if (shouldSkip(question_data)) {
-          !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
-            setSkipped((prev: string[]) =>
-              prev.concat(shouldSkipp[question_data.parent_code])
-            );
-        } else {
-          setSkipped((prev: string[]) =>
-            prev.filter(
-              (item: any) =>
-                !shouldSkipp[question_data.parent_code].includes(item)
-            )
-          );
-        }
-
-        if (shouldSkip(question_data)) setStep((prev: number) => prev + dir);
-        else if (skipped.includes(question_data.parent_code))
-          setStep((prev: number) => prev + dir);
 
         setGQ(false);
-        setQuestion(question_data);
 
-        const key = keys[step];
+        const key = localKeys[step];
 
         if (question_data.other_allowed)
           setAnswers(
@@ -77,35 +56,15 @@ export const Question = () => {
           );
         else setAnswers(data.References[key].Reference);
       } else {
-        const qg_data = localStorage.getItem(`${keys[step]}_group`);
+        const qg_data = localStorage.getItem(`${localKeys[step]}_group`);
 
         if (qg_data) {
           const parsed = JSON.parse(qg_data);
-          setQuestion(parsed);
-
-          if (shouldSkip(parsed))
-            !skipped.includes(shouldSkipp[parsed.parent_code][0]) &&
-              setSkipped((prev: string[]) =>
-                prev.concat(shouldSkipp[parsed.parent_code])
-              );
-
-          if (shouldSkip(parsed)) setStep((prev: number) => prev + dir);
-          else if (skipped.includes(parsed.parent_code))
-            setStep((prev: number) => prev + dir);
+          setQuestion(() => parsed);
         } else {
           const question_data = data.Questionary.find(
-            (item: any) => item.code === keys[step] + "_1"
+            (item: any) => item.code === localKeys[step] + "_1"
           );
-
-          if (shouldSkip(question_data))
-            !skipped.includes(shouldSkipp[question_data.parent_code][0]) &&
-              setSkipped((prev: string[]) =>
-                prev.concat(shouldSkipp[question_data.parent_code])
-              );
-
-          if (shouldSkip(question_data)) setStep((prev: number) => prev + dir);
-          else if (skipped.includes(question_data.parent_code))
-            setStep((prev: number) => prev + dir);
 
           const question_group_data = data.References.question_groups.Reference.find(
             (item: any) => item.code === question_data.question_group
@@ -114,10 +73,6 @@ export const Question = () => {
           question_data.title = question_group_data.value;
 
           setQuestion(question_data);
-          // localStorage.setItem(
-          //   `${keys[step]}_group`,
-          //   JSON.stringify(question_data)
-          // );
         }
 
         setGQ(true);
@@ -125,7 +80,7 @@ export const Question = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keys, step]);
+  }, [localKeys, step]);
 
   return question && answers ? (
     <>
@@ -140,7 +95,11 @@ export const Question = () => {
         ) : question.multiple_values ? (
           <MultipleAns answers={answers} user_input={question.other_allowed} />
         ) : (
-          <Answers answers={answers} user_input={question.other_allowed} />
+          <Answers
+            answers={answers}
+            user_input={question.other_allowed}
+            shouldSkip={shouldSkip}
+          />
         )}
       </div>
     </>

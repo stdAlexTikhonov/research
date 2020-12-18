@@ -18,14 +18,17 @@ export const Answer: React.FC<AnswerType> = ({
   selected,
   set_width,
 }) => {
-  const { setItog, step, keys, itog } = useContext(Context)!;
+  const { setItog, step, itog, localKeys } = useContext(Context)!;
 
   useEffect(() => {
-    const id = keys![step];
+    if (localKeys && itog) {
+      const id = localKeys![step];
 
-    itog[id] && setUserInput(itog[id].other);
+      itog[id] && setUserInput(itog[id].other);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
+  }, [step, localKeys]);
 
   const [userInput, setUserInput] = useState("");
   return user_input ? (
@@ -44,8 +47,8 @@ export const Answer: React.FC<AnswerType> = ({
           setUserInput(e.target.value);
           setItog((prev: any) => ({
             ...prev,
-            [`${keys![step]}`]: {
-              ...prev[`${keys![step]}`],
+            [`${localKeys![step]}`]: {
+              ...prev[`${localKeys![step]}`],
               other: e.target.value,
             },
           }));
@@ -73,12 +76,12 @@ export const CheckboxAns: React.FC<AnswerType> = ({
   value,
   user_input,
 }) => {
-  const { setItog, step, keys, itog, setNextDsb } = useContext(Context)!;
+  const { setItog, step, itog, setNextDsb, localKeys } = useContext(Context)!;
   const [checked_, setChecked] = useState(false);
   const [userInput, setUserInput] = useState("");
 
   useEffect(() => {
-    const id = keys![step];
+    const id = localKeys![step];
     itog[id] &&
       itog[id].answers &&
       setChecked(itog[id].answers.includes(value));
@@ -89,24 +92,29 @@ export const CheckboxAns: React.FC<AnswerType> = ({
 
   const handleChange = (e: React.ChangeEvent<{}>) => {
     if (!checked_) {
-      const new_answers = itog[`${keys![step]}`].answers.concat([value]);
+      const new_answers = itog[`${localKeys![step]}`].answers.concat([value]);
       const filtered = new_answers.filter((item: any) => item !== null);
+
       setNextDsb(filtered.length === 0);
       setItog((prev: any) => ({
         ...prev,
-        [`${keys![step]}`]: Object.assign({}, prev[`${keys![step]}`], {
-          answers: filtered,
-        }),
+        [`${localKeys![step]}`]: Object.assign(
+          {},
+          prev[`${localKeys![step]}`],
+          {
+            answers: filtered,
+          }
+        ),
       }));
     } else {
-      const filtered = itog[`${keys![step]}`].answers.filter(
+      const filtered = itog[`${localKeys![step]}`].answers.filter(
         (item: string) => item !== value
       );
       setNextDsb(filtered.length === 0);
       setItog((prev: any) => ({
         ...prev,
-        [`${keys![step]}`]: {
-          ...prev[`${keys![step]}`],
+        [`${localKeys![step]}`]: {
+          ...prev[`${localKeys![step]}`],
           answers: filtered,
         },
       }));
@@ -130,8 +138,8 @@ export const CheckboxAns: React.FC<AnswerType> = ({
           setUserInput(e.target.value);
           setItog((prev: any) => ({
             ...prev,
-            [`${keys![step]}`]: {
-              ...prev[`${keys![step]}`],
+            [`${localKeys![step]}`]: {
+              ...prev[`${localKeys![step]}`],
               other: e.target.value,
             },
           }));

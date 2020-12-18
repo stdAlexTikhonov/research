@@ -16,11 +16,11 @@ type Props = {
 };
 
 export const Row: React.FC<Props> = ({ values, row_index, setAnswers }) => {
-  const { setItog, step, keys, itog } = useContext(Context)!;
+  const { setItog, step, localKeys, itog } = useContext(Context)!;
   const [value, setValue] = useState<string | null>(null);
 
   useEffect(() => {
-    const id = keys![step] + "_" + (row_index + 1);
+    const id = localKeys![step] + "_" + (row_index + 1);
     itog[id] && setValue(itog[id].answers);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
@@ -31,7 +31,7 @@ export const Row: React.FC<Props> = ({ values, row_index, setAnswers }) => {
       ...prev,
       [`${row_index}`]: e.target.value,
     }));
-    const id = keys![step] + "_" + (row_index + 1);
+    const id = localKeys![step] + "_" + (row_index + 1);
 
     const timeout = setTimeout(function () {
       setItog((prev: any) =>

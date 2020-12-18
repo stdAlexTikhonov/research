@@ -23,7 +23,7 @@ export interface SimpleDialogProps {
 }
 
 function SimpleDialog(props: SimpleDialogProps) {
-  const { onClose, open } = props;
+  const { open } = props;
 
   return (
     <Dialog aria-labelledby="simple-dialog-title" open={open}>
