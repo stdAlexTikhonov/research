@@ -12,13 +12,13 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog, uuid, nextDsb, data } = context!;
+  const { step, itog, uuid, nextDsb, data, localKeys, keys } = context!;
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
     if (step > 0) setStep((prev: number) => prev - 1);
-
-    localStorage.setItem(`step_${uuid}`, (step - 1).toString());
+    const key = localKeys[step - 1];
+    localStorage.setItem(`step_${uuid}`, keys!.indexOf(key).toString());
   };
 
   const handleNext = () => {
@@ -33,7 +33,8 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
       localStorage.removeItem(uuid);
       localStorage.setItem(data.code, new Date().getFullYear().toString());
     } else {
-      localStorage.setItem(`step_${uuid}`, (step + 1).toString());
+      const key = localKeys[step + 1];
+      localStorage.setItem(`step_${uuid}`, keys!.indexOf(key).toString());
       localStorage.setItem(`itog_${uuid}`, JSON.stringify(itog));
       setStep((prev: number) => prev + 1);
     }
