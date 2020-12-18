@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  ChangeEvent,
+} from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
 import { Context } from "../../context";
@@ -33,34 +39,39 @@ export const Answers: React.FC<Props> = ({
 
   useEffect(() => {
     const id = localKeys![step];
-    itog && console.log(itog[id].answers);
     itog && itog[id] && setValue(itog[id].answers);
 
     // console.log(shouldSkip());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
-  const handleChange = (e: any) => {
-    setItog((prev: any) =>
-      Object.assign({}, prev, {
-        [`${localKeys![step]}`]: { answers: e.target.value, other: "" },
-      })
-    );
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>): void => {
+      const { value } = event.target;
 
-    setValue(e.target.value);
-    setNextDsb(false);
-    let copy = keys?.slice();
-    const key = localKeys![step];
-    const arr = shouldSkipp[key];
+      setItog((prev: any) =>
+        Object.assign({}, prev, {
+          [`${localKeys![step]}`]: { answers: value, other: "" },
+        })
+      );
 
-    if (shouldSkip(e.target.value) !== undefined && arr) {
-      if (shouldSkip(e.target.value))
-        copy = copy?.filter((item: string) => !arr.includes(item));
-      else if (copy?.indexOf(arr[0]) === -1) copy?.splice(step, 0, ...arr);
+      setValue(value);
+      setNextDsb(false);
+      let copy = keys?.slice();
+      const key = localKeys![step];
+      const arr = shouldSkipp[key];
 
-      copy && setLocalKeys(copy);
-    }
-  };
+      if (shouldSkip(value) !== undefined && arr) {
+        if (shouldSkip(value))
+          copy = copy?.filter((item: string) => !arr.includes(item));
+        else if (copy?.indexOf(arr[0]) === -1) copy?.splice(step, 0, ...arr);
+
+        copy && setLocalKeys(copy);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [step]
+  );
 
   return (
     <RadioGroup
