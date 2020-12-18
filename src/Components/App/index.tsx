@@ -117,6 +117,8 @@ export const App: React.FC<Props> = () => {
         setNextDsb,
         localKeys,
         setLocalKeys,
+        setData,
+        setList,
       }}
     >
       {data && (

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { blue } from "@material-ui/core/colors";
 import { NEXT, FINAL_TITLE } from "../../utils/constants";
+import { get } from "../../utils/api";
+import { Context } from "../../context";
 
 const useStyles = makeStyles({
   avatar: {
@@ -23,10 +25,10 @@ export interface SimpleDialogProps {
 }
 
 function SimpleDialog(props: SimpleDialogProps) {
-  const { open } = props;
+  const { open, onClose } = props;
 
   return (
-    <Dialog aria-labelledby="simple-dialog-title" open={open}>
+    <Dialog aria-labelledby="simple-dialog-title" open={open} onClose={onClose}>
       <DialogTitle id="simple-dialog-title">{FINAL_TITLE}</DialogTitle>
     </Dialog>
   );
@@ -37,6 +39,7 @@ export const FinalDialog: React.FC<{ passed: boolean; onClick: any }> = ({
   onClick,
 }) => {
   const [open, setOpen] = React.useState(false);
+  const { setData, setList } = useContext(Context)!;
 
   const classes = useStyles();
 
@@ -47,6 +50,10 @@ export const FinalDialog: React.FC<{ passed: boolean; onClick: any }> = ({
 
   const handleClose = () => {
     setOpen(false);
+    setData(null);
+    get("/api/list").then((data) => {
+      setList(data);
+    });
   };
 
   return (

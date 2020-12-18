@@ -17,4 +17,6 @@ export const Context = React.createContext<{
   setNextDsb: any;
   localKeys: any;
   setLocalKeys: any;
+  setData: any;
+  setList: any;
 } | null>(null);
