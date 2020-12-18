@@ -32,8 +32,10 @@ export const Answers: React.FC<Props> = ({
   const [value, setValue] = useState<string | null>(null);
 
   useEffect(() => {
-    const id = keys![step];
-    itog[id] && setValue(itog[id].answers);
+    const id = localKeys![step];
+    itog && console.log(itog[id].answers);
+    itog && itog[id] && setValue(itog[id].answers);
+
     // console.log(shouldSkip());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
@@ -44,7 +46,7 @@ export const Answers: React.FC<Props> = ({
         [`${localKeys![step]}`]: { answers: e.target.value, other: "" },
       })
     );
-
+    console.log(localKeys);
     setValue(e.target.value);
     setNextDsb(false);
     let copy = keys?.slice();

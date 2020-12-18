@@ -37,7 +37,7 @@ export const App: React.FC<Props> = () => {
   const [nextDsb, setNextDsb] = useState<boolean>(true);
   const [refuse, setRefuse] = useState(false);
   const [itog, setItog] = useState();
-  const [localKeys, setLocalKeys] = useState<string[]>([]);
+  const [localKeys, setLocalKeys] = useState<any>(null);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -55,8 +55,8 @@ export const App: React.FC<Props> = () => {
       const keys_ = Object.keys(parsed.References)
         .slice(1)
         .sort((a, b) => +a.slice(1) - +b.slice(1));
-      setKeys(keys_);
       setLocalKeys(keys_);
+      setKeys(keys_);
       const get_itog = localStorage.getItem(`itog_${uuidFromStorage}`);
       if (get_itog) {
         setItog(JSON.parse(get_itog));
@@ -88,8 +88,8 @@ export const App: React.FC<Props> = () => {
         const keys_ = Object.keys(data.References)
           .slice(1)
           .sort((a, b) => +a.slice(1) - +b.slice(1));
-        setKeys(keys_);
         setLocalKeys(keys_);
+        setKeys(keys_);
         setItog(setInitialData(data));
         setList([]);
       });

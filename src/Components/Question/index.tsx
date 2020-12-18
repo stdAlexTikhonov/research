@@ -22,7 +22,6 @@ export const Question = () => {
     const question = data.Questionary.find(
       (item: any) => item.code.split("_")[0] === keys![step + 1]
     );
-    console.log(question);
 
     return question && question.condition && +answer !== +question.condition;
   };

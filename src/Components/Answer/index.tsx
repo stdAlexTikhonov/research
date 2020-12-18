@@ -21,11 +21,14 @@ export const Answer: React.FC<AnswerType> = ({
   const { setItog, step, itog, localKeys } = useContext(Context)!;
 
   useEffect(() => {
-    const id = localKeys![step];
+    if (localKeys && itog) {
+      const id = localKeys![step];
 
-    itog[id] && setUserInput(itog[id].other);
+      itog[id] && setUserInput(itog[id].other);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
+  }, [step, localKeys]);
 
   const [userInput, setUserInput] = useState("");
   return user_input ? (
@@ -91,6 +94,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
     if (!checked_) {
       const new_answers = itog[`${localKeys![step]}`].answers.concat([value]);
       const filtered = new_answers.filter((item: any) => item !== null);
+      console.log(localKeys);
       setNextDsb(filtered.length === 0);
       setItog((prev: any) => ({
         ...prev,
