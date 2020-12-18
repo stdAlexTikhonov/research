@@ -22,7 +22,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   };
 
   const handleNext = () => {
-    if (step === len - 1 && !passed) {
+    if (step === localKeys.length - 1 && !passed) {
       sendToServer({
         respondent: uuid,
         answers: itog,
@@ -62,7 +62,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           {BACK}
         </Button>
 
-        {step === len - 1 ? (
+        {step === localKeys.length - 1 ? (
           <FinalDialog passed={passed || nextDsb} onClick={handleNext} />
         ) : (
           <Button
