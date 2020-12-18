@@ -23,6 +23,7 @@ export const Answers: React.FC<Props> = ({
     setItog,
     step,
     keys,
+    localKeys,
     itog,
     setNextDsb,
     shouldSkipp,
@@ -40,21 +41,26 @@ export const Answers: React.FC<Props> = ({
   const handleChange = (e: any) => {
     setItog((prev: any) =>
       Object.assign({}, prev, {
-        [`${keys![step]}`]: { answers: e.target.value, other: "" },
+        [`${localKeys![step]}`]: { answers: e.target.value, other: "" },
       })
     );
 
     setValue(e.target.value);
     setNextDsb(false);
     let copy = keys?.slice();
-    const key = keys![step];
+    const key = localKeys![step];
     const arr = shouldSkipp[key];
 
-    if (shouldSkip(e.target.value) !== undefined && arr)
+    if (shouldSkip(e.target.value) !== undefined && arr) {
       if (shouldSkip(e.target.value))
         copy = copy?.filter((item: string) => !arr.includes(item));
       else if (copy?.indexOf(arr[0]) === -1) copy?.splice(step, 0, ...arr);
-    copy && setLocalKeys(copy);
+
+      copy && setLocalKeys(copy);
+      console.log(copy);
+    } else {
+      console.log("hi");
+    }
   };
 
   return (

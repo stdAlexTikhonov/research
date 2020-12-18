@@ -33,17 +33,11 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
       localStorage.removeItem(uuid);
       localStorage.setItem(data.code, new Date().getFullYear().toString());
     } else {
-      const key = localKeys[step + 1];
+      const key = localKeys[step < localKeys.length ? step + 1 : step];
       localStorage.setItem(`step_${uuid}`, keys!.indexOf(key).toString());
       localStorage.setItem(`itog_${uuid}`, JSON.stringify(itog));
       setStep((prev: number) => prev + 1);
     }
-    // if (!itog[step]) {
-    //   setItog((prev: any) => ({
-    //     ...prev,
-    //     [`${step}`]: null,
-    //   }));
-    // }
   };
 
   const sendToServer = async (data: any) => {

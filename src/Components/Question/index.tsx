@@ -11,7 +11,9 @@ type Answer = {
 };
 
 export const Question = () => {
-  const { step, data, keys, itog, setNextDsb } = useContext(Context)!;
+  const { step, data, keys, itog, setNextDsb, localKeys } = useContext(
+    Context
+  )!;
   const [question, setQuestion] = useState<any>("");
   const [answers, setAnswers] = useState<Answer[]>();
   const [group_question, setGQ] = useState(false);
@@ -20,28 +22,29 @@ export const Question = () => {
     const question = data.Questionary.find(
       (item: any) => item.code.split("_")[0] === keys![step + 1]
     );
+    console.log(question);
 
-    return question.condition && +answer !== +question.condition;
+    return question && question.condition && +answer !== +question.condition;
   };
 
   useEffect(() => {
-    if (keys) {
+    if (localKeys) {
       const question_data = data.Questionary.find(
-        (item: any) => item.code === keys[step]
+        (item: any) => item.code === localKeys[step]
       );
 
       if (question_data) {
         setQuestion(() => question_data);
 
         if (itog) {
-          if (Array.isArray(itog[`${keys![step]}`].answers))
-            setNextDsb(!itog[`${keys![step]}`].answers[0]);
-          else setNextDsb(!itog[`${keys![step]}`].answers);
+          if (Array.isArray(itog[`${localKeys![step]}`].answers))
+            setNextDsb(!itog[`${localKeys![step]}`].answers[0]);
+          else setNextDsb(!itog[`${localKeys![step]}`].answers);
         }
 
         setGQ(false);
 
-        const key = keys[step];
+        const key = localKeys[step];
 
         if (question_data.other_allowed)
           setAnswers(
@@ -54,14 +57,14 @@ export const Question = () => {
           );
         else setAnswers(data.References[key].Reference);
       } else {
-        const qg_data = localStorage.getItem(`${keys[step]}_group`);
+        const qg_data = localStorage.getItem(`${localKeys[step]}_group`);
 
         if (qg_data) {
           const parsed = JSON.parse(qg_data);
           setQuestion(() => parsed);
         } else {
           const question_data = data.Questionary.find(
-            (item: any) => item.code === keys[step] + "_1"
+            (item: any) => item.code === localKeys[step] + "_1"
           );
 
           const question_group_data = data.References.question_groups.Reference.find(
@@ -78,7 +81,7 @@ export const Question = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keys, step]);
+  }, [localKeys, step]);
 
   return question && answers ? (
     <>
