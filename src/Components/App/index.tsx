@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useStyles } from "./styles";
-import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
@@ -47,7 +46,6 @@ export const App: React.FC<Props> = () => {
       const parsed = JSON.parse(dataFromStorage!);
       setData(parsed);
 
-      //
       const itog = commonTransform(parsed);
 
       setShouldSkipp(itog);
