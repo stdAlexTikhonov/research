@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useStyles } from "./styles";
-import { Header } from "../Header";
 import { Context } from "../../context";
 import { Controls } from "../Controls";
 import { BreadCrumbs } from "../BreadCrumbs";
@@ -47,7 +46,6 @@ export const App: React.FC<Props> = () => {
       const parsed = JSON.parse(dataFromStorage!);
       setData(parsed);
 
-      //
       const itog = commonTransform(parsed);
 
       setShouldSkipp(itog);
@@ -80,7 +78,6 @@ export const App: React.FC<Props> = () => {
       get(`/api/load?code=${code}`).then((data) => {
         localStorage.setItem(id, JSON.stringify(data));
         setData(data);
-
         const itog = commonTransform(data);
 
         setShouldSkipp(itog);
@@ -117,6 +114,8 @@ export const App: React.FC<Props> = () => {
         setNextDsb,
         localKeys,
         setLocalKeys,
+        setData,
+        setList,
       }}
     >
       {data && (

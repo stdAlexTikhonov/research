@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback, ChangeEvent } from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
 import { useStyles } from "./styles";
@@ -25,7 +25,8 @@ export const Row: React.FC<Props> = ({ values, row_index, setAnswers }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
-  const handleChange = (e: any) => {
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>): void => {
     setValue(e.target.value);
     setAnswers((prev: any) => ({
       ...prev,
@@ -33,15 +34,15 @@ export const Row: React.FC<Props> = ({ values, row_index, setAnswers }) => {
     }));
     const id = localKeys![step] + "_" + (row_index + 1);
 
-    const timeout = setTimeout(function () {
-      setItog((prev: any) =>
-        Object.assign({}, prev, {
-          [`${id}`]: { answers: e.target.value, other: "" },
-        })
-      );
-      clearTimeout(timeout);
-    }, 0);
-  };
+    setItog((prev: any) =>
+      Object.assign({}, prev, {
+        [`${id}`]: { answers: e.target.value, other: "" },
+      })
+    );
+    
+ 
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
   const classes = useStyles();
 
   return (
