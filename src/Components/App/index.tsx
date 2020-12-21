@@ -80,7 +80,6 @@ export const App: React.FC<Props> = () => {
       get(`/api/load?code=${code}`).then((data) => {
         localStorage.setItem(id, JSON.stringify(data));
         setData(data);
-
         const itog = commonTransform(data);
 
         setShouldSkipp(itog);
