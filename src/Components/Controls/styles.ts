@@ -11,13 +11,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     button: {
       minWidth: 80,
       margin: 5,
+      minHeight: 27,
     },
     custom: {
       margin: 10,
     },
     constrols: {
-      display: "flex",
-      justifyContent: "space-around",
+      // display: "flex",
+      // justifyContent: "space-around",
       margin: "auto",
       width: 300,
     },

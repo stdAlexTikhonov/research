@@ -49,8 +49,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   };
 
   return (
-    <div className={classes.root}>
-      <div className={classes.constrols}>
+    <div className={classes.constrols}>
         <Button
           variant="contained"
           color={"primary"}
@@ -76,6 +75,5 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
           </Button>
         )}
       </div>
-    </div>
   );
 };
