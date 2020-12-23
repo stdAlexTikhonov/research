@@ -80,9 +80,9 @@ export const Question = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localKeys, step]);
+  }, [localKeys, step, group_question]);
 
-  return question && answers ? (
+  return question ? (
     <>
       <Title
         title={group_question ? question.title : question.value}
@@ -93,13 +93,20 @@ export const Question = () => {
         {group_question ? (
           <GroupQuestion />
         ) : question.multiple_values ? (
-          <MultipleAns answers={answers} user_input={question.other_allowed} />
+          answers && (
+            <MultipleAns
+              answers={answers}
+              user_input={question.other_allowed}
+            />
+          )
         ) : (
-          <Answers
-            answers={answers}
-            user_input={question.other_allowed}
-            shouldSkip={shouldSkip}
-          />
+          answers && (
+            <Answers
+              answers={answers}
+              user_input={question.other_allowed}
+              shouldSkip={shouldSkip}
+            />
+          )
         )}
       </div>
     </>

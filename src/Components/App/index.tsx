@@ -57,8 +57,15 @@ export const App: React.FC<Props> = () => {
       setKeys(keys_);
       const get_itog = localStorage.getItem(`itog_${uuidFromStorage}`);
       if (get_itog) {
-        setItog(JSON.parse(get_itog));
+        const parsed = JSON.parse(get_itog);
+        setItog(parsed);
         const step_ = localStorage.getItem(`step_${uuidFromStorage}`);
+        /////
+        const key = keys_[parseInt(step_!)];
+        console.log(parsed);
+        console.log(key);
+        console.log(parsed[key]);
+        ////
         setStep(parseInt(step_!));
       } else setItog(setInitialData(parsed));
     } else {

@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect, useCallback, ChangeEvent } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  ChangeEvent,
+} from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Answer } from "../Answer";
 import { useStyles } from "./styles";
@@ -27,22 +33,23 @@ export const Row: React.FC<Props> = ({ values, row_index, setAnswers }) => {
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>): void => {
-    setValue(e.target.value);
-    setAnswers((prev: any) => ({
-      ...prev,
-      [`${row_index}`]: e.target.value,
-    }));
-    const id = localKeys![step] + "_" + (row_index + 1);
+      setValue(e.target.value);
+      setAnswers((prev: any) => ({
+        ...prev,
+        [`${row_index}`]: e.target.value,
+      }));
+      const id = localKeys![step] + "_" + (row_index + 1);
 
-    setItog((prev: any) =>
-      Object.assign({}, prev, {
-        [`${id}`]: { answers: e.target.value, other: "" },
-      })
-    );
-    
- 
+      setItog((prev: any) =>
+        Object.assign({}, prev, {
+          [`${id}`]: { answers: e.target.value, other: "" },
+        })
+      );
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
+    },
+    [localKeys, row_index, setAnswers, setItog, step]
+  );
   const classes = useStyles();
 
   return (
