@@ -75,7 +75,7 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
               {variants.map((variant: Variant, index: number) => (
                 <div
                   style={{
-                    width: variants.length < 10 ? 100 : "unset",
+                    width: variants.length < 10 ? 120 : "unset",
                     textAlign: "center",
                     paddingRight: variants.length > 5 ? 14 : "unset",
                     paddingLeft: variants.length > 5 ? 14 : "unset",
@@ -98,6 +98,7 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                             top: -40,
                             left: -15,
                             textAlign: "left",
+                            width: 140,
                           }}
                         >
                           {variant.value}
