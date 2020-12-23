@@ -50,30 +50,31 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 
   return (
     <div className={classes.constrols}>
+      <Button
+        variant="contained"
+        color={"primary"}
+        onClick={handleBack}
+        size={"small"}
+        disabled={step === 0}
+        className={classes.button}
+      >
+        {BACK}
+      </Button>
+
+      {step === localKeys.length - 1 ? (
+        <FinalDialog passed={passed || nextDsb} onClick={handleNext} />
+      ) : (
         <Button
           variant="contained"
           color={"primary"}
-          onClick={handleBack}
           size={"small"}
-          disabled={step === 0}
+          onClick={handleNext}
+          disabled={nextDsb}
           className={classes.button}
         >
-          {BACK}
+          {NEXT}
         </Button>
-
-        {step === localKeys.length - 1 ? (
-          <FinalDialog passed={passed || nextDsb} onClick={handleNext} />
-        ) : (
-          <Button
-            variant="contained"
-            color={"primary"}
-            onClick={handleNext}
-            disabled={nextDsb}
-            className={classes.button}
-          >
-            {NEXT}
-          </Button>
-        )}
-      </div>
+      )}
+    </div>
   );
 };
