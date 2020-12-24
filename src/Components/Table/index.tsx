@@ -123,7 +123,7 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
           {answers.map((answer: Answer, index: number) =>
             answer.should_show ? (
               <TableRow key={answer.code}>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" style={{ maxWidth: 250 }}>
                   {answer.value}
                 </TableCell>
                 <TableCell>
