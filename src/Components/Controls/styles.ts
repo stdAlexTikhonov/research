@@ -1,4 +1,5 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { isMobile } from "../../utils/helpers";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,10 +18,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: 10,
     },
     constrols: {
-      // display: "flex",
-      // justifyContent: "space-around",
+      display: "flex",
+      justifyContent: "space-around",
       margin: "auto",
-      width: 300,
+      width: isMobile ? "unset" : 300,
+      minHeight: 37,
     },
   })
 );

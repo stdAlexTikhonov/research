@@ -10,6 +10,7 @@ import { Typography } from "@material-ui/core";
 import { CustomList } from "../CustomList";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
+import { isMobile } from "../../utils/helpers";
 import { AGAIN_AND_AGAIN } from "../../utils/constants";
 
 const setInitialData = (datum: any) =>
@@ -129,13 +130,15 @@ export const App: React.FC<Props> = () => {
         <div className={classes.root}>
           {/* <Header /> */}
 
-          <Typography
-            variant="h6"
-            gutterBottom
-            style={{ padding: 20, paddingBottom: 0, fontSize: 14 }}
-          >
-            {title}
-          </Typography>
+          {!isMobile && (
+            <Typography
+              variant="h6"
+              gutterBottom
+              style={{ padding: 20, paddingBottom: 0, fontSize: 14 }}
+            >
+              {title}
+            </Typography>
+          )}
 
           {showCrumbs && <BreadCrumbs len={data.length} setStep={setStep} />}
           <div className={classes.viewer}>
