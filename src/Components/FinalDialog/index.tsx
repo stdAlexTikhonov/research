@@ -61,6 +61,7 @@ export const FinalDialog: React.FC<{ passed: boolean; onClick: any }> = ({
       <Button
         variant="contained"
         color="primary"
+        size={"small"}
         onClick={handleClickOpen}
         className={classes.button}
         disabled={passed}
