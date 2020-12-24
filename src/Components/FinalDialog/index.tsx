@@ -16,6 +16,7 @@ const useStyles = makeStyles({
   button: {
     minWidth: 80,
     margin: 5,
+    minHeight: 27,
   },
 });
 
