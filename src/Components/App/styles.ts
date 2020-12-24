@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "flex-start",
       flexGrow: 1,
       overflow: "auto",
-      height: "87vh", //это можно затереть
+      height: isMobile ? "87vh" : "100vh", //это можно затереть
     },
     viewer: {
       maxWidth: isMobile ? "unset" : 900,

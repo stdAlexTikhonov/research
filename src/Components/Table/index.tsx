@@ -9,12 +9,14 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { TITLE } from "../../utils/constants";
 import { Row } from "../Row";
+import { CustomSelect } from "../Select";
 import { Context } from "../../context";
+import { isMobile } from "../../utils/helpers";
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
-    paddingRight: 150,
+    minWidth: isMobile ? "unset" : 650,
+    paddingRight: isMobile ? "unset" : 150,
   },
 });
 
@@ -72,46 +74,47 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                 minHeight: 30,
               }}
             >
-              {variants.map((variant: Variant, index: number) => (
-                <div
-                  style={{
-                    width: variants.length < 10 ? 120 : "unset",
-                    textAlign: "center",
-                    paddingRight: variants.length > 5 ? 14 : "unset",
-                    paddingLeft: variants.length > 5 ? 14 : "unset",
-                  }}
-                  key={variant.code}
-                >
-                  {variants.length > 5 ? (
-                    <span
-                      style={{
-                        position: "relative",
-                        maxWidth: 38,
-                        minWidth: 38,
-                        minHeight: 25,
-                      }}
-                    >
-                      {index === variants.length - 1 ? (
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: -40,
-                            left: -15,
-                            textAlign: "left",
-                            width: 140,
-                          }}
-                        >
-                          {variant.value}
-                        </div>
-                      ) : (
-                        variant.value
-                      )}
-                    </span>
-                  ) : (
-                    variant.value
-                  )}
-                </div>
-              ))}
+              {!isMobile &&
+                variants.map((variant: Variant, index: number) => (
+                  <div
+                    style={{
+                      width: variants.length < 10 ? 120 : "unset",
+                      textAlign: "center",
+                      paddingRight: variants.length > 5 ? 14 : "unset",
+                      paddingLeft: variants.length > 5 ? 14 : "unset",
+                    }}
+                    key={variant.code}
+                  >
+                    {variants.length > 5 ? (
+                      <span
+                        style={{
+                          position: "relative",
+                          maxWidth: 38,
+                          minWidth: 38,
+                          minHeight: 25,
+                        }}
+                      >
+                        {index === variants.length - 1 ? (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: -40,
+                              left: -15,
+                              textAlign: "left",
+                              width: 140,
+                            }}
+                          >
+                            {variant.value}
+                          </div>
+                        ) : (
+                          variant.value
+                        )}
+                      </span>
+                    ) : (
+                      variant.value
+                    )}
+                  </div>
+                ))}
             </TableCell>
             <TableCell style={{ width: 30 }}></TableCell>
           </TableRow>
@@ -124,11 +127,19 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                   {answer.value}
                 </TableCell>
                 <TableCell>
-                  <Row
-                    values={variants}
-                    row_index={index}
-                    setAnswers={setLocalAnswers}
-                  />
+                  {isMobile ? (
+                    <CustomSelect
+                      values={variants}
+                      row_index={index}
+                      setAnswers={setLocalAnswers}
+                    />
+                  ) : (
+                    <Row
+                      values={variants}
+                      row_index={index}
+                      setAnswers={setLocalAnswers}
+                    />
+                  )}
                 </TableCell>
                 <TableCell style={{ width: 30 }}></TableCell>
               </TableRow>

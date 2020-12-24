@@ -44,6 +44,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 
   const sendToServer = async (data: any) => {
     setPassed(true);
+    console.log(data);
     const res = await post("/api/save", data);
     console.log(res);
   };
