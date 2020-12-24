@@ -17,6 +17,7 @@
 // * Remove the service by `node windows-uninstall.js`.
 // * Start the service: `net start "Survey WebApp"`.
 // * Stop it: `net stop "Survey WebApp"`.
+// * Delete it: `sc delete "Survey WebApp"`.
 // * Read the logs in ./daemon/ directory.
 //
 const ServiceName = 'Survey WebApp';
