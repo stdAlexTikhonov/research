@@ -63,9 +63,6 @@ export const App: React.FC<Props> = () => {
         const step_ = localStorage.getItem(`step_${uuidFromStorage}`);
         /////
         const key = keys_[parseInt(step_!)];
-        console.log(parsed);
-        console.log(key);
-        console.log(parsed[key]);
         ////
         setStep(parseInt(step_!));
       } else setItog(setInitialData(parsed));
@@ -86,6 +83,7 @@ export const App: React.FC<Props> = () => {
       get(`/api/load?code=${code}`).then((data) => {
         localStorage.setItem(id, JSON.stringify(data));
         setData(data);
+        console.log(data);
         const itog = commonTransform(data);
 
         setShouldSkipp(itog);

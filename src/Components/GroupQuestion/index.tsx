@@ -14,7 +14,7 @@ export const GroupQuestion = () => {
   const { data, step, keys, itog, setNextDsb, localKeys } = useContext(
     Context
   )!;
-  console.log("hello");
+
   const [questions, setQuestions] = useState<any>();
 
   useEffect(() => {

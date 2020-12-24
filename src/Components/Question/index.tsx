@@ -66,11 +66,15 @@ export const Question = () => {
             (item: any) => item.code === localKeys[step] + "_1"
           );
 
-          const question_group_data = data.References.question_groups.Reference.find(
-            (item: any) => item.code === question_data.question_group
-          );
+          // const question_group_data = data.References.question_groups.Reference.find(
+          //   (item: any) => item.code === question_data.question_group
+          // );
 
-          question_data.title = question_group_data.value;
+          const question_group_data = data.References[localKeys[step]];
+
+          const caption = question_group_data.caption.split(".")[1];
+
+          question_data.title = question_group_data && caption;
 
           setQuestion(question_data);
         }
@@ -85,7 +89,7 @@ export const Question = () => {
   return question ? (
     <>
       <Title
-        title={group_question ? question.title : question.value}
+        title={question.title ? question.title : question.value}
         step={step}
         tooltip={question.question_tooltip}
       />
