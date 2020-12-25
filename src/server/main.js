@@ -22,7 +22,10 @@ const {
 
 const { now } = require('./lib');
 
-const { save, load, list, SurveyCode } = require('./dwh');
+const {
+  loadlog,
+  save, load, list,
+  SurveyCode } = require('./dwh');
 
 app.use(cors());
 
@@ -113,6 +116,17 @@ api.get('/list', async (req, res) => {
     const data = await list();
     res.json(data);
     console.debug('api', 'list', 'done', size(data));
+  } catch (fail) {
+    badRequest(req, res, fail);
+  }
+});
+
+// Возвращает Журнал загрузки данных.
+api.get('/loadlog', async (req, res) => {
+  try {
+    const data = await loadlog();
+    res.json(data);
+    console.debug('api', 'loadlog', 'done', size(data));
   } catch (fail) {
     badRequest(req, res, fail);
   }

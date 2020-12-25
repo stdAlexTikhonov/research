@@ -8,6 +8,7 @@ const {
   concat,
   head,
   isArray,
+  isEmpty,
   keys,
   map,
   mapValues,
@@ -15,6 +16,7 @@ const {
   partial,
   result,
   size,
+  take,
   sortBy,
   without,
 } = require('lodash');
@@ -41,6 +43,10 @@ assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 
 const SeriesSuffix = '_timeseries';
 const SurveyPeriod = moment().format('YYYY-12-31');
+
+// Лог загрузок.
+assert.ok(!('LoadLogSeries' in process.env), 'No LOADLOG_SERIES in env');
+const LoadLogSeries = process.env.LOADLOG_SERIES;
 
 // Клиент для обращений к веб-сервису Хранилища.
 async function connection (soapWsdl)
@@ -339,4 +345,19 @@ async function save (survey, login, answers, ip)
   }
 }
 
-module.exports = { list, load, save, SurveyCode };
+// Журнал загрузки данных.
+async function loadlog ()
+{
+  if (isEmpty(LoadLogSeries))
+    return void console.warn('LoadLogSeries is empty');
+  console.debug('dwh', 'loadlog', 'query', LoadLogSeries);
+  const [ , text ] = await query(ModelCode, LoadLogSeries, []);
+  const list = parseStringPromise(text);
+  return list;
+}
+
+module.exports = {
+  SurveyCode,
+  list, load, save,
+  loadlog,
+};
