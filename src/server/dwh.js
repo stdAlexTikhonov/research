@@ -43,8 +43,11 @@ assert.ok(ModelCode, 'No MODEL_CODE in env');
 const SurveyCode = process.env.SURVEY_CODE;
 assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 
+// Добавляется к коду обследования.
 const SeriesSuffix = process.env.SERIES_SUFFIX;
-assert.ok(SeriesSuffix, 'No SERIES_SUFFIX in env';
+assert.ok(SeriesSuffix, 'No SERIES_SUFFIX in env');
+
+// Период = год.
 const SurveyPeriod = moment().format('YYYY-12-31');
 
 // Лог загрузок.
