@@ -42,11 +42,12 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
     }
   };
 
-  const sendToServer = async (data: any) => {
+  const sendToServer = async (form: any) => {
     setPassed(true);
-    console.log(data);
-    const res = await post("/api/save", data);
-    console.log(res);
+    form.survey = data.code;
+    console.log('sendToServer', form);
+    const res = await post("/api/save", form);
+    console.log('sendToServer', res);
   };
 
   return (

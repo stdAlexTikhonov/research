@@ -6,7 +6,10 @@ const assert = require('assert').strict;
 const {
   compact,
   concat,
+<<<<<<< HEAD
   fromPairs,
+=======
+>>>>>>> main
   get,
   head,
   isArray,
@@ -46,6 +49,12 @@ assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 // Добавляется к коду обследования.
 const SeriesSuffix = process.env.SERIES_SUFFIX;
 assert.ok(SeriesSuffix, 'No SERIES_SUFFIX in env');
+
+const DateTimeFormat = process.env.DATETIME_FORMAT;
+assert.ok(DateTimeFormat, 'No DATETIME_FORMAT in env');
+
+const DateFormat = process.env.DATE_FORMAT;
+assert.ok(DateFormat, 'No DATE_FORMAT in env');
 
 // Период = год.
 const SurveyPeriod = moment().format('YYYY-12-31');
@@ -286,7 +295,7 @@ async function list ()
 
 // Сохраняет Анкету в DWH.
 const QuestionPrefix = 'q_';
-const AnswerSuffix = '_';
+const AnswerSuffix = '_a_';
 const OtherSuffix = '_other';
 async function save (survey, login, answers, ip)
 {
@@ -298,30 +307,30 @@ async function save (survey, login, answers, ip)
     console.debug('dwh', 'save', ModelCode, survey, login, size(answers), answers, ip);
     // console.debug('dwh', 'save',  size(answers), JSON.stringify(data, null, 4));
     const conditions = {
-      respondent_login: login,
+      user_uuid: login,
       period: SurveyPeriod
     };
     const [ { DataSet } ] = await query(ModelCode, seriesCode, conditions);
-    // console.debug(DataSet);
     const found = !!size(DataSet.Group[0].Series[0]);
 
     const record = {
-      respondent_login: login,
-      respondent_ip: ip,
+      user_uuid: login,
+      ip: ip,
       period: SurveyPeriod,
+      end_date: moment().format(DateTimeFormat),
     };
 
     for (let code in answers) {
       const info = answers[code];
       let key = QuestionPrefix + code;
-      // TODO: Получать по опоснику вместо проверки массив/число.
+      // TODO: Узнавать множественновть по Опоснику вместо проверки массив/число.
       if (isArray(info.answers)) {
         info.answers = compact(info.answers);
-        let n = 0;
+        // let n = 0;
         for (let answer of info.answers) {
-          ++n;
-          const k = key + AnswerSuffix + n;
+          // ++n;
           const v = +answer
+          const k = key + AnswerSuffix + v;
           record[k] = v;
         }
       } else {
@@ -335,16 +344,19 @@ async function save (survey, login, answers, ip)
       }
     }
 
+    let rowId = -1;
     if (!found) {
       console.debug('dwh', 'save', 'insertRow', ModelCode, seriesCode, size(record));
-      const rowId = await insertRow(ModelCode, seriesCode, record);
-      return { rowId };
+      rowId = await insertRow(ModelCode, seriesCode, record);
+      assert.strictEqual(rowId >= 1, true, `Bad rowId ${rowId}`); // TODO!
     } else {
-      const rowId = 1; // FIXME
+      console.debug('...', DataSet); // FIXME!
+      assert.strictEqual(rowId >= 1, true, `Bad rowId ${rowId}`);
       console.debug('dwh', 'save', 'updateRow', ModelCode, seriesCode, rowId, size(record));
       await updateRow(ModelCode, seriesCode, rowId, record);
     }
-    console.debug('dwh', 'save', 'ok');
+    console.debug('dwh', 'save', 'ok', rowId);
+    return { rowId };
   } catch (fail) {
     return warning('save', fail);
   }
