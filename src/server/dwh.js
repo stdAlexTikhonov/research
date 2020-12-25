@@ -6,9 +6,12 @@ const assert = require('assert').strict;
 const {
   compact,
   concat,
+  fromPairs,
+  get,
   head,
   isArray,
   isEmpty,
+  isObject,
   keys,
   map,
   mapValues,
@@ -16,7 +19,6 @@ const {
   partial,
   result,
   size,
-  take,
   sortBy,
   without,
 } = require('lodash');
@@ -194,8 +196,7 @@ async function query (modelCode, seriesCode, conditions)
     pageNumber: -1,
     pageSize: -1,
   };
-  const result = await client.queryAsync(request);
-  return result;
+  return await client.queryAsync(request);
 }
 
 const QSortKey = 'sort_order';
@@ -351,8 +352,20 @@ async function loadlog ()
   if (isEmpty(LoadLogSeries))
     return void console.warn('LoadLogSeries is empty');
   console.debug('dwh', 'loadlog', 'query', LoadLogSeries);
-  const [ , text ] = await query(ModelCode, LoadLogSeries, []);
-  const list = parseStringPromise(text);
+  const [ , xml ] = await query(ModelCode, LoadLogSeries, []);
+  const response = await parseStringPromise(xml);
+  const SubNs = 'ns2';
+  const ExtractA = [ 'soap:Envelope', 'soap:Body', 0, 'queryResponse', 0, 'DataSet', 0,
+                     `${SubNs}:Group`, 0, `${SubNs}:Series`, 0, `${SubNs}:Obs` ];
+  const ExtractB = [ `${SubNs}:Attributes`, 0, `${SubNs}:Value` ];
+  const list = get(response, ExtractA, [])
+    .map((row) => get(row, ExtractB, false))
+    .filter(isObject)
+    .map((row) =>
+      fromPairs(row.map((col) => [ get(col, [ '$', 'concept' ], null),
+                         get(col, [ '$', 'value' ], null) ])));
+
+  if (isEmpty(list)) console.warn('dwh', 'loadlog', 'Empty log');
   return list;
 }
 
