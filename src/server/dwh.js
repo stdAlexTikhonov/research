@@ -6,10 +6,7 @@ const assert = require('assert').strict;
 const {
   compact,
   concat,
-<<<<<<< HEAD
   fromPairs,
-=======
->>>>>>> main
   get,
   head,
   isArray,
