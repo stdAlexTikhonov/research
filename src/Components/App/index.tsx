@@ -51,9 +51,12 @@ export const App: React.FC<Props> = () => {
 
       setShouldSkipp(itog);
       setTitle(parsed.caption);
-      const keys_ = Object.keys(parsed.References)
-        .slice(1)
-        .sort((a, b) => +a.slice(1) - +b.slice(1));
+      const question_keys: { [key: string]: null } = {};
+      parsed.Questionary.forEach((item: any) => {
+        question_keys[`${item.question}`] = null;
+      });
+      const keys_ = Object.keys(question_keys);
+
       setLocalKeys(keys_);
       setKeys(keys_);
       const get_itog = localStorage.getItem(`itog_${uuidFromStorage}`);
@@ -83,14 +86,16 @@ export const App: React.FC<Props> = () => {
       get(`/api/load?code=${code}`).then((data) => {
         localStorage.setItem(id, JSON.stringify(data));
         setData(data);
-        console.log(data);
+
         const itog = commonTransform(data);
 
         setShouldSkipp(itog);
         setTitle(data.caption);
-        const keys_ = Object.keys(data.References)
-          .slice(1)
-          .sort((a, b) => +a.slice(1) - +b.slice(1));
+        const question_keys: { [key: string]: null } = {};
+        data.Questionary.forEach((item: any) => {
+          question_keys[`${item.question}`] = null;
+        });
+        const keys_ = Object.keys(question_keys);
         setLocalKeys(keys_);
         setKeys(keys_);
         setItog(setInitialData(data));
