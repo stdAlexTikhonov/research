@@ -281,6 +281,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ```json
 {
+    "survey": "satisfaction",
     "respondent": "name@example.com",
     "answers": {
         "v1": { "answers": 1, "other": null },
