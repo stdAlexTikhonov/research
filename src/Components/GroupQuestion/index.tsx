@@ -66,7 +66,7 @@ export const GroupQuestion = () => {
     <>
       <DenseTable
         answers={questions}
-        variants={data.References[keys![step]].Reference}
+        variants={data.References[localKeys![step]].Reference}
       />
     </>
   ) : null;
