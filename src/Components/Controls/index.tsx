@@ -20,32 +20,16 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
     data,
     localKeys,
     keys,
-    setData,
-    setKeys,
-    setItog,
-    setLocalKeys,
-    setQuestionCode,
+    setDirection,
   } = context!;
-  //   const [step, setStep] = useState<number>(0);
-  // const [data, setData] = useState<any>(null);
-  // const [keys, setKeys] = useState<any>(null);
-  // const [uuid, setUuid] = useState<string>("");
-  // const [title, setTitle] = useState<string>("");
-  // const [list, setList] = useState<ListItemProp[]>([]);
-  // const [shouldSkipp, setShouldSkipp] = useState<any>(null);
-  // const [skipped, setSkipped] = useState<string[]>([]);
-  // const [nextDsb, setNextDsb] = useState<boolean>(true);
-  // const [refuse, setRefuse] = useState(false);
-  // const [itog, setItog] = useState();
-  // const [localKeys, setLocalKeys] = useState<any>(null);
-  // const [itogKeys, setItogKeys] = useState<string[] | null>(null);
-  // const [questionCode, setQuestionCode] = useState<string>("");
+
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
     if (step > 0) setStep((prev: number) => prev - 1);
     const key = localKeys[step - 1];
     localStorage.setItem(`step_${uuid}`, keys!.indexOf(key).toString());
+    setDirection(-1);
   };
 
   const handleNext = () => {
@@ -67,6 +51,7 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
         prev < localKeys.length - 1 ? prev + 1 : prev
       );
     }
+    setDirection(1);
   };
 
   const sendToServer = async (form: any) => {

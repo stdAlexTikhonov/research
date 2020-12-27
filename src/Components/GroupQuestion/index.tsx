@@ -11,9 +11,16 @@ import { DenseTable } from "../Table";
 //   );
 
 export const GroupQuestion = () => {
-  const { data, step, keys, itog, setNextDsb, localKeys } = useContext(
-    Context
-  )!;
+  const {
+    data,
+    step,
+    keys,
+    itog,
+    setNextDsb,
+    localKeys,
+    setStep,
+    direction,
+  } = useContext(Context)!;
 
   const [questions, setQuestions] = useState<any>();
 
@@ -35,6 +42,8 @@ export const GroupQuestion = () => {
       setNextDsb(disable);
 
       setQuestions(transformed);
+      if (transformed.every((item: any) => item.should_show))
+        setStep((prev: number) => prev + direction);
     } else {
       const questions_ = data.Questionary.filter(
         (item: any) => item.question === localKeys![step]
@@ -48,6 +57,8 @@ export const GroupQuestion = () => {
       }));
 
       setQuestions(transformed);
+      if (transformed.every((item: any) => !item.should_show))
+        setStep((prev: number) => prev + direction);
       // const question_group = questions_[0].question_group;
 
       // const question_data = data.References.question_groups.Reference.find(

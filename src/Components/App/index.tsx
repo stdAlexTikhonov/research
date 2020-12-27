@@ -40,6 +40,7 @@ export const App: React.FC<Props> = () => {
   const [localKeys, setLocalKeys] = useState<any>(null);
   const [itogKeys, setItogKeys] = useState<string[] | null>(null);
   const [questionCode, setQuestionCode] = useState<string>("");
+  const [direction, setDirection] = useState<number>(1);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -140,6 +141,8 @@ export const App: React.FC<Props> = () => {
         questionCode,
         setQuestionCode,
         setKeys,
+        direction,
+        setDirection,
       }}
     >
       {data && (

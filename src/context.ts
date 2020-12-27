@@ -23,4 +23,6 @@ export const Context = React.createContext<{
   questionCode: string;
   setQuestionCode: any;
   setKeys: any;
+  direction: number;
+  setDirection: any;
 } | null>(null);
