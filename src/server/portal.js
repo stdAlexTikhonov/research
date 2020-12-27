@@ -86,6 +86,9 @@ async function login (username, password)
 let AdminToken = PortalSession;
 async function admin (method, data)
 {
+  if (!isEmpty(PortalApi)) {
+    return { token: null };
+  }
   if (!AdminToken) {
     const { token } = await login(PortalLogin, PortalPassword);
     AdminToken = token.replace(/[{}]/g, '');
@@ -100,6 +103,5 @@ async function admin (method, data)
 }
 
 module.exports = {
-  admin,
-  PortalEnabled: !isEmpty(PortalApi)
+  admin
 };

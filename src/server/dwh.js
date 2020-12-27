@@ -31,7 +31,7 @@ const { createClientAsync } = require('soap');
 // Разбор XML, https://www.npmjs.com/package/xml2js
 const { parseStringPromise } = require('xml2js');
 
-// const { admin, PortalEnabled } = require('./portal');
+// const { admin } = require('./portal');
 
 // XML описания сервиса Хранилища.
 assert.strictEqual('DWH_WSDL_PATH' in process.env, true, 'No DWH_WSDL_PATH in env');
