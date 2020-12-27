@@ -6,25 +6,25 @@ const fs = require('fs');
 const path = require('path');
 
 const {
-    partial,
-    get,
-    trim,
-    chain,
+  //  partial,
+  isEmpty,
 } = require('lodash');
 
 const axios = require('axios');
 
 // API Портала.
+assert.strictEqual('PORTAL_API' in process.env, true, 'No PORTAL_API in env');
 const PortalApi = process.env.PORTAL_API;
-assert.ok(PortalApi, 'No PORTAL_API in env');
 
 // Логин администратора Портала.
+assert.strictEqual('PORTAL_LOGIN' in process.env, true, 'No PORTAL_LOGIN in env');
 const PortalLogin = process.env.PORTAL_LOGIN;
-assert.ok(PortalLogin, 'No PORTAL_LOGIN in env');
 
 // Пароль администратора Портала.
+assert.strictEqual('PORTAL_PASSWORD' in process.env, true, 'No PORTAL_PASSWORD in env');
 const PortalPassword = process.env.PORTAL_PASSWORD;
-assert.ok(PortalPassword, 'No PORTAL_PASSWORD in env');
+
+let PortalSession = process.env.PORTAL_SESSION || null;
 
 const TrailingSpace = /^\s|\s$/;
 const TokenFormat = /^[{][a-f0-9-]{36}[}]$/;
@@ -83,21 +83,23 @@ async function login (username, password)
 }
 
 // От имени Админинстратора Портала.
-let AdminToken = null;
+let AdminToken = PortalSession;
 async function admin (method, data)
 {
   if (!AdminToken) {
     const { token } = await login(PortalLogin, PortalPassword);
-    AdminToken = token;
+    AdminToken = token.replace(/[{}]/g, '');
+    console.debug('AdminToken', AdminToken);
   }
-  console.debug('AdminToken', AdminToken);
   if (!method) {
-    console.warn('portal', 'admin', 'No method');
+    // console.warn('portal', 'admin', 'No method');
     return { token: AdminToken };
   }
-  return await request(method, AdminToken, data);
+  const session = '{' + AdminToken + '}';
+  return await request(method, session, data);
 }
 
 module.exports = {
   admin,
+  PortalEnabled: !isEmpty(PortalApi)
 };

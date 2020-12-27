@@ -31,9 +31,19 @@ const { createClientAsync } = require('soap');
 // Разбор XML, https://www.npmjs.com/package/xml2js
 const { parseStringPromise } = require('xml2js');
 
+// const { admin, PortalEnabled } = require('./portal');
+
 // XML описания сервиса Хранилища.
+assert.strictEqual('DWH_WSDL_PATH' in process.env, true, 'No DWH_WSDL_PATH in env');
 const DwhWsdlPath = process.env.DWH_WSDL_PATH;
-assert.ok(DwhWsdlPath, 'No DWH_WSDL_PATH in env');
+
+assert.strictEqual('DWH_WSDL_URL' in process.env, true, 'No DWH_WSDL_URL in env');
+const DwhWsdlUrl = process.env.DWH_WSDL_URL;
+assert.ok(DwhWsdlUrl, 'Empty DWH_WSDL_URL');
+
+console.debug('DWH_WSDL_PATH', DwhWsdlPath);
+console.debug('DWH_WSDL_URL', DwhWsdlUrl);
+const DwhSoapWsdl = DwhWsdlPath || DwhWsdlUrl;
 
 // Код Модели в Хранилище.
 const ModelCode = process.env.MODEL_CODE;
@@ -80,7 +90,7 @@ async function connection (soapWsdl)
 }
 
 // Соединение с веб-сервисом Хранилища данных.
-const connect = partial(connection, DwhWsdlPath);
+const connect = partial(connection, DwhSoapWsdl);
 
 const warning = (place, problem) => ({
   message: (console.warn(place, 'error', problem.message), problem.message),
