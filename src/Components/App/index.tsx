@@ -110,6 +110,7 @@ export const App: React.FC<Props> = () => {
 
         setItogKeys(Object.keys(itog_data));
         setItog(itog_data);
+        setList([]);
       });
     }
   };
