@@ -11,9 +11,16 @@ type Answer = {
 };
 
 export const Question = () => {
-  const { step, data, keys, itog, setNextDsb, localKeys } = useContext(
-    Context
-  )!;
+  const {
+    step,
+    data,
+    keys,
+    itog,
+    setNextDsb,
+    localKeys,
+    itogKeys,
+    setQuestionCode,
+  } = useContext(Context)!;
   const [question, setQuestion] = useState<any>("");
   const [answers, setAnswers] = useState<Answer[]>();
   const [group_question, setGQ] = useState(false);
@@ -29,58 +36,62 @@ export const Question = () => {
   useEffect(() => {
     if (localKeys) {
       const question_data = data.Questionary.find(
-        (item: any) => item.code === localKeys[step]
+        (item: any) =>
+          item.code === localKeys[step] || item.question === localKeys[step]
       );
 
       if (question_data) {
-        setQuestion(() => question_data);
+        if (question_data.question_group) {
+          setQuestionCode("");
+          const qg_data = localStorage.getItem(`${localKeys[step]}_group`);
 
-        if (itog) {
-          if (Array.isArray(itog[`${localKeys![step]}`].answers))
-            setNextDsb(!itog[`${localKeys![step]}`].answers[0]);
-          else setNextDsb(!itog[`${localKeys![step]}`].answers);
-        }
+          if (qg_data) {
+            const parsed = JSON.parse(qg_data);
+            setQuestion(() => parsed);
+          } else {
+            // const question_data = data.Questionary.find(
+            //   (item: any) => item.question === localKeys[step]
+            // );
 
-        setGQ(false);
+            const question_group_data = data.References.question_groups.Reference.find(
+              (item: any) => item.code === question_data.question_group
+            );
 
-        const key = localKeys[step];
+            // const question_group_data = data.References[localKeys[step]];
 
-        if (question_data.other_allowed)
-          setAnswers(
-            data.References[key].Reference.concat([
-              {
-                code: data.References[key].Reference.length + 1,
-                value: question_data.other_text,
-              },
-            ])
-          );
-        else setAnswers(data.References[key].Reference);
-      } else {
-        const qg_data = localStorage.getItem(`${localKeys[step]}_group`);
+            // const caption = question_group_data.caption.split(".")[1];
 
-        if (qg_data) {
-          const parsed = JSON.parse(qg_data);
-          setQuestion(() => parsed);
+            question_data.title = question_group_data.value;
+
+            setQuestion(question_data);
+          }
+
+          setGQ(true);
         } else {
-          const question_data = data.Questionary.find(
-            (item: any) => item.question === localKeys[step]
-          );
+          setQuestion(() => question_data);
+          setQuestionCode(question_data.code);
 
-          console.log(question_data);
-          // const question_group_data = data.References.question_groups.Reference.find(
-          //   (item: any) => item.code === question_data.question_group
-          // );
+          if (itog) {
+            if (Array.isArray(itog[`${question_data.code}`].answers))
+              setNextDsb(!itog[`${question_data.code}`].answers[0]);
+            else setNextDsb(!itog[`${question_data.code}`].answers);
+          }
 
-          const question_group_data = data.References[localKeys[step]];
+          setGQ(false);
 
-          const caption = question_group_data.caption.split(".")[1];
+          const key = localKeys[step];
 
-          question_data.title = question_group_data && caption;
-
-          setQuestion(question_data);
+          if (question_data.other_allowed)
+            setAnswers(
+              data.References[key].Reference.concat([
+                {
+                  code: data.References[key].Reference.length + 1,
+                  value: question_data.other_text,
+                },
+              ])
+            );
+          else setAnswers(data.References[key].Reference);
         }
-
-        setGQ(true);
       }
     }
 

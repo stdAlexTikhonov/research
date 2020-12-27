@@ -39,6 +39,7 @@ export const App: React.FC<Props> = () => {
   const [itog, setItog] = useState();
   const [localKeys, setLocalKeys] = useState<any>(null);
   const [itogKeys, setItogKeys] = useState<string[] | null>(null);
+  const [questionCode, setQuestionCode] = useState<string>("");
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -105,9 +106,9 @@ export const App: React.FC<Props> = () => {
         setLocalKeys(keys_);
         setKeys(keys_);
         const itog_data = setInitialData(data);
+
         setItogKeys(Object.keys(itog_data));
         setItog(itog_data);
-        setList([]);
       });
     }
   };
@@ -135,6 +136,10 @@ export const App: React.FC<Props> = () => {
         setLocalKeys,
         setData,
         setList,
+        itogKeys,
+        questionCode,
+        setQuestionCode,
+        setKeys,
       }}
     >
       {data && (

@@ -33,6 +33,7 @@ export const GroupQuestion = () => {
 
       const disable = transformed.some((item: any) => !itog[item.code].answers);
       setNextDsb(disable);
+
       setQuestions(transformed);
     } else {
       const questions_ = data.Questionary.filter(

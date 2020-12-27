@@ -12,7 +12,34 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog, uuid, nextDsb, data, localKeys, keys } = context!;
+  const {
+    step,
+    itog,
+    uuid,
+    nextDsb,
+    data,
+    localKeys,
+    keys,
+    setData,
+    setKeys,
+    setItog,
+    setLocalKeys,
+    setQuestionCode,
+  } = context!;
+  //   const [step, setStep] = useState<number>(0);
+  // const [data, setData] = useState<any>(null);
+  // const [keys, setKeys] = useState<any>(null);
+  // const [uuid, setUuid] = useState<string>("");
+  // const [title, setTitle] = useState<string>("");
+  // const [list, setList] = useState<ListItemProp[]>([]);
+  // const [shouldSkipp, setShouldSkipp] = useState<any>(null);
+  // const [skipped, setSkipped] = useState<string[]>([]);
+  // const [nextDsb, setNextDsb] = useState<boolean>(true);
+  // const [refuse, setRefuse] = useState(false);
+  // const [itog, setItog] = useState();
+  // const [localKeys, setLocalKeys] = useState<any>(null);
+  // const [itogKeys, setItogKeys] = useState<string[] | null>(null);
+  // const [questionCode, setQuestionCode] = useState<string>("");
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
@@ -45,9 +72,9 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
   const sendToServer = async (form: any) => {
     setPassed(true);
     form.survey = data.code;
-    console.log('sendToServer', form);
+    console.log("sendToServer", form);
     const res = await post("/api/save", form);
-    console.log('sendToServer', res);
+    console.log("sendToServer", res);
   };
 
   return (
