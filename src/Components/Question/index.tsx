@@ -63,9 +63,10 @@ export const Question = () => {
           setQuestion(() => parsed);
         } else {
           const question_data = data.Questionary.find(
-            (item: any) => item.code === localKeys[step] + "_1"
+            (item: any) => item.question === localKeys[step]
           );
 
+          console.log(question_data);
           // const question_group_data = data.References.question_groups.Reference.find(
           //   (item: any) => item.code === question_data.question_group
           // );
