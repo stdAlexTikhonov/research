@@ -27,6 +27,8 @@ const {
   save, load, list,
   SurveyCode } = require('./dwh');
 
+const { admin } = require('./portal');
+
 app.use(cors());
 
 // Узнаем IP даже за прокси (https://stackoverflow.com/a/14631683).
@@ -127,6 +129,16 @@ api.get('/loadlog', async (req, res) => {
     const data = await loadlog();
     res.json(data);
     console.debug('api', 'loadlog', 'done', size(data));
+  } catch (fail) {
+    badRequest(req, res, fail);
+  }
+});
+
+// Возвращает Журнал загрузки данных.
+api.get('/admin', async (req, res) => {
+  try {
+    const data = await admin();
+    res.json(data);
   } catch (fail) {
     badRequest(req, res, fail);
   }
