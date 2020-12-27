@@ -12,13 +12,24 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
 }) => {
   const classes = useStyles();
   const context = useContext(Context);
-  const { step, itog, uuid, nextDsb, data, localKeys, keys } = context!;
+  const {
+    step,
+    itog,
+    uuid,
+    nextDsb,
+    data,
+    localKeys,
+    keys,
+    setDirection,
+  } = context!;
+
   const [passed, setPassed] = useState(false);
 
   const handleBack = () => {
     if (step > 0) setStep((prev: number) => prev - 1);
     const key = localKeys[step - 1];
     localStorage.setItem(`step_${uuid}`, keys!.indexOf(key).toString());
+    setDirection(-1);
   };
 
   const handleNext = () => {
@@ -40,14 +51,15 @@ export const Controls: React.FC<{ setStep: any; len: number }> = ({
         prev < localKeys.length - 1 ? prev + 1 : prev
       );
     }
+    setDirection(1);
   };
 
   const sendToServer = async (form: any) => {
     setPassed(true);
     form.survey = data.code;
-    console.log('sendToServer', form);
+    console.log("sendToServer", form);
     const res = await post("/api/save", form);
-    console.log('sendToServer', res);
+    console.log("sendToServer", res);
   };
 
   return (

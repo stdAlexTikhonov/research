@@ -19,4 +19,10 @@ export const Context = React.createContext<{
   setLocalKeys: any;
   setData: any;
   setList: any;
+  itogKeys: string[] | null;
+  questionCode: string;
+  setQuestionCode: any;
+  setKeys: any;
+  direction: number;
+  setDirection: any;
 } | null>(null);

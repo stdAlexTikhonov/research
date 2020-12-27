@@ -40,7 +40,15 @@ export const FinalDialog: React.FC<{ passed: boolean; onClick: any }> = ({
   onClick,
 }) => {
   const [open, setOpen] = React.useState(false);
-  const { setData, setList } = useContext(Context)!;
+  const {
+    setData,
+    setList,
+    setItog,
+    setLocalKeys,
+    setQuestionCode,
+    setKeys,
+    setStep,
+  } = useContext(Context)!;
 
   const classes = useStyles();
 
@@ -52,6 +60,12 @@ export const FinalDialog: React.FC<{ passed: boolean; onClick: any }> = ({
   const handleClose = () => {
     setOpen(false);
     setData(null);
+
+    setItog(null);
+    setLocalKeys(null);
+    setQuestionCode("");
+    setKeys(null);
+    setStep(0);
     get("/api/list").then((data) => {
       setList(data);
     });

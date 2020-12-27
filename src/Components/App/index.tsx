@@ -38,6 +38,9 @@ export const App: React.FC<Props> = () => {
   const [refuse, setRefuse] = useState(false);
   const [itog, setItog] = useState();
   const [localKeys, setLocalKeys] = useState<any>(null);
+  const [itogKeys, setItogKeys] = useState<string[] | null>(null);
+  const [questionCode, setQuestionCode] = useState<string>("");
+  const [direction, setDirection] = useState<number>(1);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -63,12 +66,17 @@ export const App: React.FC<Props> = () => {
       if (get_itog) {
         const parsed = JSON.parse(get_itog);
         setItog(parsed);
+        setItogKeys(Object.keys(parsed));
         const step_ = localStorage.getItem(`step_${uuidFromStorage}`);
         /////
         const key = keys_[parseInt(step_!)];
         ////
         setStep(parseInt(step_!));
-      } else setItog(setInitialData(parsed));
+      } else {
+        const itog = setInitialData(parsed);
+        setItog(itog);
+        setItogKeys(Object.keys(itog));
+      }
     } else {
       get("/api/list").then((data) => {
         setList(data);
@@ -98,7 +106,10 @@ export const App: React.FC<Props> = () => {
         const keys_ = Object.keys(question_keys);
         setLocalKeys(keys_);
         setKeys(keys_);
-        setItog(setInitialData(data));
+        const itog_data = setInitialData(data);
+
+        setItogKeys(Object.keys(itog_data));
+        setItog(itog_data);
         setList([]);
       });
     }
@@ -127,6 +138,12 @@ export const App: React.FC<Props> = () => {
         setLocalKeys,
         setData,
         setList,
+        itogKeys,
+        questionCode,
+        setQuestionCode,
+        setKeys,
+        direction,
+        setDirection,
       }}
     >
       {data && (

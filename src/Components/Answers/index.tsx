@@ -34,6 +34,7 @@ export const Answers: React.FC<Props> = ({
     setNextDsb,
     shouldSkipp,
     setLocalKeys,
+    questionCode,
   } = useContext(Context)!;
   const [value, setValue] = useState<string | null>(null);
 
@@ -51,7 +52,7 @@ export const Answers: React.FC<Props> = ({
 
       setItog((prev: any) =>
         Object.assign({}, prev, {
-          [`${localKeys![step]}`]: { answers: value, other: "" },
+          [`${questionCode}`]: { answers: value, other: "" },
         })
       );
 
@@ -70,7 +71,7 @@ export const Answers: React.FC<Props> = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [step]
+    [questionCode]
   );
 
   return (

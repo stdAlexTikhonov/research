@@ -132,12 +132,14 @@ export const DenseTable: React.FC<Props> = ({ answers, variants }) => {
                       values={variants}
                       row_index={index}
                       setAnswers={setLocalAnswers}
+                      questionCode={answer.code}
                     />
                   ) : (
                     <Row
                       values={variants}
                       row_index={index}
                       setAnswers={setLocalAnswers}
+                      questionCode={answer.code}
                     />
                   )}
                 </TableCell>

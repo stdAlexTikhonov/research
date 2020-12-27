@@ -20,19 +20,20 @@ type Props = {
   values: Variant[];
   row_index: number;
   setAnswers: any;
+  questionCode: string;
 };
 
 export const CustomSelect: React.FC<Props> = ({
   values,
   row_index,
   setAnswers,
+  questionCode,
 }) => {
   const { setItog, step, localKeys, itog } = useContext(Context)!;
   const [value, setValue] = useState<string | null>(null);
 
   useEffect(() => {
-    const id = localKeys![step] + "_" + (row_index + 1);
-    itog[id] && setValue(itog[id].answers);
+    itog[questionCode] && setValue(itog[questionCode].answers);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
@@ -43,17 +44,16 @@ export const CustomSelect: React.FC<Props> = ({
         ...prev,
         [`${row_index}`]: e.target.value,
       }));
-      const id = localKeys![step] + "_" + (row_index + 1);
 
       setItog((prev: any) =>
         Object.assign({}, prev, {
-          [`${id}`]: { answers: e.target.value, other: "" },
+          [questionCode]: { answers: e.target.value, other: "" },
         })
       );
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [localKeys, row_index, setAnswers, setItog, step]
+    [questionCode, row_index, setAnswers, setItog]
   );
   const classes = useStyles();
 
