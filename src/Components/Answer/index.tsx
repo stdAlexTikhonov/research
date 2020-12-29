@@ -1,5 +1,10 @@
-import React, { useState, useContext, useEffect,  useCallback,
-  ChangeEvent } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  ChangeEvent,
+} from "react";
 import { Radio, FormControlLabel, Checkbox } from "@material-ui/core";
 import { Context } from "../../context";
 import TextField from "@material-ui/core/TextField";
@@ -29,17 +34,20 @@ export const Answer: React.FC<AnswerType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, localKeys]);
 
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>): void => {
-        const { value } = e.currentTarget;
-          setUserInput(value);
-          setItog((prev: any) => ({
-            ...prev,
-            [questionCode]: {
-              ...prev[questionCode],
-              other: value,
-            },
-          }));
-        },[questionCode, setItog]);
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>): void => {
+      const { value } = e.currentTarget;
+      setUserInput(value);
+      setItog((prev: any) => ({
+        ...prev,
+        [questionCode]: {
+          ...prev[questionCode],
+          other: value,
+        },
+      }));
+    },
+    [questionCode, setItog]
+  );
 
   const [userInput, setUserInput] = useState("");
   return user_input ? (
@@ -98,8 +106,9 @@ export const CheckboxAns: React.FC<AnswerType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionCode]);
 
-    const handleChange = useCallback((e: any): void => {
-        if (!checked_) {
+  const handleChange = useCallback(
+    (e: any): void => {
+      if (!checked_) {
         const new_answers = itog[questionCode].answers.concat([value]);
         const filtered = new_answers.filter((item: any) => item !== null);
 
@@ -124,20 +133,24 @@ export const CheckboxAns: React.FC<AnswerType> = ({
         }));
       }
       setChecked(!checked_);
-    }, [checked_, itog, questionCode, setItog, setNextDsb, value]);
-  
-  const handleChangeText = useCallback((e: ChangeEvent<HTMLInputElement>): void => {
-     setUserInput(e.target.value);
-          setItog((prev: any) => ({
-            ...prev,
-            [questionCode]: {
-              ...prev[questionCode],
-              other: e.target.value,
-            },
-          }));
-  }, [questionCode, setItog])
+    },
+    [checked_, itog, questionCode, setItog, setNextDsb, value]
+  );
 
-
+  const handleChangeText = useCallback(
+    (e: ChangeEvent<HTMLInputElement>): void => {
+      const { value } = e.currentTarget;
+      setUserInput(value);
+      setItog((prev: any) => ({
+        ...prev,
+        [questionCode]: {
+          ...prev[questionCode],
+          other: value,
+        },
+      }));
+    },
+    [questionCode, setItog]
+  );
 
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
