@@ -42,8 +42,7 @@ assert.strictEqual('DWH_WSDL_URL' in process.env, true, 'No DWH_WSDL_URL in env'
 const DwhWsdlUrl = process.env.DWH_WSDL_URL;
 assert.ok(DwhWsdlUrl, 'Empty DWH_WSDL_URL');
 
-console.debug('DWH_WSDL_PATH', DwhWsdlPath);
-console.debug('DWH_WSDL_URL', DwhWsdlUrl);
+console.debug('DWH_WSDL_PATH', DwhWsdlPath, 'DWH_WSDL_URL', DwhWsdlUrl);
 const DwhSoapWsdl = DwhWsdlPath || DwhWsdlUrl;
 
 // Код Модели в Хранилище.
@@ -68,7 +67,7 @@ assert.ok(DateFormat, 'No DATE_FORMAT in env');
 const SurveyPeriod = take(moment().format('YYYY-12-31 23:59:59'), size(DateFormat)).join('');
 
 // Лог загрузок.
-assert.ok(!('LoadLogSeries' in process.env), 'No LOADLOG_SERIES in env');
+assert.strictEqual('LOADLOG_SERIES' in process.env, true, 'No LOADLOG_SERIES in env');
 const LoadLogSeries = process.env.LOADLOG_SERIES;
 
 // Клиент для обращений к веб-сервису Хранилища.
@@ -312,7 +311,7 @@ async function save (survey, login, answers, ip)
     assert.ok(login, 'No login');
     assert.ok(answers, 'No answers');
     const seriesCode = survey + SeriesSuffix;
-    console.debug('dwh', 'save', ModelCode, survey, login, size(answers), answers, ip);
+    console.debug('dwh', 'save', ModelCode, survey, seriesCode, login, size(answers), ip);
     // console.debug('dwh', 'save',  size(answers), JSON.stringify(data, null, 4));
     const conditions = {
       user_uuid: login,
@@ -332,7 +331,7 @@ async function save (survey, login, answers, ip)
     for (let code in answers) {
       const info = answers[code];
       let key = QuestionPrefix + code;
-      // TODO: Узнавать множественновть по Опоснику вместо проверки массив/число.
+      // TODO: Узнавать множественновть по Опроснику вместо проверки массив/число.
       if (isArray(info.answers)) {
         info.answers = compact(info.answers);
         // let n = 0;
