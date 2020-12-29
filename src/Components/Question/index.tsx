@@ -34,6 +34,8 @@ export const Question = () => {
   };
 
   useEffect(() => {
+    console.log(data);
+    console.log(localKeys);
     if (localKeys) {
       const question_data = data.Questionary.find(
         (item: any) =>
@@ -96,7 +98,7 @@ export const Question = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localKeys, step, group_question]);
+  }, [step, localKeys]);
 
   return question ? (
     <>

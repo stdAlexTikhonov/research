@@ -7,6 +7,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/Inbox";
 import { ListItemProp } from "./types";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +32,8 @@ export const CustomList: React.FC<{
 }> = ({ list, handleData }) => {
   const classes = useStyles();
 
+  const isPassed = (code: string) => !!localStorage.getItem(code);
+
   return (
     <div className={classes.container}>
       <Paper elevation={3} className={classes.root} variant="outlined">
@@ -45,6 +48,7 @@ export const CustomList: React.FC<{
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={item.caption} />
+              {isPassed(item.code) && <DoneAllIcon />}
             </ListItem>
           ))}
         </List>
