@@ -14,6 +14,7 @@ import { isMobile } from "../../utils/helpers";
 import { AGAIN_AND_AGAIN } from "../../utils/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
+import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -44,6 +45,7 @@ export const App: React.FC<Props> = () => {
   const [questionCode, setQuestionCode] = useState<string>("");
   const [direction, setDirection] = useState<number>(1);
   const [questionary_code, setQuestionaryCode] = useState<string>("");
+  const [reset, setReset] = useState<boolean>(false);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -81,11 +83,11 @@ export const App: React.FC<Props> = () => {
         setItogKeys(Object.keys(itog));
       }
     } else {
-      get("/api/list").then((data) => {
-        setList(data);
+      get("/api/list").then((data_local) => {
+        setList(data_local);
       });
     }
-  }, []);
+  }, [reset]);
 
   const handleData = (code: string) => {
     const year = localStorage.getItem(code);
@@ -95,22 +97,23 @@ export const App: React.FC<Props> = () => {
       const id = uuidv4();
       setUuid(id);
       localStorage.setItem("uuid", id);
-      get(`/api/load?code=${code}`).then((data) => {
-        localStorage.setItem(id, JSON.stringify(data));
-        setData(data);
-
-        const itog = commonTransform(data);
+      get(`/api/load?code=${code}`).then((local_data) => {
+        localStorage.setItem(id, JSON.stringify(local_data));
+        setData(local_data);
+        const itog = commonTransform(local_data);
 
         setShouldSkipp(itog);
-        setTitle(data.caption);
+        setTitle(local_data.caption);
         const question_keys: { [key: string]: null } = {};
-        data.Questionary.forEach((item: any) => {
+        local_data.Questionary.forEach((item: any) => {
           question_keys[`${item.question}`] = null;
         });
+
         const keys_ = Object.keys(question_keys);
+        console.log(keys_);
         setLocalKeys(keys_);
         setKeys(keys_);
-        const itog_data = setInitialData(data);
+        const itog_data = setInitialData(local_data);
 
         setItogKeys(Object.keys(itog_data));
         setItog(itog_data);
@@ -124,6 +127,15 @@ export const App: React.FC<Props> = () => {
   const handleReset = () => {
     localStorage.removeItem(questionary_code);
     setRefuse(false);
+  };
+
+  const handleCurrentReset = () => {
+    setData(null);
+    localStorage.removeItem("step_" + uuid);
+    localStorage.removeItem("itog_" + uuid);
+    localStorage.removeItem("uuid");
+    localStorage.removeItem(uuid);
+    setReset((prev: boolean) => !prev);
   };
 
   return (
@@ -155,15 +167,36 @@ export const App: React.FC<Props> = () => {
         setDirection,
       }}
     >
-      {data ? (
+      {list.length > 0 ? (
+        <CustomList list={list} handleData={handleData} />
+      ) : data ? (
         <div className={classes.root}>
           {/* <Header /> */}
+          <Button
+            onClick={handleCurrentReset}
+            size={"small"}
+            className={classes.reset}
+            style={{
+              textTransform: "lowercase",
+              marginLeft: 5,
+              marginBottom: 0,
+              marginTop: 5,
+            }}
+          >
+            <CancelOutlinedIcon style={{ marginRight: 10 }} /> Отменить
+            прохождение
+          </Button>
 
           {!isMobile && (
             <Typography
               variant="h6"
               gutterBottom
-              style={{ padding: 20, paddingBottom: 0, fontSize: 14 }}
+              style={{
+                padding: 20,
+                paddingBottom: 0,
+                paddingTop: 10,
+                fontSize: 14,
+              }}
             >
               {title}
             </Typography>
@@ -175,8 +208,6 @@ export const App: React.FC<Props> = () => {
           </div>
           {keys && <Controls setStep={setStep} len={keys.length} />}
         </div>
-      ) : list.length > 0 ? (
-        <CustomList list={list} handleData={handleData} />
       ) : (
         <div className={classes.loader}>
           <CircularProgress />
