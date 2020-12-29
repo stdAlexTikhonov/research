@@ -48,7 +48,7 @@ export const Answers: React.FC<Props> = ({
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>): void => {
-      const { value } = event.target;
+      const { value } = event.currentTarget;
 
       setItog((prev: any) =>
         Object.assign({}, prev, {

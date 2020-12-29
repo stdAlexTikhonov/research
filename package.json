@@ -1,6 +1,10 @@
 {
   "name": "survey",
+<<<<<<< HEAD
   "version": "0.2.20",
+=======
+  "version": "0.2.19",
+>>>>>>> TASK-59
   "private": true,
   "description": "Обследования",
   "author": "Contour Components",

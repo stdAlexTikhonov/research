@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  ChangeEvent,
+} from "react";
 import { Radio, FormControlLabel, Checkbox } from "@material-ui/core";
 import { Context } from "../../context";
 import TextField from "@material-ui/core/TextField";
@@ -28,6 +34,21 @@ export const Answer: React.FC<AnswerType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, localKeys]);
 
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>): void => {
+      const { value } = e.currentTarget;
+      setUserInput(value);
+      setItog((prev: any) => ({
+        ...prev,
+        [questionCode]: {
+          ...prev[questionCode],
+          other: value,
+        },
+      }));
+    },
+    [questionCode, setItog]
+  );
+
   const [userInput, setUserInput] = useState("");
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
@@ -41,16 +62,7 @@ export const Answer: React.FC<AnswerType> = ({
         id="standard-basic"
         value={userInput}
         disabled={!selected}
-        onChange={(e) => {
-          setUserInput(e.target.value);
-          setItog((prev: any) => ({
-            ...prev,
-            [questionCode]: {
-              ...prev[questionCode],
-              other: e.target.value,
-            },
-          }));
-        }}
+        onChange={handleChange}
         style={{ minWidth: 300, marginLeft: 20 }}
       />
     </div>
@@ -94,33 +106,51 @@ export const CheckboxAns: React.FC<AnswerType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionCode]);
 
-  const handleChange = (e: React.ChangeEvent<{}>) => {
-    if (!checked_) {
-      const new_answers = itog[questionCode].answers.concat([value]);
-      const filtered = new_answers.filter((item: any) => item !== null);
+  const handleChange = useCallback(
+    (e: any): void => {
+      if (!checked_) {
+        const new_answers = itog[questionCode].answers.concat([value]);
+        const filtered = new_answers.filter((item: any) => item !== null);
 
-      setNextDsb(filtered.length === 0);
-      setItog((prev: any) => ({
-        ...prev,
-        [questionCode]: Object.assign({}, prev[questionCode], {
-          answers: filtered,
-        }),
-      }));
-    } else {
-      const filtered = itog[questionCode].answers.filter(
-        (item: string) => item !== value
-      );
-      setNextDsb(filtered.length === 0);
+        setNextDsb(filtered.length === 0);
+        setItog((prev: any) => ({
+          ...prev,
+          [questionCode]: Object.assign({}, prev[questionCode], {
+            answers: filtered,
+          }),
+        }));
+      } else {
+        const filtered = itog[questionCode].answers.filter(
+          (item: string) => item !== value
+        );
+        setNextDsb(filtered.length === 0);
+        setItog((prev: any) => ({
+          ...prev,
+          [questionCode]: {
+            ...prev[questionCode],
+            answers: filtered,
+          },
+        }));
+      }
+      setChecked(!checked_);
+    },
+    [checked_, itog, questionCode, setItog, setNextDsb, value]
+  );
+
+  const handleChangeText = useCallback(
+    (e: ChangeEvent<HTMLInputElement>): void => {
+      const { value } = e.currentTarget;
+      setUserInput(value);
       setItog((prev: any) => ({
         ...prev,
         [questionCode]: {
           ...prev[questionCode],
-          answers: filtered,
+          other: value,
         },
       }));
-    }
-    setChecked(!checked_);
-  };
+    },
+    [questionCode, setItog]
+  );
 
   return user_input ? (
     <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
@@ -134,16 +164,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
         id="standard-basic"
         value={userInput}
         disabled={!checked_}
-        onChange={(e) => {
-          setUserInput(e.target.value);
-          setItog((prev: any) => ({
-            ...prev,
-            [questionCode]: {
-              ...prev[questionCode],
-              other: e.target.value,
-            },
-          }));
-        }}
+        onChange={handleChangeText}
         style={{ minWidth: 300, marginLeft: 20 }}
       />
     </div>
