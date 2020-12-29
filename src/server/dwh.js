@@ -42,7 +42,7 @@ assert.strictEqual('DWH_WSDL_URL' in process.env, true, 'No DWH_WSDL_URL in env'
 const DwhWsdlUrl = process.env.DWH_WSDL_URL;
 assert.ok(DwhWsdlUrl, 'Empty DWH_WSDL_URL');
 
-console.debug('DWH_WSDL_PATH', DwhWsdlPath, 'DWH_WSDL_URL', DwhWsdlUrl);
+console.debug('DWH_WSDL_PATH', DwhWsdlPath, '\n', 'DWH_WSDL_URL', DwhWsdlUrl);
 const DwhSoapWsdl = DwhWsdlPath || DwhWsdlUrl;
 
 // Код Модели в Хранилище.
