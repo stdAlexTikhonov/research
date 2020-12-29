@@ -1,0 +1,23 @@
+# Старт веб-приложения при загрузке системы.
+# При установке этот файл нужно скопировать
+# в /etc/systemd/system
+
+[Unit]
+Description=DAP Survey Service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+
+StandardOutput=journal+console
+SyslogIdentifier=dap
+
+User=root
+WorkingDirectory=/root/app
+ExecStart=/usr/bin/env npm run server
+
+[Install]
+WantedBy=multi-user.target

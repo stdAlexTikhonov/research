@@ -26,7 +26,7 @@ $(DWH_WSDL_PATH): package.json
 	wget -qO- "$(DWH_WSDL_URL)" \
  | sed -Ee 's@https?://$(DWH_WSDL_DOMAIN)/([^/]+)/+@$(DWH_WSDL_PROTOCOL)://$(DWH_WSDL_DOMAIN)/\1/@g' \
  | awk '/wsdlsoap:address\s+location/{gsub(/"\s+\/>/,"$(PORTAL_SESSION_PARAM_GET)\" />");print;next}{print}' \
- | sed -Ee 's@schemaLocation="[^"]+\.xsd"@schemaLocation="../config/SDMXGenericData.xsd")@' \
+ | sed -Ee 's@schemaLocation="[^"]+\.xsd"@schemaLocation="../config/SDMXGenericData.xsd"@' \
  > $@
 
 ################################################################
