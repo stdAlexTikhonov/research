@@ -65,7 +65,7 @@ const DateFormat = process.env.DATE_FORMAT;
 assert.ok(DateFormat, 'No DATE_FORMAT in env');
 
 // Период = год.
-const SurveyPeriod = take(moment().format('YYYY-12-31 23:59:59'), size(DateTimeFormat)).join('');
+const SurveyPeriod = take(moment().format('YYYY-12-31 23:59:59'), size(DateFormat)).join('');
 
 // Лог загрузок.
 assert.ok(!('LoadLogSeries' in process.env), 'No LOADLOG_SERIES in env');
@@ -318,8 +318,9 @@ async function save (survey, login, answers, ip)
       user_uuid: login,
       period: SurveyPeriod
     };
-    const [ { DataSet } ] = await query(ModelCode, seriesCode, conditions);
-    const found = !!size(DataSet.Group[0].Series[0]);
+    // const [ { DataSet } ] = await query(ModelCode, seriesCode, conditions);
+    // const found = !!size(DataSet.Group[0].Series[0]);
+    const found = false; // FIXME!
 
     const record = {
       user_uuid: login,
@@ -358,7 +359,7 @@ async function save (survey, login, answers, ip)
       rowId = await insertRow(ModelCode, seriesCode, record);
       assert.strictEqual(rowId >= 1, true, `Bad rowId ${rowId}`); // TODO!
     } else {
-      console.debug('...', DataSet); // FIXME!
+      // console.debug('...', DataSet); // FIXME!
       assert.strictEqual(rowId >= 1, true, `Bad rowId ${rowId}`);
       console.debug('dwh', 'save', 'updateRow', ModelCode, seriesCode, rowId, size(record));
       await updateRow(ModelCode, seriesCode, rowId, record);
