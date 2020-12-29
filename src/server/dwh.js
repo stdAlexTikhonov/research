@@ -20,6 +20,7 @@ const {
   result,
   size,
   sortBy,
+  take,
   without,
 } = require('lodash');
 
@@ -64,7 +65,7 @@ const DateFormat = process.env.DATE_FORMAT;
 assert.ok(DateFormat, 'No DATE_FORMAT in env');
 
 // Период = год.
-const SurveyPeriod = moment().format('YYYY-12-31');
+const SurveyPeriod = take(moment().format('YYYY-12-31 23:59:59'), size(DateTimeFormat)).join('');
 
 // Лог загрузок.
 assert.ok(!('LoadLogSeries' in process.env), 'No LOADLOG_SERIES in env');
