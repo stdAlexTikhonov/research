@@ -20,19 +20,13 @@ DWH_WSDL_PATH := $(shell awk '/^DWH_WSDL_PATH/{gsub(/^[^=]+=/,"");print;exit}' .
 DWH_WSDL_URL := $(shell awk '/^DWH_WSDL_URL/{gsub(/^[^=]+=/,"");print;exit}' .env)$(PORTAL_SESSION_PARAM_ADD)
 DWH_WSDL_DOMAIN := $(shell awk -F"=" '!/^DWH_WSDL_URL/{next}{print $$2}' .env | awk -F"[:/]" '{printf "%s",$$4}')
 DWH_WSDL_PROTOCOL := $(shell awk -F"=" '!/^DWH_WSDL_URL/{next}{print $$2}' .env | awk -F"[:/]" '{printf "%s",$$1}')
-DWH_XSD_NAME := $(notdir $(DWH_WSDL_PATH)).xsd
-DWH_XSD_PATH := $(dir $(DWH_WSDL_PATH))$(DWH_XSD_NAME)
 
 # Скачивает SOAP WSDL файл сервиса ХД.
 $(DWH_WSDL_PATH): package.json
-	XML=$$(wget -qO- "$(DWH_WSDL_URL)" \
+	wget -qO- "$(DWH_WSDL_URL)" \
  | sed -Ee 's@https?://$(DWH_WSDL_DOMAIN)/([^/]+)/+@$(DWH_WSDL_PROTOCOL)://$(DWH_WSDL_DOMAIN)/\1/@g' \
- | awk '/wsdlsoap:address\s+location/{gsub(/"\s+\/>/,"$(PORTAL_SESSION_PARAM_GET)\" />");print;next}{print}') \
- && XSD=$$(echo "$${XML}" \
- | awk '/schemaLocation/{gsub(/.+schemaLocation=.|".+/,"");printf "%s$(PORTAL_SESSION_PARAM_ADD)",$$0;exit}') \
- && wget -qO- "$${XSD}" > "$(DWH_XSD_PATH)" \
- && echo "$${XML}" \
- | awk '/schemaLocation/{gsub(/schemaLocation="[^"]+"/,"schemaLocation=\"./$(DWH_XSD_NAME)\"");print;next}{print}' \
+ | awk '/wsdlsoap:address\s+location/{gsub(/"\s+\/>/,"$(PORTAL_SESSION_PARAM_GET)\" />");print;next}{print}' \
+ | sed -Ee 's@schemaLocation="[^"]+\.xsd"@schemaLocation="../config/SDMXGenericData.xsd")@' \
  > $@
 
 ################################################################
@@ -62,7 +56,7 @@ build: package-lock.json
 
 # Удаляет временные файлы.
 clean:
-	$(RM) -rf build/ $(DWH_WSDL_PATH) $(DWH_XSD_PATH)
+	$(RM) -rf build/ $(DWH_WSDL_PATH)
 
 # Удаляет установленные пакеты npm.
 clear: clean
