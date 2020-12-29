@@ -13,6 +13,7 @@ import Dialog from "@material-ui/core/Dialog";
 import { isMobile } from "../../utils/helpers";
 import { AGAIN_AND_AGAIN } from "../../utils/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -42,6 +43,7 @@ export const App: React.FC<Props> = () => {
   const [itogKeys, setItogKeys] = useState<string[] | null>(null);
   const [questionCode, setQuestionCode] = useState<string>("");
   const [direction, setDirection] = useState<number>(1);
+  const [questionary_code, setQuestionaryCode] = useState<string>("");
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -87,6 +89,7 @@ export const App: React.FC<Props> = () => {
 
   const handleData = (code: string) => {
     const year = localStorage.getItem(code);
+    setQuestionaryCode(code);
     if (year) setRefuse(true);
     else {
       const id = uuidv4();
@@ -117,6 +120,11 @@ export const App: React.FC<Props> = () => {
   };
 
   const [showCrumbs, setShowCrumbs] = useState(false);
+
+  const handleReset = () => {
+    localStorage.removeItem(questionary_code);
+    setRefuse(false);
+  };
 
   return (
     <Context.Provider
@@ -181,6 +189,12 @@ export const App: React.FC<Props> = () => {
         onClose={() => setRefuse(false)}
       >
         <DialogTitle id="simple-dialog-title">{AGAIN_AND_AGAIN}</DialogTitle>
+        <Button
+          onClick={handleReset}
+          style={{ margin: "auto", marginBottom: 5 }}
+        >
+          Сбросить
+        </Button>
       </Dialog>
     </Context.Provider>
   );
