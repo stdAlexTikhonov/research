@@ -30,15 +30,16 @@ export const Answer: React.FC<AnswerType> = ({
   }, [step, localKeys]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>): void => {
-          setUserInput(e.target.value);
+        const { value } = e.currentTarget;
+          setUserInput(value);
           setItog((prev: any) => ({
             ...prev,
             [questionCode]: {
               ...prev[questionCode],
-              other: e.target.value,
+              other: value,
             },
           }));
-        },[itog]);
+        },[questionCode, setItog]);
 
   const [userInput, setUserInput] = useState("");
   return user_input ? (
@@ -123,7 +124,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
         }));
       }
       setChecked(!checked_);
-    }, [itog]);
+    }, [checked_, itog, questionCode, setItog, setNextDsb, value]);
   
   const handleChangeText = useCallback((e: ChangeEvent<HTMLInputElement>): void => {
      setUserInput(e.target.value);
@@ -134,7 +135,7 @@ export const CheckboxAns: React.FC<AnswerType> = ({
               other: e.target.value,
             },
           }));
-  }, [itog])
+  }, [questionCode, setItog])
 
 
 
