@@ -3,6 +3,6 @@ export const BACK = "Назад";
 export const NEXT = "Далее";
 export const QUESTION = "Вопрос № ";
 export const TITLE = "Наименование";
-export const FINAL_TITLE = "Благодарим Вас за участие в опросе!";
+export const FINAL_TITLE = "Спасибо за участие в обследовании!";
 export const AGAIN_AND_AGAIN =
   "Вы уже заполняли анкету выбранного обследования!";

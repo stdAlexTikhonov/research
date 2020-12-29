@@ -12,14 +12,28 @@ MAKE := make
 TIME_STYLE := long-iso
 
 ################################################################
+PORTAL_SESSION=$(shell awk '/^PORTAL_SESSION/{gsub(/^[^=]+=/,"");print;exit}' .env)
+PORTAL_SESSION_PARAM=$(and $(PORTAL_SESSION),biservice_token=$(PORTAL_SESSION))
+PORTAL_SESSION_PARAM_ADD=$(and $(PORTAL_SESSION),&$(PORTAL_SESSION_PARAM))
+PORTAL_SESSION_PARAM_GET=$(and $(PORTAL_SESSION),?$(PORTAL_SESSION_PARAM))
 DWH_WSDL_PATH := $(shell awk '/^DWH_WSDL_PATH/{gsub(/^[^=]+=/,"");print;exit}' .env)
-DWH_WSDL_URL := $(shell awk '/^DWH_WSDL_URL/{gsub(/^[^=]+=/,"");print;exit}' .env)
+DWH_WSDL_URL := $(shell awk '/^DWH_WSDL_URL/{gsub(/^[^=]+=/,"");print;exit}' .env)$(PORTAL_SESSION_PARAM_ADD)
 DWH_WSDL_DOMAIN := $(shell awk -F"=" '!/^DWH_WSDL_URL/{next}{print $$2}' .env | awk -F"[:/]" '{printf "%s",$$4}')
 DWH_WSDL_PROTOCOL := $(shell awk -F"=" '!/^DWH_WSDL_URL/{next}{print $$2}' .env | awk -F"[:/]" '{printf "%s",$$1}')
+DWH_XSD_NAME := $(notdir $(DWH_WSDL_PATH)).xsd
+DWH_XSD_PATH := $(dir $(DWH_WSDL_PATH))$(DWH_XSD_NAME)
 
 # Скачивает SOAP WSDL файл сервиса ХД.
 $(DWH_WSDL_PATH): package.json
-	wget -qO- "$(DWH_WSDL_URL)" | sed -Ee 's@https?://$(DWH_WSDL_DOMAIN)/([^/]+)/+@$(DWH_WSDL_PROTOCOL)://$(DWH_WSDL_DOMAIN)/\1/@g' > $@
+	XML=$$(wget -qO- "$(DWH_WSDL_URL)" \
+ | sed -Ee 's@https?://$(DWH_WSDL_DOMAIN)/([^/]+)/+@$(DWH_WSDL_PROTOCOL)://$(DWH_WSDL_DOMAIN)/\1/@g' \
+ | awk '/wsdlsoap:address\s+location/{gsub(/"\s+\/>/,"$(PORTAL_SESSION_PARAM_GET)\" />");print;next}{print}') \
+ && XSD=$$(echo "$${XML}" \
+ | awk '/schemaLocation/{gsub(/.+schemaLocation=.|".+/,"");printf "%s$(PORTAL_SESSION_PARAM_ADD)",$$0;exit}') \
+ && wget -qO- "$${XSD}" > "$(DWH_XSD_PATH)" \
+ && echo "$${XML}" \
+ | awk '/schemaLocation/{gsub(/schemaLocation="[^"]+"/,"schemaLocation=\"./$(DWH_XSD_NAME)\"");print;next}{print}' \
+ > $@
 
 ################################################################
 # Скачивает и устанавливает зависимости.
@@ -31,20 +45,24 @@ package-lock.json: node_modules/
 package.json: .env build/ data/
 
 ###############################################################
+# Показывает настройки.
 env: .env
 	@ env -i "$$(sed -En '\/^[^=#]+=.*/p' $<)" printenv | tr -s [:space:]
 
+# Показывает версии.
 version: .env
 	@ npm version | awk -F"[{:\"' \t}]+" '$$3 { printf "%s\t%s\n", $$2, $$3 }'
 
+# Установка зависимостей.
 install: package-lock.json $(DWH_WSDL_PATH)
 
+# Сборка фронтенда.
 build: package-lock.json
 	npm run build
 
 # Удаляет временные файлы.
 clean:
-	$(RM) -rf build/ $(DWH_WSDL_PATH)
+	$(RM) -rf build/ $(DWH_WSDL_PATH) $(DWH_XSD_PATH)
 
 # Удаляет установленные пакеты npm.
 clear: clean
