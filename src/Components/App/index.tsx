@@ -12,6 +12,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { isMobile } from "../../utils/helpers";
 import { AGAIN_AND_AGAIN } from "../../utils/constants";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -146,7 +147,7 @@ export const App: React.FC<Props> = () => {
         setDirection,
       }}
     >
-      {data && (
+      {data ? (
         <div className={classes.root}>
           {/* <Header /> */}
 
@@ -166,8 +167,14 @@ export const App: React.FC<Props> = () => {
           </div>
           {keys && <Controls setStep={setStep} len={keys.length} />}
         </div>
+      ) : list.length > 0 ? (
+        <CustomList list={list} handleData={handleData} />
+      ) : (
+        <div className={classes.loader}>
+          <CircularProgress />
+        </div>
       )}
-      {list.length > 0 && <CustomList list={list} handleData={handleData} />}
+
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={refuse}

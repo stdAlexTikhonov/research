@@ -29,5 +29,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       paddingLeft: 20,
     },
+    loader: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "100%",
+      height: "100%",
+    },
   })
 );
