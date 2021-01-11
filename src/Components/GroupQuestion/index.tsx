@@ -47,7 +47,9 @@ export const GroupQuestion = () => {
     //   (item: any) => item.code === question_group
     // );
     // setQuestion(question_data);
-    const disable = transformed.some((item: any) => !itog[item.code].answers);
+    const disable = transformed
+      .filter((item: any) => item.should_show)
+      .some((item: any) => !itog[item.code].answers);
     setNextDsb(disable);
 
     // localStorage.setItem(`${keys![step]}`, JSON.stringify(questions_));
