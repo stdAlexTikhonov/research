@@ -100,7 +100,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 #### Пример запроса ####
 
-    curl -kLs -H 'Content-Type: application/json' 'localhost:3000/api/load/?code=satisfaction_of_users_with_official_stat_inform'
+    curl -kLs -H 'Content-Type: application/json' 'localhost:3000/api/load/?code=satisfaction'
 
 #### Параметр ####
 
@@ -110,7 +110,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ```json
 {
-    "code": "satisfaction_of_users_with_official_stat_inform",
+    "code": "satisfaction",
     "caption": "Удовлетворенность пользователей официальной статистической информацией...",
     "Questionary": [
         {
@@ -164,7 +164,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
     ],
     "References": {
         "question_groups": {
-            "code": "satisfaction_of_users_with_official_stat_inform_groupref",
+            "code": "satisfaction_groupref",
             "caption": "Удовлетворенность пользователей...",
             "question_groups": true,
             "Reference": [
