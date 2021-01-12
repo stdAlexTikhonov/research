@@ -10,7 +10,7 @@
 //
 // (2) Run as an Administrator:
 //
-//     node windows-service.js
+//     node windows-install.js
 //
 // More commands:
 //

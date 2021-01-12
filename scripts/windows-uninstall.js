@@ -1,7 +1,7 @@
 /*global __dirname,require,process*/
 'use strict';
 
-// Read more in ./windows-service.js
+// Read more in ./windows-install.js
 const ServiceName = 'Survey WebApp';
 const ScriptPath = require('path').join(__dirname, 'server.js');
 
