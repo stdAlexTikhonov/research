@@ -323,7 +323,7 @@ async function save (survey, login, answers, ip)
 
     const record = {
       user_uuid: login,
-      ip: ip,
+      // ip: ip,
       period: SurveyPeriod,
       end_date: moment().format(DateTimeFormat),
     };
