@@ -32,6 +32,10 @@ app.use(cors());
 // Узнаем IP даже за прокси (https://stackoverflow.com/a/14631683).
 app.set('trust proxy', true);
 
+// Прокси.
+const proxy = require('../setupProxy');
+proxy(app);
+
 const EnvName = process.env.NODE_ENV;
 assert.ok(EnvName, 'No NODE_ENV in env');
 
