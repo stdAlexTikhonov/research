@@ -7,8 +7,9 @@ const assert = require('assert').strict;
 
 const express = require('express');
 const app = express();
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
-const cors = require("cors");
+const cors = require('cors');
 
 const page = express.Router();
 const api = express.Router();
@@ -25,7 +26,8 @@ const { now } = require('./lib');
 const {
   loadlog,
   save, load, list,
-  SurveyCode } = require('./dwh');
+  SurveyCode
+} = require('./dwh');
 
 app.use(cors());
 
@@ -44,6 +46,22 @@ const logger = (req, res, next) => {
   next();
 };
 app.use(logger);
+
+// Проксируем обращения к `/biportal`.
+const PortalFromUrl = process.env.PORTAL_PROXY_PATH || null;
+const PortalToUrl = process.env.PORTAL_PROXY_TARGET || null;
+const enablePortalProxy = !!PortalFromUrl && !!PortalToUrl;
+if (enablePortalProxy) {
+  console.debug('portalProxy', PortalFromUrl, '->', PortalToUrl);
+  const portalProxy = createProxyMiddleware({
+    target: PortalToUrl,
+    changeOrigin: true,
+    pathRewrite: {
+      ['^'+PortalFromUrl]: '/'
+    }
+  });
+  app.use(PortalFromUrl, portalProxy);
+}
 
 // Статика.
 const RootDir = path.join(__dirname, '../..');
