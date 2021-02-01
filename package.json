@@ -1,6 +1,6 @@
 {
   "name": "survey",
-  "version": "0.2.24",
+  "version": "0.2.25",
   "private": true,
   "description": "Обследования",
   "author": "Contour Components",
@@ -8,6 +8,10 @@
     "Alexander Tikhonov <alexandert@contourcomponents.com>",
     "Sergey Mikhaylov <sergeym@contourcomponents.com>"
   ],
+  "repository": {
+    "type": "git",
+    "url": "http://git.contourbi.ru/gks/survey"
+  },
   "license": "UNLICENSED",
   "dependencies": {
     "@material-ui/core": "^4.11.2",
