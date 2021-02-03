@@ -130,6 +130,7 @@ export const App: React.FC<Props> = () => {
   };
 
   const handleCurrentReset = () => {
+    setStep(0);
     setData(null);
     localStorage.removeItem("step_" + uuid);
     localStorage.removeItem("itog_" + uuid);
