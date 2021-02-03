@@ -11,6 +11,7 @@ const {
   head,
   isArray,
   isEmpty,
+  isFinite,
   isObject,
   keys,
   map,
@@ -21,6 +22,8 @@ const {
   size,
   sortBy,
   take,
+  toString,
+  toNumber,
   without,
 } = require('lodash');
 
@@ -300,6 +303,18 @@ async function list ()
   }
 }
 
+// Валидные ответы: 0, 1, "0", "1".
+// Невалидные ответы: "", "null", null.
+// TODO: Не отправлять ответы строками.
+function isAnswer (x)
+{
+  let v = toString(x);
+  if (!size(v)) return false;
+  v = toNumber(v);
+  if (!isFinite(v)) return false;
+  return true;
+}
+
 // Сохраняет Анкету в DWH.
 const QuestionPrefix = 'q_';
 const AnswerSuffix = '_a_';
@@ -312,7 +327,7 @@ async function save (survey, login, answers, ip)
     assert.ok(answers, 'No answers');
     const seriesCode = survey + SeriesSuffix;
     console.debug('dwh', 'save', ModelCode, survey, seriesCode, login, size(answers), ip);
-    // console.debug('dwh', 'save',  size(answers), JSON.stringify(data, null, 4));
+    // console.debug('dwh', 'save',  size(answers), JSON.stringify(answers, null, 4));
     const conditions = {
       user_uuid: login,
       period: SurveyPeriod
@@ -331,20 +346,18 @@ async function save (survey, login, answers, ip)
     for (let code in answers) {
       const info = answers[code];
       let key = QuestionPrefix + code;
-      // TODO: Узнавать множественновть по Опроснику вместо проверки массив/число.
-      if (isArray(info.answers)) {
-        info.answers = compact(info.answers);
-        // let n = 0;
+      // TODO: Узнавать множественность по настройкам вместо проверки массив/число.
+      if (isArray(info.answers)) { // Несколько ответов.
+        info.answers = info.answers.filter(isAnswer);
         for (let answer of info.answers) {
-          // ++n;
           const v = +answer
           const k = key + AnswerSuffix + v;
           record[k] = v;
         }
-      } else {
-        const a = +info.answers;
-        if (!!a) {
-          record[key] = a;
+      } else { // Один ответ.
+        const a = info.answers;
+        if (isAnswer(a)) {
+          record[key] = +a;
         }
       }
       if (!!info.other) {
