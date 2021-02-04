@@ -11,11 +11,13 @@ import { CustomList } from "../CustomList";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { isMobile } from "../../utils/helpers";
-import { AGAIN_AND_AGAIN } from "../../utils/constants";
+import { AGAIN_AND_AGAIN, FORM_RESET_BUTTON } from "../../utils/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import { Header } from "../Header";
+
+const allowReset = process.env.REACT_APP_SURVEY_RESET || false;
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -174,20 +176,19 @@ export const App: React.FC<Props> = ({ showHeader }) => {
       ) : data ? (
         <div className={classes.root}>
           {showHeader && <Header />}
-          <Button
+          {allowReset && (<Button
             onClick={handleCurrentReset}
             size={"small"}
             className={classes.reset}
             style={{
-              textTransform: "lowercase",
-              marginLeft: 5,
-              marginBottom: 0,
-              marginTop: 5,
-            }}
-          >
-            <CancelOutlinedIcon style={{ marginRight: 10 }} /> Отменить
-            прохождение
-          </Button>
+                textTransform: "lowercase",
+                marginLeft: 5,
+                marginBottom: 0,
+                marginTop: 5,
+            }}>
+              <CancelOutlinedIcon style={{ marginRight: 10 }} />
+              {FORM_RESET_BUTTON}
+            </Button>)}
 
           {!isMobile && (
             <Typography

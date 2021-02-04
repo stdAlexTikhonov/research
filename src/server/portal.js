@@ -4,13 +4,9 @@
 const assert = require('assert').strict;
 const fs = require('fs');
 const path = require('path');
-
-const {
-  //  partial,
-  isEmpty,
-} = require('lodash');
-
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const axios = require('axios');
+const { isEmpty} = require('lodash');
 
 // API Портала.
 assert.strictEqual('PORTAL_API' in process.env, true, 'No PORTAL_API in env');
@@ -23,12 +19,16 @@ const PortalLogin = process.env.PORTAL_LOGIN;
 // Пароль администратора Портала.
 assert.strictEqual('PORTAL_PASSWORD' in process.env, true, 'No PORTAL_PASSWORD in env');
 const PortalPassword = process.env.PORTAL_PASSWORD;
-
 let PortalSession = process.env.PORTAL_SESSION || null;
+
+assert.strictEqual('PORTAL_PROXY_PATH' in process.env, true, 'No PORTAL_PROXY_PATH in env');
+const PortalFromUrl = process.env.PORTAL_PROXY_PATH || null;
+assert.strictEqual('PORTAL_PROXY_TARGET' in process.env, true, 'No PORTAL_PROXY_TARGET in env');
+const PortalToUrl = process.env.PORTAL_PROXY_TARGET || null;
+const PortalProxyEnabled = !!PortalFromUrl && !!PortalToUrl;
 
 const TrailingSpace = /^\s|\s$/;
 const TokenFormat = /^[{][a-f0-9-]{36}[}]$/;
-
 function verify (token) {
     if (!token) throw new Error('No token');
     if (!TokenFormat.test(token)) throw new Error('Invalid token');
@@ -102,6 +102,22 @@ async function admin (method, data)
   return await request(method, session, data);
 }
 
+// Проксируем обращения к `/biportal`.
+function portalProxy (app)
+{
+  if (!PortalProxyEnabled) return void !!PortalFromUrl && console.warn('portalProxy', PortalFromUrl);
+  else console.debug('portalProxy', PortalFromUrl, '->', PortalToUrl);
+  const portalProxyConfig = createProxyMiddleware({
+    target: PortalToUrl,
+    changeOrigin: true,
+    pathRewrite: {
+      ['^'+PortalFromUrl]: '/'
+    }
+  });
+  app.use(PortalFromUrl, portalProxyConfig);
+}
+
 module.exports = {
-  admin
+  admin,
+  portalProxy,
 };

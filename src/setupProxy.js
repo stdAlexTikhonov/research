@@ -3,6 +3,8 @@
 'use strict';
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
+// Перенаправление запросов API.
+// See also `portalProxy` in `./server/portal.js`.
 module.exports = function (app)
 {
   app.use(
