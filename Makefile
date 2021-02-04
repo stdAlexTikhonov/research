@@ -30,6 +30,10 @@ $(DWH_WSDL_PATH): package.json
  > $@
 
 ################################################################
+# Создает файл настроек.
+.env: config/.env.example
+	test -f $@ || cp -pun $< $@
+
 # Скачивает и устанавливает зависимости.
 node_modules/: package.json
 	test -d $@ && npm update || npm install

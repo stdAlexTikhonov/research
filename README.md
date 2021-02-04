@@ -5,6 +5,8 @@ Web-интерфейс для заполнения *Анкет*.
 ## Настройки ##
 
 Все настройки определяются в файле [.env](./.env).
+Он не хранится в репозитории.
+Его нужно скопировать из [заготовки](./config/.env.example).
 
 Используемые библиотеки определены в файле [package.json](./package.json).
 
@@ -112,6 +114,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 {
     "code": "satisfaction",
     "caption": "Удовлетворенность пользователей официальной статистической информацией...",
+    "enabled": true,
     "Questionary": [
         {
             "code": "v1",
@@ -218,10 +221,11 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 #### Примечания ####
 
-*Опросный лист* состоит из четырех полей:
+*Опросный лист* состоит из пяти полей:
 
 * `code` строчный код *Обследования*,
 * `caption` название *Обследования*,
+* `enabled` флаг для включения/отключения *Обследования*.
 * `Questionary` список вопросов в порядке их показа,
 * `References` справочники вариантов ответов.
 
@@ -282,7 +286,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 ```json
 {
     "survey": "satisfaction",
-    "respondent": "name@example.com",
+    "respondent": "efdaf292-671a-11eb-a279-33407e27f3ba",
     "answers": {
         "v1": { "answers": 1, "other": null },
         "v2": { "answers": [ 2, 3 ], "other": null },

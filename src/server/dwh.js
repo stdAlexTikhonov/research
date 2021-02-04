@@ -56,6 +56,11 @@ assert.ok(ModelCode, 'No MODEL_CODE in env');
 const SurveyCode = process.env.SURVEY_CODE;
 assert.ok(SurveyCode, 'No SURVEY_CODE in env');
 
+// Обследования включены.
+assert.strictEqual('SURVEY_ENABLED' in process.env, true, 'No SURVEY_ENABLED in env');
+const SurveyEnabled = !isEmpty(process.env.SURVEY_ENABLED) || true;
+if (!SurveyEnabled) console.warn('SURVEY_ENABLED', SurveyEnabled);
+
 // Добавляется к коду обследования.
 const SeriesSuffix = process.env.SERIES_SUFFIX;
 assert.ok(SeriesSuffix, 'No SERIES_SUFFIX in env');
@@ -280,6 +285,7 @@ async function load (survey)
     form.Questionary = map(sortBy(qs, QSortKey), (record) => omit(record, QOmitKeys));
     form.References = rs;
     console.debug('dwh', 'load', size(form.Questionary), '(' + keys(form).join(', ') + ')');
+    form.enabled = SurveyEnabled;
     return form;
   } catch (fail) {
     return warning('load', fail);
@@ -298,7 +304,7 @@ async function list ()
       return {
         code,
         caption,
-        enabled: true
+        enabled: SurveyEnabled,
       };
     });
     return found;
@@ -326,6 +332,7 @@ const OtherSuffix = '_other';
 async function save (survey, login, answers, ip)
 {
   try {
+    assert.strictEqual(SurveyEnabled, true, 'SURVEY_ENABLED is OFF');
     assert.ok(survey, 'No survey');
     assert.ok(login, 'No login');
     assert.ok(answers, 'No answers');
