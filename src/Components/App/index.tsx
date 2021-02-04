@@ -15,6 +15,7 @@ import { AGAIN_AND_AGAIN } from "../../utils/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
+import { Header } from "../Header";
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -27,7 +28,7 @@ const setInitialData = (datum: any) =>
     return result;
   }, {});
 
-export const App: React.FC<Props> = () => {
+export const App: React.FC<Props> = ({ showHeader }) => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
   const [data, setData] = useState<any>(null);
@@ -172,7 +173,7 @@ export const App: React.FC<Props> = () => {
         <CustomList list={list} handleData={handleData} />
       ) : data ? (
         <div className={classes.root}>
-          {/* <Header /> */}
+          {showHeader && <Header />}
           <Button
             onClick={handleCurrentReset}
             size={"small"}
