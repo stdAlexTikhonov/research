@@ -8,7 +8,7 @@ Web-интерфейс для заполнения *Анкет*.
 
 Используемые библиотеки определены в файле [package.json](./package.json).
 
-Каталог `data/` и сторонние библиотеки не хранятся в [репозитории](.git/).
+Каталог `data/` и сторонние библиотеки не хранятся в [репозитории](http://git.contourbi.ru/gks/survey).
 
 ## Зависимости ##
 
@@ -92,7 +92,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 #### Ответ ####
 
-Ответ содержит массив объектов с ключами `code` и `caption`.
+Ответ содержит массив объектов с ключами `code`, `caption`, и `enabled`.
 
 ### GET /api/load ###
 
@@ -290,7 +290,3 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
     }
 }
 ```
-
-## Ссылки ##
-
-To learn React, check out the [React documentation](https://reactjs.org/).

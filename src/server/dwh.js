@@ -295,7 +295,11 @@ async function list ()
     console.debug('dwh', 'list', 'getList', size(item));
     const found = item.map((record) => {
       const { code, caption } = record.$;
-      return { code, caption };
+      return {
+        code,
+        caption,
+        enabled: true
+      };
     });
     return found;
   } catch (fail) {
