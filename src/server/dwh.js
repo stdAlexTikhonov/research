@@ -37,6 +37,11 @@ const { parseStringPromise } = require('xml2js');
 
 // const { admin } = require('./portal');
 
+// Обследования включены.
+assert.strictEqual('SURVEY_ENABLED' in process.env, true, 'No SURVEY_ENABLED in env');
+const SurveyEnabled = !isEmpty(process.env.SURVEY_ENABLED);
+console.debug('SURVEY_ENABLED\t%s', SurveyEnabled ? 'ON' : 'OFF');
+
 // XML описания сервиса Хранилища.
 assert.strictEqual('DWH_WSDL_PATH' in process.env, true, 'No DWH_WSDL_PATH in env');
 const DwhWsdlPath = process.env.DWH_WSDL_PATH;
@@ -222,6 +227,7 @@ async function query (modelCode, seriesCode, conditions)
   return await client.queryAsync(request);
 }
 
+const OtherTextDefault = 'Другое (уточните)'; // TODO: В конфиг.
 const QSortKey = 'sort_order';
 const QuestionaryType = 'Questionary';
 const QIntKeys = [ 'action_id', QSortKey, 'condition', 'question_num', 'question_group', 'default_value' ];
@@ -235,8 +241,8 @@ const GroupRefCode = 'question_groups';
 // Загружает Опросный лист из DWH.
 async function load (survey)
 {
-  assert.ok(survey, 'No survey');
   try {
+    assert.ok(survey, 'No survey');
     console.debug('dwh', 'load', 'queryExtendedData', ModelCode, survey);
     const { Questionaries, References } = await queryExtendedData(ModelCode, QuestionaryType, survey);
     const questions = result(Questionaries, [ 0, QuestionaryType, 0 ]);
@@ -250,7 +256,7 @@ async function load (survey)
         delete record.multiply_values;
       }
       if (!!record.other_allowed) {
-        record.other_text = 'Другое (уточните)'; // TODO: В конфиг.
+        record.other_text = OtherTextDefault;
         if (!!record.other_caption) {
           record.other_text = record.other_caption;
           delete record.other_caption; // TODO: Оставить только caption.
@@ -279,6 +285,7 @@ async function load (survey)
     }
     form.Questionary = map(sortBy(qs, QSortKey), (record) => omit(record, QOmitKeys));
     form.References = rs;
+    form.enabled = SurveyEnabled;
     console.debug('dwh', 'load', size(form.Questionary), '(' + keys(form).join(', ') + ')');
     return form;
   } catch (fail) {
@@ -290,12 +297,16 @@ async function load (survey)
 async function list ()
 {
   try {
-    console.debug('dwh', 'list', ModelCode);
+    console.debug('dwh', 'list', ModelCode, SurveyEnabled);
     const { item } = await getList(ModelCode, QuestionaryType);
     console.debug('dwh', 'list', 'getList', size(item));
     const found = item.map((record) => {
       const { code, caption } = record.$;
-      return { code, caption };
+      return {
+        code,
+        caption,
+        enabled: SurveyEnabled,
+      };
     });
     return found;
   } catch (fail) {
@@ -322,6 +333,7 @@ const OtherSuffix = '_other';
 async function save (survey, login, answers, ip)
 {
   try {
+    assert.strictEqual(SurveyEnabled, true, 'SURVEY_ENABLED is OFF');
     assert.ok(survey, 'No survey');
     assert.ok(login, 'No login');
     assert.ok(answers, 'No answers');
@@ -386,9 +398,8 @@ async function save (survey, login, answers, ip)
 // Журнал загрузки данных.
 async function loadlog ()
 {
-  if (isEmpty(LoadLogSeries))
-    return void console.warn('LoadLogSeries is empty');
-  console.debug('dwh', 'loadlog', 'query', LoadLogSeries);
+  if (isEmpty(LoadLogSeries)) return void console.warn('LoadLogSeries is empty');
+  else console.debug('dwh', 'loadlog', 'query', LoadLogSeries);
   const [ , xml ] = await query(ModelCode, LoadLogSeries, []);
   const response = await parseStringPromise(xml);
   const SubNs = 'ns2';
@@ -407,7 +418,7 @@ async function loadlog ()
 }
 
 module.exports = {
-  SurveyCode,
+  SurveyCode, SurveyEnabled,
   list, load, save,
   loadlog,
 };

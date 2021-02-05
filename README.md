@@ -5,10 +5,12 @@ Web-интерфейс для заполнения *Анкет*.
 ## Настройки ##
 
 Все настройки определяются в файле [.env](./.env).
+Он не хранится в репозитории.
+Его нужно скопировать из [заготовки](./config/.env.example).
 
 Используемые библиотеки определены в файле [package.json](./package.json).
 
-Каталог `data/` и сторонние библиотеки не хранятся в [репозитории](.git/).
+Каталог `data/` и сторонние библиотеки не хранятся в [репозитории](http://git.contourbi.ru/gks/survey).
 
 ## Зависимости ##
 
@@ -92,7 +94,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 #### Ответ ####
 
-Ответ содержит массив объектов с ключами `code` и `caption`.
+Ответ содержит массив объектов с ключами `code`, `caption`, и `enabled`.
 
 ### GET /api/load ###
 
@@ -112,6 +114,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 {
     "code": "satisfaction",
     "caption": "Удовлетворенность пользователей официальной статистической информацией...",
+    "enabled": true,
     "Questionary": [
         {
             "code": "v1",
@@ -218,10 +221,11 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 #### Примечания ####
 
-*Опросный лист* состоит из четырех полей:
+*Опросный лист* состоит из пяти полей:
 
 * `code` строчный код *Обследования*,
 * `caption` название *Обследования*,
+* `enabled` флаг для включения/отключения *Обследования*.
 * `Questionary` список вопросов в порядке их показа,
 * `References` справочники вариантов ответов.
 
@@ -282,7 +286,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 ```json
 {
     "survey": "satisfaction",
-    "respondent": "name@example.com",
+    "respondent": "efdaf292-671a-11eb-a279-33407e27f3ba",
     "answers": {
         "v1": { "answers": 1, "other": null },
         "v2": { "answers": [ 2, 3 ], "other": null },
@@ -290,7 +294,3 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
     }
 }
 ```
-
-## Ссылки ##
-
-To learn React, check out the [React documentation](https://reactjs.org/).

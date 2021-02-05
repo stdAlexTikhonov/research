@@ -7,7 +7,6 @@ const assert = require('assert').strict;
 
 const express = require('express');
 const app = express();
-const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const cors = require('cors');
 
@@ -26,8 +25,10 @@ const { now } = require('./lib');
 const {
   loadlog,
   save, load, list,
-  SurveyCode
+  SurveyCode,
 } = require('./dwh');
+
+const { portalProxy } = require('./portal');
 
 app.use(cors());
 
@@ -36,7 +37,6 @@ app.set('trust proxy', true);
 
 const EnvName = process.env.NODE_ENV;
 assert.ok(EnvName, 'No NODE_ENV in env');
-
 const AppName = process.env.REACT_APP_NAME || 'survey';
 const AppVersion = process.env.REACT_APP_VERSION || 'unknown';
 const AppLabel = `${AppName}@${AppVersion}`;
@@ -48,20 +48,7 @@ const logger = (req, res, next) => {
 app.use(logger);
 
 // Проксируем обращения к `/biportal`.
-const PortalFromUrl = process.env.PORTAL_PROXY_PATH || null;
-const PortalToUrl = process.env.PORTAL_PROXY_TARGET || null;
-const enablePortalProxy = !!PortalFromUrl && !!PortalToUrl;
-if (enablePortalProxy) {
-  console.debug('portalProxy', PortalFromUrl, '->', PortalToUrl);
-  const portalProxy = createProxyMiddleware({
-    target: PortalToUrl,
-    changeOrigin: true,
-    pathRewrite: {
-      ['^'+PortalFromUrl]: '/'
-    }
-  });
-  app.use(PortalFromUrl, portalProxy);
-}
+portalProxy(app);
 
 // Статика.
 const RootDir = path.join(__dirname, '../..');
@@ -106,7 +93,10 @@ api.use(express.json());
 // Сохраняет Анкету.
 api.post('/save', async (req, res) => {
   try {
-    const data = await save(req.body.survey, req.body.respondent, req.body.answers, req.ip);
+    const data = await save(req.body.survey,
+                            req.body.respondent,
+                            req.body.answers,
+                            req.ip);
     res.json(data);
     console.debug('api', 'save', 'done', size(data));
   } catch (fail) {
@@ -168,7 +158,7 @@ const PageSlug = /^\/?[a-z0-9_-]*\/?$/i;
 page.get(PageSlug, frontend);
 app.use(page);
 
-// Стартуем сервер
+// Стартуем сервер.
 const PortNum = +process.env.HTTP_PORT;
 assert.strictEqual(PortNum >= 80, true, 'No HTTP_PORT in env');
 app.listen(PortNum, () => console.info(

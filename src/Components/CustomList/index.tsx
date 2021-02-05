@@ -43,6 +43,7 @@ export const CustomList: React.FC<{
               key={item.code}
               button
               onClick={() => handleData(item.code)}
+              disabled={!item.enabled}
             >
               <ListItemIcon>
                 <InboxIcon />

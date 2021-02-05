@@ -9,6 +9,7 @@ ReactDOM.render(
     name={process.env.REACT_APP_NAME}
     version={process.env.REACT_APP_VERSION}
     env={process.env.NODE_ENV}
+    showHeader={!!process.env.REACT_APP_SURVEY_HEADER}
   />,
   document.getElementById("root")
 );

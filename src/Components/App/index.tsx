@@ -11,10 +11,14 @@ import { CustomList } from "../CustomList";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { isMobile } from "../../utils/helpers";
-import { AGAIN_AND_AGAIN } from "../../utils/constants";
+import { AGAIN_AND_AGAIN, FORM_RESET_BUTTON, SENT_RESET_BUTTON } from "../../utils/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
+import { Header } from "../Header";
+
+const doAllowReset = !!(process.env.REACT_APP_SURVEY_RESET || '');
+// console.debug('doAllowReset', doAllowReset, process.env.REACT_APP_SURVEY_RESET);
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -27,7 +31,7 @@ const setInitialData = (datum: any) =>
     return result;
   }, {});
 
-export const App: React.FC<Props> = () => {
+export const App: React.FC<Props> = ({ showHeader }) => {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
   const [data, setData] = useState<any>(null);
@@ -46,6 +50,7 @@ export const App: React.FC<Props> = () => {
   const [direction, setDirection] = useState<number>(1);
   const [questionary_code, setQuestionaryCode] = useState<string>("");
   const [reset, setReset] = useState<boolean>(false);
+  const [allowReset,] = useState<boolean>(doAllowReset);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -172,21 +177,20 @@ export const App: React.FC<Props> = () => {
         <CustomList list={list} handleData={handleData} />
       ) : data ? (
         <div className={classes.root}>
-          {/* <Header /> */}
-          <Button
+          {showHeader && <Header />}
+          {allowReset && (<Button
             onClick={handleCurrentReset}
             size={"small"}
             className={classes.reset}
             style={{
-              textTransform: "lowercase",
-              marginLeft: 5,
-              marginBottom: 0,
-              marginTop: 5,
-            }}
-          >
-            <CancelOutlinedIcon style={{ marginRight: 10 }} /> Отменить
-            прохождение
-          </Button>
+                textTransform: "lowercase",
+                marginLeft: 5,
+                marginBottom: 0,
+                marginTop: 5,
+            }}>
+              <CancelOutlinedIcon style={{ marginRight: 10 }} />
+              {FORM_RESET_BUTTON}
+            </Button>)}
 
           {!isMobile && (
             <Typography
@@ -210,9 +214,9 @@ export const App: React.FC<Props> = () => {
           {keys && <Controls setStep={setStep} len={keys.length} />}
         </div>
       ) : (
-        <div className={classes.loader}>
-          <CircularProgress />
-        </div>
+          <div className={classes.loader}>
+            <CircularProgress style={{ margin: "3em" }} />
+          </div>
       )}
 
       <Dialog
@@ -221,12 +225,13 @@ export const App: React.FC<Props> = () => {
         onClose={() => setRefuse(false)}
       >
         <DialogTitle id="simple-dialog-title">{AGAIN_AND_AGAIN}</DialogTitle>
+        {allowReset && (
         <Button
           onClick={handleReset}
           style={{ margin: "auto", marginBottom: 5 }}
-        >
-          Сбросить
-        </Button>
+          >
+          {SENT_RESET_BUTTON}
+              </Button>)}
       </Dialog>
     </Context.Provider>
   );
