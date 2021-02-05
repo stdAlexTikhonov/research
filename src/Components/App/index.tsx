@@ -6,18 +6,22 @@ import { BreadCrumbs } from "../BreadCrumbs";
 import { get, uuidv4, commonTransform } from "../../utils/api";
 import { Question } from "../Question";
 import { Props, ListItemProp } from "./type";
-import { Typography } from "@material-ui/core";
+import { DialogContent, Typography } from "@material-ui/core";
 import { CustomList } from "../CustomList";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { isMobile } from "../../utils/helpers";
-import { AGAIN_AND_AGAIN, FORM_RESET_BUTTON, SENT_RESET_BUTTON } from "../../utils/constants";
+import {
+  AGAIN_AND_AGAIN,
+  FORM_RESET_BUTTON,
+  SENT_RESET_BUTTON,
+} from "../../utils/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import { Header } from "../Header";
 
-const doAllowReset = !!(process.env.REACT_APP_SURVEY_RESET || '');
+const doAllowReset = !!(process.env.REACT_APP_SURVEY_RESET || "");
 // console.debug('doAllowReset', doAllowReset, process.env.REACT_APP_SURVEY_RESET);
 
 const setInitialData = (datum: any) =>
@@ -50,7 +54,8 @@ export const App: React.FC<Props> = ({ showHeader }) => {
   const [direction, setDirection] = useState<number>(1);
   const [questionary_code, setQuestionaryCode] = useState<string>("");
   const [reset, setReset] = useState<boolean>(false);
-  const [allowReset,] = useState<boolean>(doAllowReset);
+  const [allowReset] = useState<boolean>(doAllowReset);
+  const [error, setError] = useState<boolean | string>(false);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -89,10 +94,22 @@ export const App: React.FC<Props> = ({ showHeader }) => {
       }
     } else {
       get("/api/list").then((data_local) => {
-        setList(data_local);
+        if (data_local.error) setError(data_local.message);
+        else setList(data_local);
       });
     }
   }, [reset]);
+
+  const tryAgain = () => {
+    setError(false);
+    const timeout = setTimeout(() => {
+      get("/api/list").then((data_local) => {
+        if (data_local.error) setError(data_local.message);
+        else setList(data_local);
+      });
+      clearTimeout(timeout);
+    }, 1000);
+  };
 
   const handleData = (code: string) => {
     const year = localStorage.getItem(code);
@@ -178,19 +195,22 @@ export const App: React.FC<Props> = ({ showHeader }) => {
       ) : data ? (
         <div className={classes.root}>
           {showHeader && <Header />}
-          {allowReset && (<Button
-            onClick={handleCurrentReset}
-            size={"small"}
-            className={classes.reset}
-            style={{
+          {allowReset && (
+            <Button
+              onClick={handleCurrentReset}
+              size={"small"}
+              className={classes.reset}
+              style={{
                 textTransform: "lowercase",
                 marginLeft: 5,
                 marginBottom: 0,
                 marginTop: 5,
-            }}>
+              }}
+            >
               <CancelOutlinedIcon style={{ marginRight: 10 }} />
               {FORM_RESET_BUTTON}
-            </Button>)}
+            </Button>
+          )}
 
           {!isMobile && (
             <Typography
@@ -214,9 +234,9 @@ export const App: React.FC<Props> = ({ showHeader }) => {
           {keys && <Controls setStep={setStep} len={keys.length} />}
         </div>
       ) : (
-          <div className={classes.loader}>
-            <CircularProgress style={{ margin: "3em" }} />
-          </div>
+        <div className={classes.loader}>
+          <CircularProgress style={{ margin: "3em" }} />
+        </div>
       )}
 
       <Dialog
@@ -226,12 +246,30 @@ export const App: React.FC<Props> = ({ showHeader }) => {
       >
         <DialogTitle id="simple-dialog-title">{AGAIN_AND_AGAIN}</DialogTitle>
         {allowReset && (
-        <Button
-          onClick={handleReset}
-          style={{ margin: "auto", marginBottom: 5 }}
+          <Button
+            onClick={handleReset}
+            style={{ margin: "auto", marginBottom: 5 }}
           >
-          {SENT_RESET_BUTTON}
-              </Button>)}
+            {SENT_RESET_BUTTON}
+          </Button>
+        )}
+      </Dialog>
+
+      <Dialog
+        aria-labelledby="simple-dialog-title"
+        open={!!error}
+        onClose={() => setRefuse(false)}
+      >
+        <DialogTitle id="error-dialog-title">Ошибка сервера</DialogTitle>
+        <DialogContent>
+          <p>Message: {error}</p>
+          <p>
+            Попробуйте перезазрузить страницу, или обратитесь к администратору
+          </p>
+        </DialogContent>
+        <Button onClick={tryAgain} style={{ margin: "auto", marginBottom: 5 }}>
+          Перезагрузить
+        </Button>
       </Dialog>
     </Context.Provider>
   );
