@@ -11,13 +11,14 @@ import { CustomList } from "../CustomList";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { isMobile } from "../../utils/helpers";
-import { AGAIN_AND_AGAIN, FORM_RESET_BUTTON } from "../../utils/constants";
+import { AGAIN_AND_AGAIN, FORM_RESET_BUTTON, SENT_RESET_BUTTON } from "../../utils/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import { Header } from "../Header";
 
-const allowReset = process.env.REACT_APP_SURVEY_RESET || false;
+const doAllowReset = !!(process.env.REACT_APP_SURVEY_RESET || '');
+// console.debug('doAllowReset', doAllowReset, process.env.REACT_APP_SURVEY_RESET);
 
 const setInitialData = (datum: any) =>
   datum.Questionary.reduce(function (result: any, item: any, index: number) {
@@ -49,6 +50,7 @@ export const App: React.FC<Props> = ({ showHeader }) => {
   const [direction, setDirection] = useState<number>(1);
   const [questionary_code, setQuestionaryCode] = useState<string>("");
   const [reset, setReset] = useState<boolean>(false);
+  const [allowReset, setAllowReset] = useState<boolean>(doAllowReset);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -223,12 +225,13 @@ export const App: React.FC<Props> = ({ showHeader }) => {
         onClose={() => setRefuse(false)}
       >
         <DialogTitle id="simple-dialog-title">{AGAIN_AND_AGAIN}</DialogTitle>
+        {allowReset && (
         <Button
           onClick={handleReset}
           style={{ margin: "auto", marginBottom: 5 }}
-        >
-          Сбросить
-        </Button>
+          >
+          {SENT_RESET_BUTTON}
+              </Button>)}
       </Dialog>
     </Context.Provider>
   );
