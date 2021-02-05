@@ -50,7 +50,7 @@ export const App: React.FC<Props> = ({ showHeader }) => {
   const [direction, setDirection] = useState<number>(1);
   const [questionary_code, setQuestionaryCode] = useState<string>("");
   const [reset, setReset] = useState<boolean>(false);
-  const [allowReset, setAllowReset] = useState<boolean>(doAllowReset);
+  const [allowReset,] = useState<boolean>(doAllowReset);
 
   useEffect(() => {
     const uuidFromStorage = localStorage.getItem("uuid");
@@ -214,9 +214,9 @@ export const App: React.FC<Props> = ({ showHeader }) => {
           {keys && <Controls setStep={setStep} len={keys.length} />}
         </div>
       ) : (
-        <div className={classes.loader}>
-          <CircularProgress />
-        </div>
+          <div className={classes.loader}>
+            <CircularProgress style={{ margin: "3em" }} />
+          </div>
       )}
 
       <Dialog
