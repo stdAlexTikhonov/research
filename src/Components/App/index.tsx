@@ -15,6 +15,10 @@ import {
   AGAIN_AND_AGAIN,
   FORM_RESET_BUTTON,
   SENT_RESET_BUTTON,
+  RELOAD,
+  SUGGESTION,
+  MESSAGE,
+  ERROR_TITLE,
 } from "../../utils/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
@@ -260,15 +264,13 @@ export const App: React.FC<Props> = ({ showHeader }) => {
         open={!!error}
         onClose={() => setRefuse(false)}
       >
-        <DialogTitle id="error-dialog-title">Ошибка сервера</DialogTitle>
+        <DialogTitle id="error-dialog-title">{ERROR_TITLE}</DialogTitle>
         <DialogContent>
-          <p>Message: {error}</p>
-          <p>
-            Попробуйте перезазрузить страницу, или обратитесь к администратору
-          </p>
+          <p>{MESSAGE + error}</p>
+          <p>{SUGGESTION}</p>
         </DialogContent>
         <Button onClick={tryAgain} style={{ margin: "auto", marginBottom: 5 }}>
-          Перезагрузить
+          {RELOAD}
         </Button>
       </Dialog>
     </Context.Provider>
